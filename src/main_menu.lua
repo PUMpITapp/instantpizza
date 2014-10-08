@@ -10,7 +10,7 @@ dir = './'
 png_logo_width = 361 
 png_logo_height = 100 
 	
-png_math = {
+png_numbers = {
 	  num1 = 'images/1.png',
 	  num2 = 'images/2.png',
 	  num3 = 'images/3.png',
@@ -48,18 +48,10 @@ end
 
 function onKey(key,state)
   if(key == 'red') then
-  	img = gfx.loadjpeg(png_math['num1'])
-	gfx.screen:copyfrom(img, nil, {x=20, y=20})
   elseif(key == 'green') then
-  	  	img1 = gfx.loadjpeg("images/1.png")
-	gfx.screen:copyfrom(img1, nil, {x=20, y=100})
   elseif(key == 'yellow') then
-  	  	img2 = gfx.loadjpeg("images/2.png")
-	gfx.screen:copyfrom(img2, nil, {x=20, y=180})
   elseif(key == 'blue') then
-  	  	img3 = gfx.loadjpeg("images/3.png")
-	gfx.screen:copyfrom(img3, nil, {x=20, y=260})
-		end
+  end
 	gfx.update()
 end
 

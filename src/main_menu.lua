@@ -14,8 +14,11 @@ local sideSurface = gfx.new_surface(gfx.screen:get_width()/4, gfx.screen:get_hei
 local inputSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
 
 --Starting coordinates for current inputField
-local inputFieldX = 110
+local inputFieldX = 150
 local inputFieldY = 160
+local inputFieldStart = 160
+local inputFieldEnd = 510
+
 
 png_numbers = {
 	  num1 = 'images/1.png',
@@ -35,7 +38,7 @@ function buildGUI()
 
 displayLogo()
 displaySideSurface()
-drawInputSurface()
+displayInputSurface()
 end
 
 --Creates new surface and displays logo
@@ -58,40 +61,56 @@ function displaySideSurface()
 	local name = gfx.loadpng("images/1.png")
 	printPicture(name,20,160)
 	--adress
-	local adress = gfx.loadpng("images/2.png")
-	printPicture(adress,20,230)
+	local address = gfx.loadpng("images/2.png")
+	printPicture(address,20,230)
 	--postal
 	local postal = gfx.loadpng("images/3.png")
 	printPicture(postal,20,300)
 	--phone
-	local phone = gfx.loadpng("images/4.png")
-	printPicture(phone,20,370)
+	local city = gfx.loadpng("images/4.png")
+	printPicture(city,20,370)
+	--phone
+	local phone = gfx.loadpng("images/5.png")
+	printPicture(phone,20,440)
 	--email
+	local email = gfx.loadpng("images/6.png")
+	printPicture(email,20,510)
 	gfx.update()
 end
 
 --Creates inputsurface and displays "highlighted" input
-function drawInputSurface()
+function displayInputSurface()
+	--TODO:
+	--Actual inputfields and higlight. Variable highlight is the actual highlight
+	-- that moves when user presses up and down.
 	inputSurface:clear()
 	inputSurface:fill({255,255,255})
-	gfx.screen:copyfrom(inputSurface,nil,{x=120, y=200})
-	local input = gfx.loadpng("images/0.png")
-	printPicture(input,inputFieldX,inputFieldY)
+	gfx.screen:copyfrom(inputSurface,nil,{x=160, y=200})
+	local highlight = gfx.loadpng("images/1.png")
+	printPicture(highlight,inputFieldX,inputFieldY)
 	gfx.update()
 end
 
 --Moves the current inputField
-function moveInputFields(key)
+function moveHighlightedInputField(key)
+	--Up
 	if(key == 'red') then
 		if(inputFieldY > 160) then
 			inputFieldY = inputFieldY - 70
-			drawInputSurface()
+			displayInputSurface()
+		elseif(inputFieldY == 160) then
+			inputFieldY = inputFieldEnd
+			displayInputSurface()
 		end
 	end
+	--Down
 	if(key == 'green') then
-		if(inputFieldY < 370) then
+		if(inputFieldY < 510) then
 			inputFieldY = inputFieldY + 70
-			drawInputSurface()
+			displayInputSurface()
+		elseif(inputFieldY == 510) then
+			inputFieldY = inputFieldStart
+			displayInputSurface()
 		end
 	end
 end
@@ -104,10 +123,10 @@ end
 function onKey(key,state)
   	if(key == 'red') then
   		--Up
-  		moveInputFields(key)
+  		moveHighlightedInputField(key)
   	elseif(key == 'green') then
   		--Down
-  		moveInputFields(key)
+  		moveHighlightedInputField(key)
   	elseif(key == 'yellow') then
 
   	elseif(key == 'blue') then

@@ -3,7 +3,7 @@
 --Inputs from user, read and write
 --Create user from input
 --Buttons
---
+--Transparency not working
 
 local gfx = require "gfx"
 gfx.screen:fill({255,255,255,255})
@@ -40,6 +40,7 @@ function buildGUI()
 
 displayLogo()
 displaySideSurface()
+displayInputSurface()
 displayHighlightSurface()
 end
 
@@ -56,7 +57,7 @@ end
 --Creates new surface and displays items on the left side
 function displaySideSurface()
 	sideSurface:clear()
-	sideSurface:fill({255,255,0})
+	sideSurface:fill({255,255,255})
 	gfx.screen:copyfrom(sideSurface,nil,{x=0, y=200})
 	gfx.update()
 	--name
@@ -80,7 +81,12 @@ function displaySideSurface()
 	gfx.update()
 end
 function displayInputSurface()
-
+	inputSurface:clear()
+	inputSurface:fill({255,255,255,0})
+	gfx.screen:copyfrom(inputSurface,nil,{x=160, y=200})
+	local highlight = gfx.loadpng("images/2.png")
+	printPicture(highlight,inputFieldX,inputFieldY)
+	gfx.update()
 
 end
 
@@ -89,9 +95,11 @@ function displayHighlightSurface()
 	--TODO:
 	--Actual inputfields and higlight. Variable highlight is the actual highlight
 	-- that moves when user presses up and down.
-	inputSurface:clear()
-	inputSurface:fill({255,255,255,0})
-	gfx.screen:copyfrom(inputSurface,nil,{x=160, y=200})
+	--Try transparent on box
+
+	highlightSurface:clear()
+	highlightSurface:fill({255,255,255,0})
+	gfx.screen:copyfrom(highlightSurface,nil,{x=160, y=200})
 	local highlight = gfx.loadpng("images/1.png")
 	printPicture(highlight,inputFieldX,inputFieldY)
 	gfx.update()

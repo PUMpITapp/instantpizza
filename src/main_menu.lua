@@ -12,6 +12,8 @@ gfx.update()
 local logoSurface = gfx.new_surface(gfx.screen:get_width()/2, gfx.screen:get_height()/4)
 local sideSurface = gfx.new_surface(gfx.screen:get_width()/4, gfx.screen:get_height())
 local inputSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
+local highlightSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
+
 
 --Starting coordinates for current inputField
 local inputFieldX = 150
@@ -38,7 +40,7 @@ function buildGUI()
 
 displayLogo()
 displaySideSurface()
-displayInputSurface()
+displayHighlightSurface()
 end
 
 --Creates new surface and displays logo
@@ -54,7 +56,7 @@ end
 --Creates new surface and displays items on the left side
 function displaySideSurface()
 	sideSurface:clear()
-	sideSurface:fill({255,255,255})
+	sideSurface:fill({255,255,0})
 	gfx.screen:copyfrom(sideSurface,nil,{x=0, y=200})
 	gfx.update()
 	--name
@@ -77,14 +79,18 @@ function displaySideSurface()
 	printPicture(email,20,510)
 	gfx.update()
 end
+function displayInputSurface()
+
+
+end
 
 --Creates inputsurface and displays "highlighted" input
-function displayInputSurface()
+function displayHighlightSurface()
 	--TODO:
 	--Actual inputfields and higlight. Variable highlight is the actual highlight
 	-- that moves when user presses up and down.
 	inputSurface:clear()
-	inputSurface:fill({255,255,255})
+	inputSurface:fill({255,255,255,0})
 	gfx.screen:copyfrom(inputSurface,nil,{x=160, y=200})
 	local highlight = gfx.loadpng("images/1.png")
 	printPicture(highlight,inputFieldX,inputFieldY)
@@ -97,20 +103,20 @@ function moveHighlightedInputField(key)
 	if(key == 'red') then
 		if(inputFieldY > 160) then
 			inputFieldY = inputFieldY - 70
-			displayInputSurface()
+			displayHighlightSurface()
 		elseif(inputFieldY == 160) then
 			inputFieldY = inputFieldEnd
-			displayInputSurface()
+			displayHighlightSurface()
 		end
 	end
 	--Down
 	if(key == 'green') then
 		if(inputFieldY < 510) then
 			inputFieldY = inputFieldY + 70
-			displayInputSurface()
+			displayHighlightSurface()
 		elseif(inputFieldY == 510) then
 			inputFieldY = inputFieldStart
-			displayInputSurface()
+			displayHighlightSurface()
 		end
 	end
 end

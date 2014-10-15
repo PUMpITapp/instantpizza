@@ -12,9 +12,8 @@ local yMargin = 40 -- margin in y for keyboard keys
 local lastInputX = xMargin	-- last input of x
 local lastInputY = yMargin	-- last input of y
 local PosKey = {}
-local keyboard = {}
 
--- creates the position of the key
+-- creates an object with position of the key
 function PosKey:new(key, posX, posY)
 	key = {	letter = key,
 			row = posX,		-- what row the key is in
@@ -28,17 +27,10 @@ function PosKey:new(key, posX, posY)
 	return setmetatable(key ,self)
 end
 
-function main()
-	buildKeyboard()
-	displayKeyboard()
-	displayHighlightSurface()
-end
-
---build keyboard
-function buildKeyboard()
+local keyboard = {
 	-- TODO
 	-- the whole keyboard is not implemented yet
-	keyboard = {
+
 	--first row
 		GraveAccent = PosKey:new("`",1,1),
 		one = PosKey:new("1",2,1),
@@ -87,9 +79,14 @@ function buildKeyboard()
 		M = PosKey:new("M",9,4),
 		Colon = PosKey:new(",",10,4),
 		Period = PosKey:new(".",11,4),
-		Question = PosKey:new("?",12,4),
-}
+		Question = PosKey:new("?",12,4),}
+
+
+function main()
+	displayKeyboard()
+	displayHighlightSurface()
 end
+
 
 --display keyboard
 function displayKeyboard()
@@ -102,19 +99,24 @@ function displayKeyboard()
 	gfx.update()
 end
 
+-- displays the highlight
+-- TODO
+-- needs to change position of copyfrom. (0,0) now writes over keyboard 
 function displayHighlightSurface()
 	-- highlightX = 0 + posX
 	-- highlightY = 0 + posY
 
 	highlightSurface:clear()
 	highlightSurface:fill({255,0,0,0})
-	gfx.screen:copyfrom(keyboardSurface, nil, {x=0, y=0})
+	--gfx.screen:copyfrom(keyboardSurface, nil, {x=600, y=600})
 	text.print(gfx.screen, arial, "O", lastInputX, lastInputY, 200, 300)
 	gfx.update()
 end
 
+-- moves the highligther around
+-- TODO:
+-- needs to have proper boundaries
 function movehighlightKey(key)
-	
 	if(key == 'green')then
 		--down
 		lastInputX = lastInputX + 0
@@ -139,7 +141,6 @@ function movehighlightKey(key)
 			displayHighlightSurface()
 			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
 		end
-
 
 	end
 	if(key == 'yellow')then
@@ -172,6 +173,7 @@ function movehighlightKey(key)
 	end
 end
 
+-- calls functions on keys
 function onKey(key, state)
 	if(state == 'up')then
 		if(key == 'red') then
@@ -182,10 +184,22 @@ function onKey(key, state)
 			movehighlightKey(key)
 		elseif(key == 'blue') then
 			movehighlightKey(key)
+		elseif(key == 'Return') then
+			getKeyboardChar(lastInputX,lastInputY)
 		end
 	end
 	gfx.update()
 
+end
+
+-- gets the char that is highlighted
+function getKeyboardChar(posX, posY)
+	local letter = nil
+	for key, value in pairs(keyboard) do
+		if(posX == value.x) and (posY==value.y)then
+			print(value.letter)
+		end
+	end
 end
 
 main()

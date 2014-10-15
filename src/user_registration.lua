@@ -26,7 +26,7 @@ function buildGUI()
 displayLogo()
 displaySideSurface()
 displayInputSurface()
---displayHighlightSurface()
+displayHighlightSurface()
 displaystatusSurface()
 end
 
@@ -72,7 +72,7 @@ function displayHighlightSurface()
 	--Try transparent on box
 	highlightSurface:clear()
 	highlightSurface:fill({0,0,155})
-	gfx.screen:copyfrom(inputSurface,nil,{x=gfx.screen:get_width()/4, y=gfx.screen:get_height()/5})
+	gfx.screen:copyfrom(highlightSurface,nil,{x=gfx.screen:get_width()/4, y=gfx.screen:get_height()/5})
 	text.print(gfx.screen,arial,"Highlighted input",(gfx.screen:get_width()/4 + 5),inputFieldY,500,200)
 	gfx.update()
 end

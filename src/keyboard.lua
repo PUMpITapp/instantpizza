@@ -4,7 +4,7 @@ gfx.screen:fill({0,0,0,0})
 gfx.update()
 
 
-local keyboardSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
+local keyboardSurface = gfx.new_surface(gfx.screen:get_width()/2, gfx.screen:get_height()/2)
 local highlightSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
 local xMargin = 30 -- margin in x for keyboard keys
@@ -95,7 +95,7 @@ end
 function displayKeyboard()
 	keyboardSurface:clear()
 	keyboardSurface:fill({0,0,0})
-	gfx.screen:copyfrom(keyboardSurface, nil, {x=0, y=200})
+	gfx.screen:copyfrom(keyboardSurface, nil, {x=0, y=0})
 	for key, value in pairs(keyboard)do
 		text.print(gfx.screen, arial, value.letter, value.x, value.y, value.w, value.h)
 	end
@@ -108,7 +108,7 @@ function displayHighlightSurface()
 
 	highlightSurface:clear()
 	highlightSurface:fill({255,0,0,0})
-	gfx.screen:copyfrom(keyboardSurface, nil, {x=200, y=150})
+	gfx.screen:copyfrom(keyboardSurface, nil, {x=0, y=0})
 	text.print(gfx.screen, arial, "O", lastInputX, lastInputY, 200, 300)
 	gfx.update()
 end
@@ -119,8 +119,8 @@ function movehighlightKey(key)
 		--down
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY + yMargin
-		if(lastInputY>500)then
-			lastInputY = 500
+		if(lastInputY>520)then
+			lastInputY = 520
 			displayHighlightSurface()
 		else
 			displayHighlightSurface()
@@ -160,8 +160,8 @@ function movehighlightKey(key)
 		--right
 		lastInputX = lastInputX + xMargin
 		lastInputY = lastInputY + 0
-		if(lastInputX>500)then
-			lastInputX = 500
+		if(lastInputX>600)then
+			lastInputX = 600
 			displayHighlightSurface()
 		else
 			displayHighlightSurface()
@@ -173,14 +173,16 @@ function movehighlightKey(key)
 end
 
 function onKey(key, state)
-	if(key == 'red') then
-		movehighlightKey(key)
-	elseif(key == 'green') then
-		movehighlightKey(key)
-	elseif(key == 'yellow') then
-		movehighlightKey(key)
-	elseif(key == 'blue') then
-		movehighlightKey(key)
+	if(state == 'up')then
+		if(key == 'red') then
+			movehighlightKey(key)
+		elseif(key == 'green') then
+			movehighlightKey(key)
+		elseif(key == 'yellow') then
+			movehighlightKey(key)
+		elseif(key == 'blue') then
+			movehighlightKey(key)
+		end
 	end
 	gfx.update()
 

@@ -115,12 +115,12 @@ end
 
 function movehighlightKey(key)
 	
-	if(key == 'red')then
-		--up
+	if(key == 'green')then
+		--down
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY + yMargin
-		if(lastInputY>1000)then
-			lastInputY = 1000
+		if(lastInputY>500)then
+			lastInputY = 500
 			displayHighlightSurface()
 		else
 			displayHighlightSurface()
@@ -128,8 +128,8 @@ function movehighlightKey(key)
 
 		end
 	end
-	if(key == 'green')then
-		--down
+	if(key == 'red')then
+		--up
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY - yMargin
 		if(lastInputY<yMargin)then
@@ -146,7 +146,7 @@ function movehighlightKey(key)
 		--left
 		lastInputX = lastInputX - xMargin
 		lastInputY = lastInputY + 0
-		if(lastInputY<xMargin)then
+		if(lastInputX<xMargin)then
 			lastInputX = xMargin
 			displayHighlightSurface()
 		else
@@ -160,8 +160,8 @@ function movehighlightKey(key)
 		--right
 		lastInputX = lastInputX + xMargin
 		lastInputY = lastInputY + 0
-		if(lastInputX>1000)then
-			lastInputX = 1000
+		if(lastInputX>500)then
+			lastInputX = 500
 			displayHighlightSurface()
 		else
 			displayHighlightSurface()

@@ -119,34 +119,41 @@ function movehighlightKey(key)
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY + yMargin
 		displayHighlightSurface()
+		print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
 
 	end
 	if(key == 'green')then
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY - yMargin
 		displayHighlightSurface()		
+				print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+
 	end
 	if(key == 'yellow')then
 		lastInputX = lastInputX + xMargin
 		lastInputY = lastInputY + 0
 		displayHighlightSurface()
+				print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+
 	end
 	if(key == 'blue')then
 		lastInputX = lastInputX - xMargin
 		lastInputY = lastInputY + 0
 		displayHighlightSurface()
+				print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+
 	end
 end
 
 function onKey(key, state)
 	if(key == 'red') then
-
+		movehighlightKey(key)
 	elseif(key == 'green') then
-
+		movehighlightKey(key)
 	elseif(key == 'yellow') then
-
+		movehighlightKey(key)
 	elseif(key == 'blue') then
-
+		movehighlightKey(key)
 	end
 	gfx.update()
 

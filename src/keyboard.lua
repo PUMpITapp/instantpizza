@@ -1,5 +1,6 @@
 local gfx = require "gfx"
 local text = require "write_text"
+local keyboardPNG = gfx.loadpng("keyboard.png")
 gfx.screen:fill({0,0,0,0})
 gfx.update()
 
@@ -7,8 +8,8 @@ gfx.update()
 local keyboardSurface = gfx.new_surface(gfx.screen:get_width()/2, gfx.screen:get_height()/2)
 local highlightSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
-local xMargin = 30 -- margin in x for keyboard keys
-local yMargin = 40 -- margin in y for keyboard keys
+local xMargin = 35 -- margin in x for keyboard keys
+local yMargin = 35 -- margin in y for keyboard keys
 local lastInputX = xMargin	-- last input of x
 local lastInputY = yMargin	-- last input of y
 local PosKey = {}
@@ -43,9 +44,14 @@ local keyboard = {
 		eight = PosKey:new("8",9,1),
 		nine = PosKey:new("9",10,1),
 		zero = PosKey:new("0",11,1),
+		minus = PosKey:new("-",12,1),
+		equal = PosKey:new("=",13,1),
+		backspace1 = PosKey:new("BACKSPACE", 14,1),
+		backspace2 = PosKey:new("BACKSPACE", 15,1),
 
+	
 	-- second row
-		-- Tab = PosKey:new("TAB",1,2),
+		Tab = PosKey:new("TAB",1,2),
 		Q = PosKey:new("Q",2,2),
 		W = PosKey:new("W",3,2),
 		E = PosKey:new("E",4,2),
@@ -56,8 +62,10 @@ local keyboard = {
 		I = PosKey:new("I",9,2),
 		O = PosKey:new("O",10,2),
 		P = PosKey:new("P",11,2),
+		leftbracket = PosKey:new("LEFTBRACKET",12 ,2),
+		rightbracket= PosKey:new("RIGHTBRACKET",13 ,2),
 	-- third row
-		-- Caps = PosKey:new("CAPS",1,3),
+		Caps = PosKey:new("CAPS",1,3),
 		A = PosKey:new("A",2,3),
 		S = PosKey:new("S",3,3),
 		D = PosKey:new("D",4,3),
@@ -68,8 +76,9 @@ local keyboard = {
 		K = PosKey:new("K",9,3),
 		L = PosKey:new("L",10,3),
 	-- fourth row
-		-- Lshift = PosKey:new("Lshift"1,4),
-		-- the<key = PosKey:new("<"2,4),
+		
+		Lshift1 = PosKey:new("Lshift",1,4),
+		Lshift2 = PosKey:new("Lshift",2,4),
 		Z = PosKey:new("Z",3,4),
 		X = PosKey:new("X",4,4),
 		C = PosKey:new("C",5,4),
@@ -79,7 +88,11 @@ local keyboard = {
 		M = PosKey:new("M",9,4),
 		Colon = PosKey:new(",",10,4),
 		Period = PosKey:new(".",11,4),
-		Question = PosKey:new("?",12,4),}
+		Question = PosKey:new("?",12,4),
+		Rshift1 = PosKey:new("Rshift", 13, 4),
+		Rshift2 = PosKey:new("Rshift", 14, 4),
+		Rshift3 = PosKey:new("Rshift", 15, 4)
+	}
 
 
 function main()
@@ -92,10 +105,10 @@ end
 function displayKeyboard()
 	keyboardSurface:clear()
 	keyboardSurface:fill({0,0,0})
-	gfx.screen:copyfrom(keyboardSurface, nil, {x=0, y=0})
-	for key, value in pairs(keyboard)do
-		text.print(gfx.screen, arial, value.letter, value.x, value.y, value.w, value.h)
-	end
+	gfx.screen:copyfrom(keyboardPNG, nil, {x=xMargin, y=yMargin})
+	--for key, value in pairs(keyboard)do
+	--	text.print(gfx.screen, arial, value.letter, value.x, value.y, value.w, value.h)
+	--end
 	gfx.update()
 end
 
@@ -109,7 +122,9 @@ function displayHighlightSurface()
 	highlightSurface:clear()
 	highlightSurface:fill({255,0,0,0})
 	--gfx.screen:copyfrom(keyboardSurface, nil, {x=600, y=600})
-	text.print(gfx.screen, arial, "O", lastInputX, lastInputY, 200, 300)
+	displayKeyboard()
+	gfx.screen:fill({r=255, g=0, b=0, a=0}, {x=lastInputX, y=lastInputY, w=35, h=35})
+--	text.print(gfx.screen, arial, "+", lastInputX, lastInputY, 200, 300)
 	gfx.update()
 end
 

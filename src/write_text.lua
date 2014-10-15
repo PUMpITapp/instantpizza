@@ -1,7 +1,9 @@
 local text = {}
 
 gfx = require "gfx"
-arial = require "apple_symbols_regular_65"
+
+arial = require "apple_symbols_regular_20"
+
 
 font_spritesheet = gfx.loadpng(arial.file)
 
@@ -40,5 +42,8 @@ end
 --text.print(gfx.screen, arial, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus auctor tellus. In interdum maximus odio consequat posuere. Suspendisse convallis condimentum pharetra. Ut luctus massa eget consequat iaculis. Nunc blandit semper odio, et tristique justo vestibulum nec. Donec ex justo, iaculis eget fringilla at, tempus sed justo. Pellentesque a odio orci. Integer vel lorem sodales, laoreet quam non, porta velit.", 10, 10, 400, 400)
 
 return text
+<<<<<<< HEAD
 
 -- cred to scrum1
+=======
+>>>>>>> Added functions to print text.

@@ -1,10 +1,4 @@
 --TODO:
---Another background and text font/color
---Real graphic components
---Inputs from user, read and write
---Create user from input
---Buttons
---Transparency not working
 
 local text = require "write_text"
 local gfx = require "gfx"

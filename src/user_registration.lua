@@ -11,7 +11,7 @@ local gfx = require "gfx"
 --Start of inputFields. Needed for 
 local inputFieldY = 150
 
-gfx.screen:fill({0,0,0,0})
+gfx.screen:fill({0,0,255})
 gfx.update()
 
 local logoSurface = gfx.new_surface(gfx.screen:get_width()/2, gfx.screen:get_height()/4)
@@ -23,7 +23,6 @@ local highlightSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:ge
 function buildGUI()
 displayLogo()
 displaySideSurface()
-
 --displayInputSurface()
 displayHighlightSurface()
 end
@@ -31,7 +30,7 @@ end
 --Creates new surface and displays logo
 function displayLogo()
 	logoSurface:clear()
-	logoSurface:fill({0,0,0})
+	logoSurface:fill({0,0,255})
 	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
 	png_logo_width = 250
 	text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-(png_logo_width/2),50,300,300)
@@ -41,7 +40,7 @@ end
 --Creates new surface and displays items on the left side
 function displaySideSurface()
 	sideSurface:clear()
-	sideSurface:fill({0,0,0})
+	sideSurface:fill({0,0,255})
 	gfx.screen:copyfrom(sideSurface,nil,{x=0, y=200})
 	--Print text on sidemenu
 	text.print(gfx.screen,arial,"Name",20,150,200,300)
@@ -54,9 +53,8 @@ function displaySideSurface()
 end
 function displayInputSurface()
 	inputSurface:clear()
-	inputSurface:fill({0,0,0,0})
+	inputSurface:fill({0,0,255})
 	gfx.screen:copyfrom(inputSurface,nil,{x=160, y=200})
-	local highlight = gfx.loadpng("images/2.png")
 	printPicture(highlight,inputFieldX,inputFieldY)
 	gfx.update()
 
@@ -69,8 +67,8 @@ function displayHighlightSurface()
 	--that moves when user presses up and down.
 	--Try transparent on box
 	highlightSurface:clear()
-	highlightSurface:fill({255,0,0,0})
-	gfx.screen:copyfrom(inputSurface,nil,{x=250, y=150})
+	highlightSurface:fill({0,0,255})
+	gfx.screen:copyfrom(highlightSurface,nil,{x=250, y=150})
 	text.print(gfx.screen,arial,"Highlighted input",250,inputFieldY,500,200)
 	gfx.update()
 end
@@ -125,7 +123,6 @@ end
 --Main method
 function main()
 	buildGUI()
-
 end
 main()
 

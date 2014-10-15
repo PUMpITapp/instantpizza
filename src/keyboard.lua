@@ -108,7 +108,7 @@ function displayHighlightSurface()
 
 	highlightSurface:clear()
 	highlightSurface:fill({255,0,0,0})
-	-- gfx.screen.copyfrom(keyboardSurface, nil, {x=250, y=150})
+	gfx.screen:copyfrom(keyboardSurface, nil, {x=200, y=150})
 	text.print(gfx.screen, arial, "O", lastInputX, lastInputY, 200, 300)
 	gfx.update()
 end
@@ -116,31 +116,58 @@ end
 function movehighlightKey(key)
 	
 	if(key == 'red')then
+		--up
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY + yMargin
-		displayHighlightSurface()
-		print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+		if(lastInputY>1000)then
+			lastInputY = 1000
+			displayHighlightSurface()
+		else
+			displayHighlightSurface()
+			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
 
+		end
 	end
 	if(key == 'green')then
+		--down
 		lastInputX = lastInputX + 0
 		lastInputY = lastInputY - yMargin
-		displayHighlightSurface()		
-				print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+		if(lastInputY<yMargin)then
+			lastInputY = yMargin
+			displayHighlightSurface()
+		else
+			displayHighlightSurface()
+			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+		end
+
 
 	end
 	if(key == 'yellow')then
-		lastInputX = lastInputX + xMargin
+		--left
+		lastInputX = lastInputX - xMargin
 		lastInputY = lastInputY + 0
-		displayHighlightSurface()
-				print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+		if(lastInputY<xMargin)then
+			lastInputX = xMargin
+			displayHighlightSurface()
+		else
+			displayHighlightSurface()
+			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+
+		end
 
 	end
 	if(key == 'blue')then
-		lastInputX = lastInputX - xMargin
+		--right
+		lastInputX = lastInputX + xMargin
 		lastInputY = lastInputY + 0
-		displayHighlightSurface()
-				print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+		if(lastInputX>1000)then
+			lastInputX = 1000
+			displayHighlightSurface()
+		else
+			displayHighlightSurface()
+			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
+
+		end
 
 	end
 end

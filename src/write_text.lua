@@ -4,7 +4,6 @@ gfx = require "gfx"
 
 arial = require "apple_symbols_regular_20"
 
-
 font_spritesheet = gfx.loadpng(arial.file)
 
 function text.print(surface, font, text, x, y, w, h)
@@ -43,7 +42,12 @@ end
 
 return text
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 -- cred to scrum1
 =======
 >>>>>>> Added functions to print text.
+=======
+
+-- cred to scrum1
+>>>>>>> a primitive keyboard now display

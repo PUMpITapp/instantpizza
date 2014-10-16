@@ -6,10 +6,10 @@ local gfx = require "gfx"
 --Start of inputFields. Needed for 
 local inputFieldY = 250
 local inputFieldX = gfx.screen:get_width()/8
-local pizzaPicture = gfx.loadpng("Images/pizza.png")
-local nextButton = gfx.loadpng("Images/buttonnext.png")
-local backButton = gfx.loadpng("Images/buttonback.png")
-local logoName = gfx.loadpng("Images/pizzaIP.png")
+local pizzaPicture = gfx.loadpng("images/pizza.png")
+local nextButton = gfx.loadpng("images/buttonnext.png")
+local backButton = gfx.loadpng("images/buttonback.png")
+local logoName = gfx.loadpng("images/pizzaIP.png")
 local logoSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
 local pizzeriaSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/2)
 --local highlightSurface = gfx.new_surface(gfx.screen:get_width(), 80)

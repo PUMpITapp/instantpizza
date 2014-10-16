@@ -10,11 +10,11 @@ local text = require "write_text"
 local gfx = require "gfx"
 --Start of inputFields. Needed for 
 local inputFieldY = 150
-local pizzaPicture = gfx.loadpng("Images/pizza.png")
-local progressBar = gfx.loadpng("Images/progressbar1.png")
-local nextButton = gfx.loadpng("Images/buttonnext.png")
-local logoName = gfx.loadpng("Images/pizzaIP.png")
-local backButton = gfx.loadpng("Images/buttonback.png")
+local pizzaPicture = gfx.loadpng("images/pizza.png")
+local progressBar = gfx.loadpng("images/progressbar1.png")
+local nextButton = gfx.loadpng("images/buttonnext.png")
+local logoName = gfx.loadpng("images/pizzaIP.png")
+local backButton = gfx.loadpng("images/buttonback.png")
 gfx.screen:fill({241,248,233,0})
 gfx.update()
 

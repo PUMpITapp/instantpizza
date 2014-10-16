@@ -130,18 +130,20 @@ function printPicture(pic,xx,yy)
 end
 
 function onKey(key,state)
-  	if(key == 'red' and state == 'up') then
-  		--Up
-  		moveHighlightedInputField(key)
-  	elseif(key == 'green' and state == 'up') then
-  		--Down
-  		moveHighlightedInputField(key)
-  	elseif(key == 'yellow') then
+	if(state == 'up') then
+	  	if(key == 'red') then
+	  		--Up
+	  		moveHighlightedInputField(key)
+	  	elseif(key == 'green') then
+	  		--Down
+	  		moveHighlightedInputField(key)
+	  	elseif(key == 'yellow') then
 
-  	elseif(key == 'blue') then
-  		dofile("choose_Pizzeria.lua")
-  	end
+	  	elseif(key == 'blue') then
+	  		dofile("choose_Pizzeria.lua")
+	  	end
 	gfx.update()
+	end
 end
 
 --Main method

@@ -8,6 +8,9 @@
 
 local text = require "write_text"
 local gfx = require "gfx"
+-- inserted these for showing to customer. remove if needed //Huy
+local pizzaPicture = gfx.loadpng("images/pizza.png")
+local logoName = gfx.loadpng("images/pizzaIP.png")
 
 --Start of inputFields. Needed for 
 local inputFieldY = 250
@@ -30,15 +33,25 @@ displayPizzas()
 end
 
 --Creates new surface and displays logo
+-- inserted these for showing to customer. your function is in comment if needed//Huy
 function displayLogo()
 	logoSurface:clear()
 	logoSurface:fill({139,195,74})
-	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
+	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=25})
 	png_logo_width = 250
-	text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-(png_logo_width/2),50,300,300)
-  --  gfx.screen:copyfrom(logo, nil, {x=gfx.screen:get_width()/2-(png_logo_width/2), y=100})
+	printPicture(logoName,(gfx.screen:get_width() - 740)/2,(gfx.screen:get_height()/5)-45)
+	printPicture(pizzaPicture,gfx.screen:get_width()/5+420,(gfx.screen:get_height()/5)-110)
 	gfx.update()
 end
+-- function displayLogo()
+-- 	logoSurface:clear()
+-- 	logoSurface:fill({139,195,74})
+-- 	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
+-- 	png_logo_width = 250
+-- 	text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-(png_logo_width/2),50,300,300)
+--   --  gfx.screen:copyfrom(logo, nil, {x=gfx.screen:get_width()/2-(png_logo_width/2), y=100})
+-- 	gfx.update()
+-- end
 
 --Creates new surface and display pizzas
 function displayPizzas()
@@ -49,7 +62,6 @@ function displayPizzas()
 	text.print(gfx.screen,arial,"Pizza 2",gfx.screen:get_width()/8+200,300,220,300)
 	text.print(gfx.screen,arial,"Pizza 3",gfx.screen:get_width()/8+400,300,220,300)
 	text.print(gfx.screen,arial,"Pizza 4",gfx.screen:get_width()/8+600,300,220,300)
-
 	text.print(gfx.screen,arial,"Pizza 5",gfx.screen:get_width()/8,500,220,300)
 	text.print(gfx.screen,arial,"Pizza 6",gfx.screen:get_width()/8+200,500,220,300)
 	text.print(gfx.screen,arial,"Pizza 7",gfx.screen:get_width()/8+400,500,220,300)
@@ -130,21 +142,23 @@ end
 
 function onKey(key,state)
 	--TODO
-
-  	if(key == 'Up') then
-  		--Up
-  		moveHighlightedInputField(key)
-  	elseif(key == 'Down') then
-  		--Down
-  	  	moveHighlightedInputField(key)
-  		--Left
-  	elseif(key == 'Left') then
-  		moveHighlightedInputField(key)
-  		--Right
-  	elseif(key == 'Right') then
-  		moveHighlightedInputField(key)
-
-  	end
+	if(state == 'up') then
+	  	if(key == 'Up') then
+	  		--Up
+	  		moveHighlightedInputField(key)
+	  	elseif(key == 'Down') then
+	  		--Down
+	  	  	moveHighlightedInputField(key)
+	  		--Left
+	  	elseif(key == 'Left') then
+	  		moveHighlightedInputField(key)
+	  		--Right
+	  	elseif(key == 'Right') then
+	  		moveHighlightedInputField(key)
+	  	elseif(key == 'red') then
+	  	  	dofile("choose_Pizzeria.lua")
+	  	end
+	end
 	gfx.update()
 end
 

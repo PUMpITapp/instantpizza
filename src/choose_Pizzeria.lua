@@ -105,25 +105,26 @@ end
 
 function onKey(key,state)
 	--TODO
-
+	if(state == 'up') then
   	if(key == 'Up') then
-  		--Up
-  		moveHighlightedInputField(key)
-  	elseif(key == 'Down') then
-  		--Down
-  	  	moveHighlightedInputField(key)
-  		--Left
-  	elseif(key == 'Left') then
-  		moveHighlightedInputField(key)
-  		--Right
-  	elseif(key == 'Right') then
-  		moveHighlightedInputField(key)
-  	
-  	elseif(key == 'blue') then
-  	  	dofile("pizza_info.lua")
-  	elseif(key == 'red')then
-  		dofile("user_registration.lua")
-  	end
+	  		--Up
+	  		moveHighlightedInputField(key)
+	  	elseif(key == 'Down') then
+	  		--Down
+	  	  	moveHighlightedInputField(key)
+	  		--Left
+	  	elseif(key == 'Left') then
+	  		moveHighlightedInputField(key)
+	  		--Right
+	  	elseif(key == 'Right') then
+	  		moveHighlightedInputField(key)
+	  	
+	  	elseif(key == 'blue') then
+	  	  	dofile("pizza_info.lua")
+	  	elseif(key == 'red')then
+	  		dofile("user_registration.lua")
+	  	end
+ 	end
 end
 
 --Main method

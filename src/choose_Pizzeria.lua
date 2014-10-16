@@ -29,11 +29,10 @@ end
 function displayLogo()
 	logoSurface:clear()
 	logoSurface:fill({139,195,74})
-	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
+	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=25})
 	png_logo_width = 250
 	printPicture(logoName,(gfx.screen:get_width() - 740)/2,(gfx.screen:get_height()/5)-45)
 	printPicture(pizzaPicture,gfx.screen:get_width()/5+420,(gfx.screen:get_height()/5)-110)
-	text.print(gfx.screen,arial,"Pizzerias near you",gfx.screen:get_width()/2-320/2,160,320,300)
 	gfx.update()
 end
 function displayPizzerias()
@@ -41,7 +40,8 @@ function displayPizzerias()
 	--Get pizzerias
 	pizzeriaSurface:clear()
 	pizzeriaSurface:fill({241,248,233})
-	gfx.screen:copyfrom(pizzeriaSurface,nil,{x=0, y=230})
+	gfx.screen:copyfrom(pizzeriaSurface,nil,{x=0,y=gfx.screen:get_height()/5, h=gfx.screen:get_height()*(3/5)})
+	text.print(gfx.screen,arial,"Pizzerias near you",gfx.screen:get_width()/2-320/2,160,320,300)
 	text.print(gfx.screen,arial,"Pizzeria 1",gfx.screen:get_width()/8,300,220,300)
 	text.print(gfx.screen,arial,"Pizzeria 2",gfx.screen:get_width()/8+200,300,220,300)
 	text.print(gfx.screen,arial,"Pizzeria 3",gfx.screen:get_width()/8+400,300,220,300)
@@ -119,10 +119,10 @@ function onKey(key,state)
   		--Right
   	elseif(key == 'Right') then
   		moveHighlightedInputField(key)
-  	end
+  	
   	elseif(key == 'blue') then
 
-  	end
+  	
   	elseif(key == 'red')then
 
   	end

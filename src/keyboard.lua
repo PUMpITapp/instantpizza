@@ -5,7 +5,7 @@ gfx.screen:fill({0,0,0,0})
 gfx.update()
 
 
-local keyboardSurface = gfx.new_surface(gfx.screen:get_width()/2, gfx.screen:get_height()/2)
+local keyboardSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 local highlightSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
 local xMargin = 35 -- margin in x for keyboard keys
@@ -106,9 +106,9 @@ function displayKeyboard()
 	keyboardSurface:clear()
 	keyboardSurface:fill({0,0,0})
 	gfx.screen:copyfrom(keyboardPNG, nil, {x=xMargin, y=yMargin})
-	--for key, value in pairs(keyboard)do
-	--	text.print(gfx.screen, arial, value.letter, value.x, value.y, value.w, value.h)
-	--end
+	-- for key, value in pairs(keyboard)do
+	-- 	text.print(gfx.screen, arial, value.letter, value.x, value.y, value.w, value.h)
+	-- end
 	gfx.update()
 end
 

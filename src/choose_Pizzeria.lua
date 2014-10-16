@@ -67,8 +67,6 @@ function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
 	 inputFieldStart = 150
 	 inputFieldEnd = 550
-	 print(inputFieldX)
-	 print(inputFieldY)
 	--Up
 	if(key == 'red')then
 		if(inputFieldY == 450) then

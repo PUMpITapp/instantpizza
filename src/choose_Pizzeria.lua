@@ -6,14 +6,16 @@ local gfx = require "gfx"
 --Start of inputFields. Needed for 
 local inputFieldY = 250
 local inputFieldX = gfx.screen:get_width()/8
-
-gfx.screen:fill({241,248,233})
-gfx.update()
-
+local pizzaPicture = gfx.loadpng("Images/pizza.png")
+local nextButton = gfx.loadpng("Images/buttonnext.png")
+local backButton = gfx.loadpng("Images/buttonback.png")
+local logoName = gfx.loadpng("Images/pizzaIP.png")
 local logoSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
 local pizzeriaSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/2)
 --local highlightSurface = gfx.new_surface(gfx.screen:get_width(), 80)
 
+gfx.screen:fill({241,248,233})
+gfx.update()
 
 --Calls methods that builds GUI
 function buildGUI()
@@ -29,7 +31,8 @@ function displayLogo()
 	logoSurface:fill({139,195,74})
 	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
 	png_logo_width = 250
-	text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-220/2,50,220,300)
+	printPicture(logoName,(gfx.screen:get_width() - 740)/2,(gfx.screen:get_height()/5)-45)
+	printPicture(pizzaPicture,gfx.screen:get_width()/5+420,(gfx.screen:get_height()/5)-110)
 	text.print(gfx.screen,arial,"Pizzerias near you",gfx.screen:get_width()/2-320/2,160,320,300)
 	gfx.update()
 end

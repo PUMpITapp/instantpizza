@@ -9,22 +9,22 @@
 local text = require "write_text"
 local gfx = require "gfx"
 --Start of inputFields. Needed for 
-local inputFieldY = 150
-local inputFieldX = 250
+local inputFieldY = gfx.screen:get_height()/5
+local inputFieldX = 0
 
 gfx.screen:fill({0,0,255})
 gfx.update()
 
 local logoSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
 local sideSurface = gfx.new_surface(gfx.screen:get_width()/4, gfx.screen:get_height())
-local inputSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
+local inputSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height()*(3/5))
 local highlightSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
 local statusSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
 
 --Calls methods that builds GUI
 function buildGUI()
 displayLogo()
-displaySideSurface()
+--displaySideSurface()
 displaystatusSurface()
 displayInputSurface()
 
@@ -56,7 +56,7 @@ end
 function displayInputSurface()
 	inputSurface:clear()
 	inputSurface:fill({0,0,155})
-	gfx.screen:copyfrom(inputSurface,nil,{x=gfx.screen:get_width()/4, y=gfx.screen:get_height()/5, h=gfx.screen:get_height()*(3/5)})
+	gfx.screen:copyfrom(inputSurface,nil,{x=0, y=gfx.screen:get_height()/5, h=gfx.screen:get_height()*(3/5)})
 	--local highlight = gfx.loadpng("images/2.png")
 	--printPicture(highlight,inputFieldX,inputFieldY)
 	gfx.update()
@@ -72,7 +72,7 @@ function displayHighlightSurface()
 	--Try transparent on box
 	highlightSurface:clear()
 	highlightSurface:fill({0,0,155})
-	gfx.screen:copyfrom(inputSurface,nil,{x=gfx.screen:get_width()/4, y=gfx.screen:get_height()/5, h=gfx.screen:get_height()*(3/5)})
+	gfx.screen:copyfrom(inputSurface,nil,{x=0, y=gfx.screen:get_height()/5 ,h=gfx.screen:get_height()*(3/5)})
 	text.print(gfx.screen,arial,"Highlighted",inputFieldX,inputFieldY,500,200)
 	gfx.update()
 end
@@ -88,51 +88,53 @@ end
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	 inputFieldStartY = 150
-	 inputFieldStartX = 250
-	 inputFieldEnd = 550
+	 inputFieldStartY = gfx.screen:get_height()/5
+	 inputFieldStartX = 0
+	 inputFieldEndY = gfx.screen:get_height()*(4/5)
+	 inputFieldEndX = gfx.screen:get_width()
 	--Up
 	if(key == 'red') then
-		if(inputFieldY > 150) then
-			inputFieldY = inputFieldY - 80
+		if(inputFieldY > gfx.screen:get_height()/5) then
+			inputFieldY = inputFieldY - gfx.screen:get_height()/10
 			displayHighlightSurface()
-		elseif(inputFieldY == 150) then
-			inputFieldY = inputFieldEnd
+		elseif(inputFieldY == gfx.screen:get_height()/5) then
+			inputFieldY = inputFieldEndY
 			displayHighlightSurface()
 		end
 	end
 	--Down
 	if(key == 'green') then
-		if(inputFieldY < 550) then
-			inputFieldY = inputFieldY + 80
+		if(inputFieldY < gfx.screen:get_width()) then
+			inputFieldY = inputFieldY + gfx.screen:get_height()/10
 			displayHighlightSurface()
-		elseif(inputFieldY == 550) then
+		elseif(inputFieldY == gfx.screen:get_width()) then
 			inputFieldY = inputFieldStartY
 			displayHighlightSurface()
 		end
 	end
 	--Left
 	if(key == 'yellow') then
-		if(inputFieldX > 250) then
+		if(inputFieldX > 0) then
 			inputFieldX = inputFieldX - 80
-			if(inputFieldX < 250) then
-				inputFieldX = inputFieldEnd
+			if(inputFieldX < 0) then
+				inputFieldX = inputFieldEndX
 			end
 			displayHighlightSurface()
-		elseif(inputFieldX == 250) then
+		elseif(inputFieldX == 0) then
 			inputFieldX = inputFieldEnd
 			displayHighlightSurface()
 		end
 	end
 	--Right
 	if(key == 'blue') then
-		if(inputFieldX < 550) then
+		if(inputFieldX < gfx.screen:get_width()) then
 			inputFieldX = inputFieldX + 80
-			if(inputFieldX > 550) then
+			if(inputFieldX > gfx.screen:get_width()) then
 				inputFieldX = inputFieldStartX
 			end
 			displayHighlightSurface()
-		elseif(inputFieldX == 550) then
+			print(inputFieldX)
+		elseif(inputFieldX == gfx.screen:get_width()) then
 			inputFieldX = inputFieldStartX
 			displayHighlightSurface()
 		end
@@ -146,15 +148,15 @@ function printPicture(pic,xx,yy)
 end
 
 function onKey(key,state)
-  	if(key == 'red') then
+  	if(key == 'red' and state == 'up') then
   		--Up
   		moveHighlightedInputField(key)
-  	elseif(key == 'green') then
+  	elseif(key == 'green' and state == 'up') then
   		--Down
   		moveHighlightedInputField(key)
-  	elseif(key == 'yellow') then
+  	elseif(key == 'yellow' and state == 'up') then
   		moveHighlightedInputField(key)
-  	elseif(key == 'blue') then
+  	elseif(key == 'blue' and state == 'up') then
   		moveHighlightedInputField(key)
   	end
 	gfx.update()

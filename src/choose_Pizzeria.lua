@@ -119,6 +119,11 @@ function onKey(key,state)
   		--Right
   	elseif(key == 'Right') then
   		moveHighlightedInputField(key)
+  	end
+  	elseif(key == 'blue') then
+
+  	end
+  	elseif(key == 'red')then
 
   	end
 	gfx.update()

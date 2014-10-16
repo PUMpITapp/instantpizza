@@ -43,7 +43,6 @@ function displayLogo()
 	logoSurface:fill({139,195,74})
 	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=25})
 	png_logo_width = 250
-	--text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-(png_logo_width/2),50,300,300)
 	printPicture(logoName,(gfx.screen:get_width() - 740)/2,(gfx.screen:get_height()/5)-45)
 	printPicture(pizzaPicture,gfx.screen:get_width()/5+420,(gfx.screen:get_height()/5)-110)
   --  gfx.screen:copyfrom(logo, nil, {x=gfx.screen:get_width()/2-(png_logo_width/2), y=100})
@@ -141,6 +140,7 @@ function onKey(key,state)
   	elseif(key == 'yellow') then
 
   	elseif(key == 'blue') then
+  		dofile("choose_Pizzeria.lua")
   	end
 	gfx.update()
 end

@@ -108,7 +108,6 @@ function onKey(key,state)
 
   	if(key == 'Up') then
   		--Up
-  		print("Hej")
   		moveHighlightedInputField(key)
   	elseif(key == 'Down') then
   		--Down
@@ -121,12 +120,10 @@ function onKey(key,state)
   		moveHighlightedInputField(key)
   	
   	elseif(key == 'blue') then
-
-  	
+  	  	dofile("pizza_info.lua")
   	elseif(key == 'red')then
-
+  		dofile("user_registration.lua")
   	end
-	gfx.update()
 end
 
 --Main method

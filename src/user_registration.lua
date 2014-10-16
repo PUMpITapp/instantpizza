@@ -31,7 +31,7 @@ function buildGUI()
 displayLogo()
 displaySideSurface()
 displayInputSurface()
-displayHighlightSurface()
+--displayHighlightSurface()
 displaystatusSurface()
 
 end

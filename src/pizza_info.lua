@@ -8,61 +8,56 @@
 
 local text = require "write_text"
 local gfx = require "gfx"
---Start of inputFields. Needed for 
-local inputFieldY = gfx.screen:get_height()/5
-local inputFieldX = 0
 
-gfx.screen:fill({0,0,255})
+--Start of inputFields. Needed for 
+local inputFieldY = 250
+local inputFieldX = gfx.screen:get_width()/8
+
+gfx.screen:fill({241,248,233})
 gfx.update()
 
 local logoSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
-local sideSurface = gfx.new_surface(gfx.screen:get_width()/4, gfx.screen:get_height())
-local inputSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height()*(3/5))
+local pizzaSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/2)
 local highlightSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
 local statusSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
 
 --Calls methods that builds GUI
 function buildGUI()
 displayLogo()
---displaySideSurface()
 displaystatusSurface()
-displayInputSurface()
-
---displayInputSurface()
+displayPizzas()
 --displayHighlightSurface()
 end
 
 --Creates new surface and displays logo
 function displayLogo()
 	logoSurface:clear()
-	logoSurface:fill({0,155,0})
+	logoSurface:fill({139,195,74})
 	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
 	png_logo_width = 250
 	text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-(png_logo_width/2),50,300,300)
   --  gfx.screen:copyfrom(logo, nil, {x=gfx.screen:get_width()/2-(png_logo_width/2), y=100})
 	gfx.update()
 end
---Creates new surface and displays items on the left side
-function displaySideSurface()
-	sideSurface:clear()
-	sideSurface:fill({155,0,0})
-	gfx.screen:copyfrom(sideSurface,nil,{x=0, y=gfx.screen:get_height()/5})
-	--Print text on sidemenu
-	text.print(gfx.screen,arial,"Pizza",20,150,200,300)
 
-	text.print(gfx.screen,arial,"Soda",20,410,200,300)
+--Creates new surface and display pizzas
+function displayPizzas()
+	pizzaSurface:clear()
+	pizzaSurface:fill({241,248,233})
+	gfx.screen:copyfrom(pizzaSurface,nil,{x=0, y=230})
+	text.print(gfx.screen,arial,"Pizza 1",gfx.screen:get_width()/8,300,220,300)
+	text.print(gfx.screen,arial,"Pizza 2",gfx.screen:get_width()/8+200,300,220,300)
+	text.print(gfx.screen,arial,"Pizza 3",gfx.screen:get_width()/8+400,300,220,300)
+	text.print(gfx.screen,arial,"Pizza 4",gfx.screen:get_width()/8+600,300,220,300)
+
+	text.print(gfx.screen,arial,"Pizza 5",gfx.screen:get_width()/8,500,220,300)
+	text.print(gfx.screen,arial,"Pizza 6",gfx.screen:get_width()/8+200,500,220,300)
+	text.print(gfx.screen,arial,"Pizza 7",gfx.screen:get_width()/8+400,500,220,300)
+	text.print(gfx.screen,arial,"Pizza 8",gfx.screen:get_width()/8+600,500,220,300)
+	text.print(gfx.screen,arial,"Choose",inputFieldX,inputFieldY,140,50)
 	gfx.update()
-end
-function displayInputSurface()
-	inputSurface:clear()
-	inputSurface:fill({0,0,155})
-	gfx.screen:copyfrom(inputSurface,nil,{x=0, y=gfx.screen:get_height()/5, h=gfx.screen:get_height()*(3/5)})
-	--local highlight = gfx.loadpng("images/2.png")
-	--printPicture(highlight,inputFieldX,inputFieldY)
-	gfx.update()
 
 end
-
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
@@ -88,55 +83,41 @@ end
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	 inputFieldStartY = gfx.screen:get_height()/5
-	 inputFieldStartX = 0
-	 inputFieldEndY = gfx.screen:get_height()*(4/5)
-	 inputFieldEndX = gfx.screen:get_width()
+	 inputFieldStart = 150
+	 inputFieldEnd = 550
 	--Up
-	if(key == 'red') then
-		if(inputFieldY > gfx.screen:get_height()/5) then
-			inputFieldY = inputFieldY - gfx.screen:get_height()/10
-			displayHighlightSurface()
-		elseif(inputFieldY == gfx.screen:get_height()/5) then
-			inputFieldY = inputFieldEndY
-			displayHighlightSurface()
+	if(key == 'Up')then
+		if(inputFieldY == 450) then
+			inputFieldY = 250
+			displayPizzas()
 		end
 	end
 	--Down
-	if(key == 'green') then
-		if(inputFieldY < gfx.screen:get_width()) then
-			inputFieldY = inputFieldY + gfx.screen:get_height()/10
-			displayHighlightSurface()
-		elseif(inputFieldY == gfx.screen:get_width()) then
-			inputFieldY = inputFieldStartY
-			displayHighlightSurface()
+	if(key == 'Down')then
+		if(inputFieldY == 250)then
+			inputFieldY = 450
+			displayPizzas()
 		end
 	end
 	--Left
-	if(key == 'yellow') then
-		if(inputFieldX > 0) then
-			inputFieldX = inputFieldX - 80
-			if(inputFieldX < 0) then
-				inputFieldX = inputFieldEndX
-			end
-			displayHighlightSurface()
-		elseif(inputFieldX == 0) then
-			inputFieldX = inputFieldEnd
-			displayHighlightSurface()
+	if(key == 'Left')then
+		if(inputFieldX > gfx.screen:get_width()/8) then
+			inputFieldX = inputFieldX - 200
+			displayPizzas()
+		elseif(inputFieldX == gfx.screen:get_width()/8)then
+			inputFieldX = gfx.screen:get_width()/8+600
+			displayPizzas()
 		end
 	end
-	--Right
-	if(key == 'blue') then
-		if(inputFieldX < gfx.screen:get_width()) then
-			inputFieldX = inputFieldX + 80
-			if(inputFieldX > gfx.screen:get_width()) then
-				inputFieldX = inputFieldStartX
-			end
-			displayHighlightSurface()
-			print(inputFieldX)
-		elseif(inputFieldX == gfx.screen:get_width()) then
-			inputFieldX = inputFieldStartX
-			displayHighlightSurface()
+	--Down
+	if(key == 'Right') then
+		if(inputFieldX < gfx.screen:get_width()/8+600) then
+			inputFieldX = inputFieldX + 200 
+			displayPizzas()
+		elseif(inputFieldX == gfx.screen:get_width()/8+600)then
+			inputFieldX = gfx.screen:get_width()/8
+			displayPizzas()
+
 		end
 	end
 end
@@ -148,16 +129,21 @@ function printPicture(pic,xx,yy)
 end
 
 function onKey(key,state)
-  	if(key == 'red' and state == 'up') then
+	--TODO
+
+  	if(key == 'Up') then
   		--Up
   		moveHighlightedInputField(key)
-  	elseif(key == 'green' and state == 'up') then
+  	elseif(key == 'Down') then
   		--Down
+  	  	moveHighlightedInputField(key)
+  		--Left
+  	elseif(key == 'Left') then
   		moveHighlightedInputField(key)
-  	elseif(key == 'yellow' and state == 'up') then
+  		--Right
+  	elseif(key == 'Right') then
   		moveHighlightedInputField(key)
-  	elseif(key == 'blue' and state == 'up') then
-  		moveHighlightedInputField(key)
+
   	end
 	gfx.update()
 end

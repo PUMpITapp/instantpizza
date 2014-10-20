@@ -33,7 +33,7 @@ displayPizzas()
 end
 
 --Creates new surface and displays logo
--- inserted these for showing to customer. your function is in comment if needed//Huy
+-- inserted these for showing to customer. your function is in comment below if needed//Huy
 function displayLogo()
 	logoSurface:clear()
 	logoSurface:fill({139,195,74})

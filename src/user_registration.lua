@@ -41,7 +41,7 @@ end
 --Creates new surface and displays items on the left side
 function displaySideSurface()
 	sideSurface:clear()
-	sideSurface:fill({0,0,0})
+	sideSurface:fill({0,0,0,0})
 	gfx.screen:copyfrom(sideSurface,nil,{x=0, y=200})
 	--Print text on sidemenu
 	text.print(gfx.screen,arial,"Name",20,150,200,300)

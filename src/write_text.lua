@@ -43,6 +43,7 @@ end
 return text
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 -- cred to scrum1
 =======
@@ -51,3 +52,7 @@ return text
 
 -- cred to scrum1
 >>>>>>> a primitive keyboard now display
+=======
+
+-- cred to scrum1
+>>>>>>> c2e70f59b1b03bdbf460d2ef56a8edfdcaf8d9ea

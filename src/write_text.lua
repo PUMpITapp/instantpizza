@@ -41,18 +41,3 @@ end
 --text.print(gfx.screen, arial, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus auctor tellus. In interdum maximus odio consequat posuere. Suspendisse convallis condimentum pharetra. Ut luctus massa eget consequat iaculis. Nunc blandit semper odio, et tristique justo vestibulum nec. Donec ex justo, iaculis eget fringilla at, tempus sed justo. Pellentesque a odio orci. Integer vel lorem sodales, laoreet quam non, porta velit.", 10, 10, 400, 400)
 
 return text
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-
--- cred to scrum1
-=======
->>>>>>> Added functions to print text.
-=======
-
--- cred to scrum1
->>>>>>> a primitive keyboard now display
-=======
-
--- cred to scrum1
->>>>>>> c2e70f59b1b03bdbf460d2ef56a8edfdcaf8d9ea

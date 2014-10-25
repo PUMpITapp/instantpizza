@@ -5,11 +5,46 @@
 --Create user from input
 --Buttons
 --Transparency not working
+--- Checks if the file was called from a test file.
+-- Returs true if it was, 
+--   - which would mean that the file is being tested.
+-- Returns false if it was not,
+--   - which wold mean that the file was being used.  
+function checkTestMode()
+  runFile = debug.getinfo(2, "S").source:sub(2,3)
+  if (runFile ~= './' ) then
+    underGoingTest = false
+  elseif (runFile == './') then
+    underGoingTest = true
+  end
+  return underGoingTest
+end
 
-local text = require "write_text"
-local gfx = require "gfx"
+--- Chooses either the actual or he dummy gfx.
+-- Returns dummy gfx if the file is being tested.
+-- Rerunes actual gfx if the file is being run.
+function chooseGfx(underGoingTest)
+  if not underGoingTest then
+    tempGfx = require "gfx"
+  elseif underGoingTest then
+    tempGfx = require "gfx_stub"
+  end
+  return tempGfx
+end
+
+function chooseText(underGoingTest)
+  if not underGoingTest then
+    tempText = require "write_text"
+  elseif underGoingTest then
+    tempText = require "write_text_stub"
+  end
+  return tempText
+end
+local text = chooseText(checkTestMode())
+local gfx =  chooseGfx(checkTestMode())
 --Start of inputFields. Needed for 
-local inputFieldY = 150
+
+inputFieldY = 150
 local pizzaPicture = gfx.loadpng("images/pizza.png")
 local progressBar = gfx.loadpng("images/progressbar1.png")
 local nextButton = gfx.loadpng("images/buttonnext.png")
@@ -36,6 +71,7 @@ displaystatusSurface()
 
 end
 
+
 --Creates new surface and displays logo
 function displayLogo()
 	logoSurface:clear()
@@ -50,8 +86,10 @@ end
 --Creates new surface and displays items on the left side
 function displaySideSurface()
 	sideSurface:clear()
+
 	sideSurface:fill({241,248,233})
 	gfx.screen:copyfrom(sideSurface,nil,{x=0, y=gfx.screen:get_height()/5})
+
 	--Print text on sidemenu
 	text.print(gfx.screen,arial,"Name",40,150,200,300)
 	text.print(gfx.screen,arial,"Address",40,230,200,300)

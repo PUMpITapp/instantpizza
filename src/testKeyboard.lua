@@ -3,8 +3,8 @@ local text = require "write_text"
 -- local keyboardClass = require "keyboard"
 local screenWidth = gfx.screen:get_width()
 local screenHeight = gfx.screen:get_height()
-local xUnit = screenWidth / 10
-local yUnit = screenHeight / 10
+local xUnit = screenWidth / 16
+local yUnit = screenHeight / 9
 local highlightPos = 1
 
 gfx.screen:fill({0,0,0,0})
@@ -46,6 +46,8 @@ function onKey(key, state)
 
 		elseif(key == "Return") then
 			assert(loadfile("keyboard.lua"))(info)
+		elseif(key == "Z") then
+			saveData(info)
 		end
 	end
 end
@@ -96,6 +98,16 @@ function displayInfo(information)
 			print(key,value)
 		end
 	end
+end
+
+function saveData(information)
+	local file = io.open("userExample.txt", "w")
+	for key, value in pairs(information) do
+		file:write(key," : ",value, "\n")
+	end
+	file:flush()
+	file:close()
+	print "SAVED"
 end
 
 main()

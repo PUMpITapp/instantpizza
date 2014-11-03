@@ -1,7 +1,7 @@
-local keyboardClass = {}
 local gfx = require "gfx"
 local text = require "write_text"
-local keyboardPNG = gfx.loadpng("keyboard2.png")
+local keyboardPNG = gfx.loadpng("keyboardblank4.png")
+local keyboardPressedPNG = gfx.loadpng("keystatndardpressed2.png")
 
 --what do these actually do?!
 local keyboardSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
@@ -19,6 +19,8 @@ local yMargin = keyboardHeight/4 -- margin in y for keyboard keys. 4 keys each c
 local lastInputX = xMargin	-- last input of x
 local lastInputY = yMargin	-- last input of y
 local savedText = ""	-- text to display
+-- local arg = {...}
+local lastStateInfo = ...
 
 gfx.screen:fill({0,0,0,0}) --colours the screen black
 gfx.update()
@@ -94,17 +96,20 @@ local keyboard = {
 		Question = PosKey:new("?",10,4)
 	}
 
-
-function keyboardClass:displayKeyboard()
-	displayKeyboardSurface()
+function main()
+		displayKeyboardSurface()
 	displayHighlightSurface()
 	displaySavedText()
 end
 
+-- function keyboardClass:displayKeyboard()
+-- 	displayKeyboardSurface()
+-- 	displayHighlightSurface()
+-- 	displaySavedText()
+-- end
+
 --display keyboard
 function displayKeyboardSurface()
-	local width = gfx.screen:get_width()
-	local height = gfx.screen:get_height()
 	keyboardSurface:clear()
 	gfx.screen:copyfrom(keyboardPNG, nil, {x=screenWidth/10, y=screenHeight * 3/10, w=screenWidth * 8/10, h=screenHeight * 6/10})
 	gfx.update()
@@ -117,8 +122,9 @@ function displayHighlightSurface()
 
 	displayKeyboardSurface()
 	highlightSurface:clear()
-	highlightSurface:fill({255,145,145,0}) 
-	gfx.screen:fill({r=255, g=0, b=0, a=0}, {x=screenWidth * 1/10 + lastInputX - xMargin, y=screenHeight * 3/10 + lastInputY - yMargin, w=xMargin, h=yMargin})
+	-- highlightSurface:fill({255,145,145,0}) 
+	gfx.screen:copyfrom(keyboardPressedPNG, nil ,{x=screenWidth * 1/10 + lastInputX - xMargin, y=screenHeight * 3/10 + lastInputY - yMargin, w=xMargin, h=yMargin})
+	-- gfx.screen:fill({r=255, g=0, b=0, a=0}, {x=screenWidth * 1/10 + lastInputX - xMargin, y=screenHeight * 3/10 + lastInputY - yMargin, w=xMargin, h=yMargin})
 	gfx.update()
 end
 
@@ -200,6 +206,9 @@ function onKey(key, state)
 			local letterToDisplay = getKeyboardChar(lastInputX,lastInputY)
 			saveText(letterToDisplay)
 			displaySavedText()
+		elseif(key == 'B') then
+			-- sendInputToState(lastState, savedText)
+			sendInfoBackToState(lastStateInfo.state, lastStateInfo)
 
 		end
 	end
@@ -226,6 +235,7 @@ end
 --saves all input and can display them by pressing S
 function saveText(character)
 	savedText = savedText .. character
+
 end
 
 function getSavedText()
@@ -236,7 +246,21 @@ function displaySavedText()
 	gfx.screen:fill({r=255, g=255, b=255, a=0}, {x=screenWidth/10, y=screenHeight*1/10, w=screenWidth * 8/10, h=screenHeight/10}) --colours the saved text field
 
 	text.print(gfx.screen, arial, savedText, screenWidth/10, screenHeight * 1/10,screenWidth * 8/10, screenHeight/10)
+	gfx.update()
 end
 
+-- function sendInputBackToState(state, textToSend)
+-- 	assert(loadfile(state))(textToSend)
+-- end
 
-return keyboardClass
+function saveInfo(myText)
+	local inputField = lastStateInfo.currentInputField
+	lastStateInfo[inputField] = myText
+end
+
+function sendInfoBackToState(state, info)
+	saveInfo(getSavedText())
+	assert(loadfile(state))(info)
+end
+
+main()

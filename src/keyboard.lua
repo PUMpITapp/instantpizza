@@ -1,7 +1,7 @@
 local gfx = require "gfx"
 local text = require "write_text"
-local keyboardPNG = gfx.loadpng("keyboardblank.png")
-local keyboardPressedPNG = gfx.loadpng("standKeyPressed.png")
+local keyboardPNG = gfx.loadpng("images/keyboard/keyboardblank.png")
+local keyboardPressedPNG = gfx.loadpng("images/keyboard/standKeyPressed.png")
 
 --what do these actually do?!
 --
@@ -142,7 +142,6 @@ end
 -- TODO:
 -- needs to have proper boundaries
 function movehighlightKey(key)
-	keyboardPressedPNG = gfx.loadpng("standKeyPressed.png")
 	if(key == 'Down')then
 		--down
 		highlightPosX = highlightPosX + 0

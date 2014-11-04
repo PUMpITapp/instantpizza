@@ -56,7 +56,7 @@ function onKey(key, state)
 		elseif(key == "S") then
 			saveData(newForm)
 		elseif(key == "blue") then
-			assert(loadfile("testKeyboard2.lua"))(newForm)
+			assert(loadfile("testKeyboardState2.lua"))(newForm)
 		end
 	end
 end
@@ -104,7 +104,7 @@ end
 
 -- can be used to save data from form to a file
 function saveData(form)
-	local file = io.open("userExample.txt", "w")
+	local file = io.open("outputEXAMPLE.txt", "w")
 	for key, value in pairs(form) do
 		file:write(key," : ",value, "\n")
 	end

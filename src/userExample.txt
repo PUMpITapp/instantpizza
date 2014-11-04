@@ -1,5 +1,0 @@
-adress : CCCC
-state : testKeyboard.lua
-currentInputField : name
-age : QQQQ
-name : EDDXXX

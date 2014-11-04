@@ -61,13 +61,6 @@ function onKey(key, state)
 	end
 end
 
--- function displaySavedText(myText)
--- 	if myText then	--basically says if myText != nil then
--- 		gfx.screen:fill({r=255, g=255, b=255, a=0}, {x=screenWidth*1/10, y=screenHeight*4/10, w=screenWidth * 8/10, h=screenHeight/10}) --colours the saved text field
--- 		text.print(gfx.screen, arial, myText, screenWidth/10, screenHeight * 4/10,screenWidth * 8/10, screenHeight/10)
--- 		gfx.update()
--- 	end
--- end
 function displayInputfield()
 	local pos1 = {x=xUnit, y=2 * yUnit, w=xUnit * 8, h=yUnit}
 	local pos2 = {x=xUnit, y=4 * yUnit, w=xUnit * 8, h=yUnit}

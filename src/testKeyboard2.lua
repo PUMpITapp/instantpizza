@@ -8,19 +8,20 @@ local yUnit = screenHeight / 9
 local highlightPos = 1
 gfx.screen:fill({0,0,0,0})
 gfx.update()
--- local name = ...
+
 local lastForm = ...
 
 local newForm = {
-	laststate = "testKeyboard.lua",
-	currentInputField = "name",
-	name = "Input name",
-	age = 0,
-	adress = "Input adress"
+	laststate = "testKeyboard2.lua",
+	currentInputField = "pizzeria",
+	pizzeria = "Choose pizzeria"
 	}
 
 local function main()
 	checkForm()
+	for k,v in pairs(newForm) do
+		print(k,v)
+	end
 	-- displaySavedText(name)
 	displayInputfield()
 	displayForm(info)
@@ -47,7 +48,7 @@ function onKey(key, state)
 			highlightPos = highlightPos - 1
 			displayHighlight()
 
-		elseif(key == "Down" and highlightPos < 3) then
+		elseif(key == "Down" and highlightPos < 4) then
 			highlightPos = highlightPos +1
 			displayHighlight()
 
@@ -55,8 +56,6 @@ function onKey(key, state)
 			assert(loadfile("keyboard.lua"))(newForm)
 		elseif(key == "S") then
 			saveData(newForm)
-		elseif(key == "blue") then
-			assert(loadfile("testKeyboard2.lua"))(newForm)
 		end
 	end
 end
@@ -72,6 +71,7 @@ function displayInputfield()
 	local pos1 = {x=xUnit, y=2 * yUnit, w=xUnit * 8, h=yUnit}
 	local pos2 = {x=xUnit, y=4 * yUnit, w=xUnit * 8, h=yUnit}
 	local pos3 = {x=xUnit, y=6 * yUnit, w=xUnit * 8, h=yUnit}
+	local pos4 = {x=xUnit, y=8 * yUnit, w=xUnit * 8, h=yUnit}
 
 	gfx.screen:fill({r=255, g=255, b=255, a=0}, pos1)
 	text.print(gfx.screen, arial, tostring(newForm.name), pos1.x, pos1.y, pos1.w, pos1.h)
@@ -79,6 +79,8 @@ function displayInputfield()
 	text.print(gfx.screen, arial, tostring(newForm.age), pos2.x, pos2.y, pos2.w, pos2.h)
 	gfx.screen:fill({r=255, g=255, b=255, a=0}, pos3)
 	text.print(gfx.screen, arial, tostring(newForm.adress), pos3.x, pos3.y, pos3.w, pos3.h)
+	gfx.screen:fill({r=255, g=255, b=255, a=0}, pos4)
+	text.print(gfx.screen, arial, tostring(newForm.pizzeria), pos4.x, pos4.y, pos4.w, pos4.h)
 	gfx.update()
 end
 
@@ -98,6 +100,8 @@ function setInputfield(form)
 		form.currentInputField = "age"
 	elseif highlightPos ==3 then
 		form.currentInputField = "adress"
+	elseif highlightPos == 4 then
+		form.currentInputField = "pizzeria"
 	end
 end
 
@@ -120,3 +124,10 @@ function saveData(form)
 end
 
 main()
+
+
+-- function displaySavedText(myText)
+-- 	if myText then	--basically says if myText != nil then
+-- 		gfx.screen:fill({r=255, g=255, b=255, a=0}, {x=screenWidth*1/10, y=screenHeight*4/10, w=screenWidth * 8/10, h=screenHeight/10}) --colours the saved text field
+-- 		text.print(gfx.screen, arial, myText, screenWidth/10, screenHeight * 4/10,screenWidth * 8/10, screenHeight/10)
+-- 		gfx.update()

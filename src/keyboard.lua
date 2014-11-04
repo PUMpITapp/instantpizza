@@ -4,8 +4,6 @@ local keyboardPNG = gfx.loadpng("keyboardblank.png")
 local keyboardPressedPNG = gfx.loadpng("standKeyPressed.png")
 
 --what do these actually do?!
-local keyboardSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
-local highlightSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 --
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -15,13 +13,16 @@ local keyboardXUnit = keyboardWidth/10 -- margin in x for keyboard keys. 10 keys
 local keyboardYUnit = keyboardHeight/4 -- margin in y for keyboard keys. 4 keys each column
 local lastInputX = keyboardXUnit	-- last input of x
 local lastInputY = keyboardYUnit	-- last input of y
-local keyboardPosX = 3 * xUnit
-local keyboardPosY = 3 * yUnit
-local highlightPosX = 1
-local highlightPosY = 1
+local keyboardPosX = 3 * xUnit 		-- keyboard start posx
+local keyboardPosY = 3 * yUnit 		-- keyboard start posy
+local highlightPosX = 1 			-- pos on keyboard posx
+local highlightPosY = 1 			-- pos on keyboard posy
 local savedText = ""	-- text to display
 local lastStateInfo = ...
 
+
+local keyboardSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
+local highlightSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 gfx.screen:fill({0,0,0,0}) --colours the screen black
 gfx.update()
 
@@ -40,10 +41,6 @@ function mapElement:new(key,row,column,posX,posY)
 end
 
 local map = {
-	-- row1 = 10,
-	-- row2 = 9,
-	-- row3 = 9,
-	-- row4 = 5,
 --first row
 	p11 = mapElement:new("Q",1,1,keyboardPosX + xUnit, keyboardPosY + yUnit),
 	p21 = mapElement:new("W",2,1,keyboardPosX +2 * xUnit, keyboardPosY +yUnit),
@@ -89,16 +86,8 @@ function main()
 	displayHighlightSurface()
 	displaySavedText()
 	printKeyboardLetters()
-	-- for k,v in pairs(map) do
-	-- 	print(k,v)
-	-- end
 end
 
--- function keyboardClass:displayKeyboard()
--- 	displayKeyboardSurface()
--- 	displayHighlightSurface()
--- 	displaySavedText()
--- end
 
 --display keyboard
 function displayKeyboardSurface()
@@ -118,8 +107,6 @@ function displayHighlightSurface()
 	printKeyboardLetters()
 	highlightSurface:clear()
 	-- highlightSurface:fill({255,145,145,0}) 
-	-- gfx.screen:copyfrom(keyboardPressedPNG, nil ,{x= 3 * xUnit + lastInputX - keyboardXUnit, y=3 * yUnit + lastInputY - keyboardYUnit, w=keyboardXUnit, h=keyboardYUnit})
-	-- gfx.screen:fill({r=255, g=0, b=0, a=0}, {x= 3 * xUnit + lastInputX - keyboardXUnit, y=3 * yUnit + lastInputY - keyboardYUnit, w=keyboardXUnit, h=keyboardYUnit})
 	
 	if (highlightPosX == 1 or highlightPosX == 9) and highlightPosY ==3 then
 		width = 1.5 * xUnit
@@ -133,6 +120,7 @@ function displayHighlightSurface()
 	gfx.update()
 end
 
+--gets the coordinate of arguments
 function getCoordinates(posX, posY)
 	local pos = "p"..posX..posY
 	if map[pos] then
@@ -231,8 +219,12 @@ function onKey(key, state)
 		elseif(key == 'Return') then
 		-- print("lastInputX: "..lastInputX.."lastInputY: "..lastInputY)
 			local letterToDisplay = getKeyboardChar(highlightPosX,highlightPosY)
-			saveText(letterToDisplay)
-			displaySavedText()
+			if (letterToDisplay == "ENTER") then
+				sendInfoBackToState(lastStateInfo.laststate, lastStateInfo)
+			else 
+				saveText(letterToDisplay)
+				displaySavedText()
+			end
 		elseif(key == 'B' and lastStateInfo) then
 			-- sendInputToState(lastState, savedText)
 			sendInfoBackToState(lastStateInfo.state, lastStateInfo)
@@ -245,16 +237,13 @@ end
 
 -- gets the char that is highlighted
 function getKeyboardChar(row, column)
-	-- local cursorPosX = math.floor(posX)	--int instead of float for precision
-	-- local cursorPosY = math.floor(posY) --int instead of float for precision
 
 	for key, value in pairs(map) do
 
 		if(row == value.row) and (column==value.column)then
 			print(value.letter)
 			return value.letter
-		-- else
-		-- 	return "not mapped"
+		
 		end
 	end
 end
@@ -269,7 +258,7 @@ end
 function getSavedText()
 	return savedText
 end
-
+-- displays the saved text on screen
 function displaySavedText()
 	gfx.screen:fill({r=255, g=255, b=255, a=0}, {x=2 * xUnit, y=2 * yUnit, w=12 * xUnit, h=yUnit}) --colours the saved text field
 
@@ -277,15 +266,13 @@ function displaySavedText()
 	gfx.update()
 end
 
--- function sendInputBackToState(state, textToSend)
--- 	assert(loadfile(state))(textToSend)
--- end
-
+-- saves the text to the info form to be sent back to last state
 function saveInfo(myText)
 	local inputField = lastStateInfo.currentInputField
 	lastStateInfo[inputField] = myText
 end
 
+-- send info back to state
 function sendInfoBackToState(state, info)
 	saveInfo(getSavedText())
 	assert(loadfile(state))(info)

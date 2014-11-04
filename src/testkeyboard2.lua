@@ -12,11 +12,9 @@ gfx.update()
 local lastForm = ...
 
 local newForm = {
-	laststate = "testKeyboard.lua",
-	currentInputField = "name",
-	name = "Input name",
-	age = 0,
-	adress = "Input adress"
+	laststate = "testKeyboard2.lua",
+	currentInputField = "pizzeria",
+	pizzeria = "Choose pizzeria"
 	}
 
 local function main()
@@ -33,9 +31,7 @@ function checkForm()
 			newForm = lastForm
 		else
 			for k,v in pairs(lastForm) do
-				if not newForm[k] then
-					newForm[k] = v
-				end
+				newForm[k] = v
 			end
 		end
 	end
@@ -55,8 +51,6 @@ function onKey(key, state)
 			assert(loadfile("keyboard.lua"))(newForm)
 		elseif(key == "S") then
 			saveData(newForm)
-		elseif(key == "blue") then
-			assert(loadfile("testKeyboard2.lua"))(newForm)
 		end
 	end
 end
@@ -120,3 +114,18 @@ function saveData(form)
 end
 
 main()
+			highlightPos = highlightPos - 1
+			displayHighlight()
+
+		elseif(key == "Down" and highlightPos < 3) then
+			highlightPos = highlightPos +1
+			saveData(info)
+		end
+	end
+end
+
+-- function displaySavedText(myText)
+-- 	if myText then	--basically says if myText != nil then
+-- 		gfx.screen:fill({r=255, g=255, b=255, a=0}, {x=screenWidth*1/10, y=screenHeight*4/10, w=screenWidth * 8/10, h=screenHeight/10}) --colours the saved text field
+-- 		text.print(gfx.screen, arial, myText, screenWidth/10, screenHeight * 4/10,screenWidth * 8/10, screenHeight/10)
+-- 		gfx.update()

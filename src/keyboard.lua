@@ -4,8 +4,6 @@ local keyboardPNG = gfx.loadpng("images/keyboard/keyboardblank.png")
 local keyboardPressedPNG = gfx.loadpng("images/keyboard/standKeyPressed.png")
 local inputFieldPNG = gfx.loadpng("images/keyboard/standKeyPressed.png")
 
---what do these actually do?!
---
 local xUnit = gfx.screen:get_width()/16	-- units of the screen. based on 16:9 ratio
 local yUnit = gfx.screen:get_height()/9	-- units of the screen. based on 16:9 ratio
 local keyboardWidth = 10 * xUnit 	-- width of keyboard. can be changed to fit
@@ -46,16 +44,16 @@ end
 
 local map = {
 --first row
-	p11 = mapElement:new("Q",1,1,keyboardPosX + keyboardXUnit, keyboardPosY + keyboardYUnit,0,1),
-	p21 = mapElement:new("W",2,1,keyboardPosX +2 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,2),
-	p31 = mapElement:new("E",3,1,keyboardPosX +3 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,3),
-	p41 = mapElement:new("R",4,1,keyboardPosX +4 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,4),
-	p51 = mapElement:new("T",5,1,keyboardPosX +5 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,5),
-	p61 = mapElement:new("Y",6,1,keyboardPosX +6 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,6),
-	p71 = mapElement:new("U",7,1,keyboardPosX +7 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,6),
-	p81 = mapElement:new("I",8,1,keyboardPosX +8 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,7),
-	p91 = mapElement:new("O",9,1,keyboardPosX +9 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,8),
-	p101 = mapElement:new("P",10,1,keyboardPosX +10 *keyboardXUnit,keyboardPosY +keyboardYUnit,0,9),
+	p11 = mapElement:new("Q",1,1,keyboardPosX + keyboardXUnit, keyboardPosY + keyboardYUnit,1,1),
+	p21 = mapElement:new("W",2,1,keyboardPosX +2 * keyboardXUnit, keyboardPosY +keyboardYUnit,2,2),
+	p31 = mapElement:new("E",3,1,keyboardPosX +3 * keyboardXUnit, keyboardPosY +keyboardYUnit,3,3),
+	p41 = mapElement:new("R",4,1,keyboardPosX +4 * keyboardXUnit, keyboardPosY +keyboardYUnit,4,4),
+	p51 = mapElement:new("T",5,1,keyboardPosX +5 * keyboardXUnit, keyboardPosY +keyboardYUnit,5,5),
+	p61 = mapElement:new("Y",6,1,keyboardPosX +6 * keyboardXUnit, keyboardPosY +keyboardYUnit,6,6),
+	p71 = mapElement:new("U",7,1,keyboardPosX +7 * keyboardXUnit, keyboardPosY +keyboardYUnit,7,6),
+	p81 = mapElement:new("I",8,1,keyboardPosX +8 * keyboardXUnit, keyboardPosY +keyboardYUnit,8,7),
+	p91 = mapElement:new("O",9,1,keyboardPosX +9 * keyboardXUnit, keyboardPosY +keyboardYUnit,9,8),
+	p101 = mapElement:new("P",10,1,keyboardPosX +10 *keyboardXUnit,keyboardPosY +keyboardYUnit,10,9),
  
 	p12 = mapElement:new("A",1,2,keyboardPosX + 1.5 *keyboardXUnit, keyboardPosY + 2*keyboardYUnit,1,1),
 	p22 = mapElement:new("S",2,2,keyboardPosX +2.5 * keyboardXUnit, keyboardPosY + 2*keyboardYUnit,2,2),
@@ -77,11 +75,11 @@ local map = {
 	p83 = mapElement:new("M",8,3,keyboardPosX +8.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,8,4),
 	p93 = mapElement:new("DEL",9,3,keyboardPosX +9.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,9,5),
 
-	p14 = mapElement:new("?123",1,4,keyboardPosX + 1 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,1,0),
-	p24 = mapElement:new(",",2,4,keyboardPosX +3 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,2,0),
-	p34 = mapElement:new("__",3,4,keyboardPosX +4 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,5,0),
-	p44 = mapElement:new(".",4,4,keyboardPosX +8 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,8,0),
-	p54 = mapElement:new("ENTER",5,4,keyboardPosX +9 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,9,0)
+	p14 = mapElement:new("?123",1,4,keyboardPosX + 1 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,1,1),
+	p24 = mapElement:new(",",2,4,keyboardPosX +3 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,2,2),
+	p34 = mapElement:new("__",3,4,keyboardPosX +4 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,5,3),
+	p44 = mapElement:new(".",4,4,keyboardPosX +8 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,8,4),
+	p54 = mapElement:new("ENTER",5,4,keyboardPosX +9 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,9,5)
 
 }
 
@@ -186,6 +184,11 @@ function sendFormBackToState(state, form)
 	assert(loadfile(state))(form)
 end
 
+-- removes the last char in argument
+function removeLastChar(input)
+	return string.sub(input, 1, #input-1)
+end
+
 -- moves the highligther around
 function movehighlightKey(key)
 	if(key == 'Down')then
@@ -253,7 +256,12 @@ function onKey(key, state)
 		elseif(key == 'Return') then
 			local letterToDisplay = getKeyboardChar(highlightPosX,highlightPosY)
 			if (letterToDisplay == "ENTER") then
+
 				sendFormBackToState(lastStateForm.laststate, lastStateForm)
+			elseif(letterToDisplay == "DEL") then
+
+				inputText = removeLastChar(inputText)
+				displayInputField()
 			else 
 				saveText(letterToDisplay)
 				displayInputField()

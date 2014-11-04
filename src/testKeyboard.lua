@@ -93,7 +93,7 @@ function setInputfield(form)
 		form.currentInputField = "adress"
 	end
 end
-
+-- just to show how the form looks like in terminal
 function displayForm(form)
 	if form then
 		for key, value in pairs(form) do
@@ -102,6 +102,7 @@ function displayForm(form)
 	end
 end
 
+-- can be used to save data from form to a file
 function saveData(form)
 	local file = io.open("userExample.txt", "w")
 	for key, value in pairs(form) do

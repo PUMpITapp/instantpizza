@@ -6,20 +6,20 @@ local inputFieldPNG = gfx.loadpng("images/keyboard/standKeyPressed.png")
 
 --what do these actually do?!
 --
-local xUnit = gfx.screen:get_width()/16
-local yUnit = gfx.screen:get_height()/9
-local keyboardWidth = 10 * xUnit	-- puts boundaries for highlight
-local keyboardHeight = 4 * yUnit	-- puts boundaries for highlight
+local xUnit = gfx.screen:get_width()/16	-- units of the screen. based on 16:9 ratio
+local yUnit = gfx.screen:get_height()/9	-- units of the screen. based on 16:9 ratio
+local keyboardWidth = 10 * xUnit 	-- width of keyboard. can be changed to fit
+local keyboardHeight = 4 * yUnit 	-- height of keyabord. can be changed to fit
 local keyboardXUnit = keyboardWidth/10 -- margin in x for keyboard keys. 10 keys each row
 local keyboardYUnit = keyboardHeight/4 -- margin in y for keyboard keys. 4 keys each column
 local lastInputX = keyboardXUnit	-- last input of x
 local lastInputY = keyboardYUnit	-- last input of y
-local keyboardPosX = 3 * xUnit 		-- keyboard start posx
-local keyboardPosY = 3 * yUnit 		-- keyboard start posy
+local keyboardPosX = 3 * xUnit 		-- keyboard start posx. can be changed
+local keyboardPosY = 3 * yUnit 		-- keyboard start posy. can be changed
 local highlightPosX = 1 			-- pos on keyboard posx
 local highlightPosY = 1 			-- pos on keyboard posy
-local savedText = ""	-- text to display
-local lastStateInfo = ...
+local inputText = ""	-- text to display
+local lastStateForm = ...	-- gets last state form
 
 local keyboardSurface = gfx.new_surface(keyboardWidth,keyboardHeight)
 local highlightSurface = gfx.new_surface(keyboardXUnit,keyboardYUnit)
@@ -30,14 +30,15 @@ gfx.update()
 
 local mapElement = {}
 
-function mapElement:new(key,row,column,posX,posY)
+function mapElement:new(key,row,column,posX,posY,upMove,downMove)
 	pos = {
 	letter = key,
 	row = row,
 	column = column,
 	x = posX,
-	y = posY
-
+	y = posY,
+	up = upMove,
+	down = downMove
 	}
 	self.__index = self
 	return setmetatable(pos, self)
@@ -45,44 +46,45 @@ end
 
 local map = {
 --first row
-	p11 = mapElement:new("Q",1,1,keyboardPosX + keyboardXUnit, keyboardPosY + keyboardYUnit),
-	p21 = mapElement:new("W",2,1,keyboardPosX +2 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p31 = mapElement:new("E",3,1,keyboardPosX +3 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p41 = mapElement:new("R",4,1,keyboardPosX +4 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p51 = mapElement:new("T",5,1,keyboardPosX +5 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p61 = mapElement:new("Y",6,1,keyboardPosX +6 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p71 = mapElement:new("U",7,1,keyboardPosX +7 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p81 = mapElement:new("I",8,1,keyboardPosX +8 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p91 = mapElement:new("O",9,1,keyboardPosX +9 * keyboardXUnit, keyboardPosY +keyboardYUnit),
-	p101 = mapElement:new("P",10,1,keyboardPosX +10 *keyboardXUnit,keyboardPosY +keyboardYUnit),
+	p11 = mapElement:new("Q",1,1,keyboardPosX + keyboardXUnit, keyboardPosY + keyboardYUnit,0,1),
+	p21 = mapElement:new("W",2,1,keyboardPosX +2 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,2),
+	p31 = mapElement:new("E",3,1,keyboardPosX +3 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,3),
+	p41 = mapElement:new("R",4,1,keyboardPosX +4 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,4),
+	p51 = mapElement:new("T",5,1,keyboardPosX +5 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,5),
+	p61 = mapElement:new("Y",6,1,keyboardPosX +6 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,6),
+	p71 = mapElement:new("U",7,1,keyboardPosX +7 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,6),
+	p81 = mapElement:new("I",8,1,keyboardPosX +8 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,7),
+	p91 = mapElement:new("O",9,1,keyboardPosX +9 * keyboardXUnit, keyboardPosY +keyboardYUnit,0,8),
+	p101 = mapElement:new("P",10,1,keyboardPosX +10 *keyboardXUnit,keyboardPosY +keyboardYUnit,0,9),
  
-	p12 = mapElement:new("A",1,2,keyboardPosX + 1.5 *keyboardXUnit, keyboardPosY + 2*keyboardYUnit),
-	p22 = mapElement:new("S",2,2,keyboardPosX +2.5 * keyboardXUnit, keyboardPosY + 2*keyboardYUnit),
-	p32 = mapElement:new("D",3,2,keyboardPosX +3.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
-	p42 = mapElement:new("F",4,2,keyboardPosX +4.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
-	p52 = mapElement:new("G",5,2,keyboardPosX +5.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
-	p62 = mapElement:new("H",6,2,keyboardPosX +6.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
-	p72 = mapElement:new("J",7,2,keyboardPosX +7.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
-	p82 = mapElement:new("K",8,2,keyboardPosX +8.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
-	p92 = mapElement:new("L",9,2,keyboardPosX +9.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit),
+	p12 = mapElement:new("A",1,2,keyboardPosX + 1.5 *keyboardXUnit, keyboardPosY + 2*keyboardYUnit,1,1),
+	p22 = mapElement:new("S",2,2,keyboardPosX +2.5 * keyboardXUnit, keyboardPosY + 2*keyboardYUnit,2,2),
+	p32 = mapElement:new("D",3,2,keyboardPosX +3.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,3,3),
+	p42 = mapElement:new("F",4,2,keyboardPosX +4.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,4,4),
+	p52 = mapElement:new("G",5,2,keyboardPosX +5.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,5,5),
+	p62 = mapElement:new("H",6,2,keyboardPosX +6.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,6,6),
+	p72 = mapElement:new("J",7,2,keyboardPosX +7.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,7,7),
+	p82 = mapElement:new("K",8,2,keyboardPosX +8.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,9,8),
+	p92 = mapElement:new("L",9,2,keyboardPosX +9.5 * keyboardXUnit, keyboardPosY +2*keyboardYUnit,10,9),
 
-	p13 = mapElement:new("SH",1,3,keyboardPosX + 1 *keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p23 = mapElement:new("Z",2,3,keyboardPosX +2.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p33 = mapElement:new("X",3,3,keyboardPosX +3.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p43 = mapElement:new("C",4,3,keyboardPosX +4.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p53 = mapElement:new("V",5,3,keyboardPosX +5.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p63 = mapElement:new("B",6,3,keyboardPosX +6.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p73 = mapElement:new("N",7,3,keyboardPosX +7.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p83 = mapElement:new("M",8,3,keyboardPosX +8.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
-	p93 = mapElement:new("DEL",9,3,keyboardPosX +9.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit),
+	p13 = mapElement:new("SH",1,3,keyboardPosX + 1 *keyboardXUnit, keyboardPosY +3*keyboardYUnit,1,1),
+	p23 = mapElement:new("Z",2,3,keyboardPosX +2.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,2,2),
+	p33 = mapElement:new("X",3,3,keyboardPosX +3.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,3,3),
+	p43 = mapElement:new("C",4,3,keyboardPosX +4.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,4,3),
+	p53 = mapElement:new("V",5,3,keyboardPosX +5.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,5,3),
+	p63 = mapElement:new("B",6,3,keyboardPosX +6.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,6,3),
+	p73 = mapElement:new("N",7,3,keyboardPosX +7.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,7,3),
+	p83 = mapElement:new("M",8,3,keyboardPosX +8.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,8,4),
+	p93 = mapElement:new("DEL",9,3,keyboardPosX +9.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,9,5),
 
-	p14 = mapElement:new("?123",1,4,keyboardPosX + 1 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit),
-	p24 = mapElement:new(",",2,4,keyboardPosX +3 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit),
-	p34 = mapElement:new("__",3,4,keyboardPosX +4 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit),
-	p44 = mapElement:new(".",4,4,keyboardPosX +8 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit),
-	p54 = mapElement:new("ENTER",5,4,keyboardPosX +9 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit)
+	p14 = mapElement:new("?123",1,4,keyboardPosX + 1 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,1,0),
+	p24 = mapElement:new(",",2,4,keyboardPosX +3 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,2,0),
+	p34 = mapElement:new("__",3,4,keyboardPosX +4 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,5,0),
+	p44 = mapElement:new(".",4,4,keyboardPosX +8 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,8,0),
+	p54 = mapElement:new("ENTER",5,4,keyboardPosX +9 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,9,0)
 
 }
+
 
 function main()
 	updateScreen()
@@ -93,6 +95,7 @@ function updateScreen()
 	displayHighlightSurface()
 	displayInputField()
 	displayKeyboardLetters()
+	gfx.update()
 end
 
 --display keyboard
@@ -100,7 +103,6 @@ function displayKeyboardSurface()
 	keyboardSurface:clear()
 	keyboardSurface:copyfrom(keyboardPNG)
 	gfx.screen:copyfrom(keyboardSurface,nil, {x=3 * xUnit, y= 3 * yUnit, w=keyboardWidth, h=keyboardHeight})
-	gfx.update()
 end
 
 -- displays the highlight
@@ -123,8 +125,23 @@ function displayHighlightSurface()
 	end
 
 	gfx.screen:copyfrom(highlightSurface, nil ,{x= coordinates.x - keyboardXUnit, y=coordinates.y - keyboardYUnit, w=width, h=height})
-	gfx.update()
+end
 
+function displayKeyboardLetters()
+	for k,v in pairs(map)do
+		
+		text.print(gfx.screen, arial, v.letter, v.x-xUnit/1.5, v.y-yUnit/1.5, xUnit*2, yUnit*2)
+	end
+end
+
+-- displays the saved text on screen
+function displayInputField()
+	inputSurface:clear()
+	-- inputSurface:copyfrom(inputFieldPNG)
+	inputSurface:fill({r=255, g=255, b=255, a=0})
+	-- gfx.screen:copyfrom(inputSurface, nil ,{x=2 * xUnit, y=2 *yUnit,w = 12* xUnit, h = yUnit})
+	gfx.screen:copyfrom(inputSurface, nil ,{x=2 * xUnit, y=2 * yUnit, w=12 * xUnit, h=yUnit}) --colours the saved text field
+	text.print(gfx.screen, arial, inputText, 2 * xUnit, 2 * yUnit, 12 * xUnit, yUnit)
 end
 
 --gets the coordinate of arguments
@@ -137,50 +154,61 @@ function getCoordinates(posX, posY)
 	end
 end
 
-function displayKeyboardLetters()
-	for k,v in pairs(map)do
-		text.print(gfx.screen, arial, v.letter, v.x-xUnit/1.5, v.y-yUnit/1.5, xUnit*2, yUnit*2)
+--gets the correct movement of cursor when moving in y-axis
+function getYmove(xVal,yVal,move)
+	local coordinates = "p"..xVal..yVal
+	print(coordinates)
+	return map[coordinates][move]
+end
+
+-- gets the char that is highlighted
+function getKeyboardChar(row, column)
+	local coordinates = "p"..row..column
+	return map[coordinates].letter
+end
+
+--saves all input and displays them
+function saveText(character)
+	if character then
+	inputText = inputText .. character
 	end
 end
 
--- displays the saved text on screen
-function displayInputField()
-	inputSurface:clear()
-	-- inputSurface:copyfrom(inputFieldPNG,{x=2 * xUnit, y=2 * yUnit, w=12 * xUnit, h=yUnit})
-	-- inputSurface:copyfrom(inputFieldPNG)
-	inputSurface:fill({r=255, g=255, b=255, a=0})
-	-- gfx.screen:copyfrom(inputSurface, nil ,{x=2 * xUnit, y=2 *yUnit,w = 12* xUnit, h = yUnit})
-	gfx.screen:copyfrom(inputSurface, nil ,{x=2 * xUnit, y=2 * yUnit, w=12 * xUnit, h=yUnit}) --colours the saved text field
-	text.print(gfx.screen, arial, savedText, 2 * xUnit, 2 * yUnit, 12 * xUnit, yUnit)
-	gfx.update()
+-- saves the text to the form to be sent back to last state
+function saveToForm(myText)
+	local inputField = lastStateForm.currentInputField
+	lastStateForm[inputField] = myText
+end
+
+-- send form back to state
+function sendFormBackToState(state, form)
+	saveToForm(inputText)
+	assert(loadfile(state))(form)
 end
 
 -- moves the highligther around
--- TODO:
--- needs to have proper boundaries
 function movehighlightKey(key)
 	if(key == 'Down')then
 		--down
-		highlightPosX = highlightPosX + 0
+
+		highlightPosX = getYmove(highlightPosX,highlightPosY,"down")
 		highlightPosY = highlightPosY + 1
 		if not(getCoordinates(highlightPosX,highlightPosY))then
 			highlightPosY = highlightPosY-1
 			updateScreen()
 		else
 			updateScreen()
-			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
 		end
 	end
 	if(key == 'Up')then
 		--up
-		highlightPosX = highlightPosX + 0
+		highlightPosX = getYmove(highlightPosX,highlightPosY,"up")
 		highlightPosY = highlightPosY - 1
 		if not(getCoordinates(highlightPosX,highlightPosY))then
 			highlightPosY = highlightPosY + 1
 			updateScreen()
 		else
 			updateScreen()
-			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
 		end
 
 	end
@@ -194,8 +222,6 @@ function movehighlightKey(key)
 			updateScreen()
 		else
 			updateScreen()
-			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
-
 		end
 
 	end
@@ -208,14 +234,10 @@ function movehighlightKey(key)
 			updateScreen()
 		else
 			updateScreen()
-			print("xInput: ".. lastInputX .. "yInput: ".. lastInputY)
-
 		end
 
 	end
 end
-
-
 
 -- calls functions on keys
 function onKey(key, state)
@@ -229,10 +251,9 @@ function onKey(key, state)
 		elseif(key == 'Right') then
 			movehighlightKey(key)
 		elseif(key == 'Return') then
-
 			local letterToDisplay = getKeyboardChar(highlightPosX,highlightPosY)
 			if (letterToDisplay == "ENTER") then
-				sendInfoBackToState(lastStateInfo.laststate, lastStateInfo)
+				sendFormBackToState(lastStateForm.laststate, lastStateForm)
 			else 
 				saveText(letterToDisplay)
 				displayInputField()
@@ -241,43 +262,6 @@ function onKey(key, state)
 	end
 	gfx.update()
 
-end
-
--- gets the char that is highlighted
-function getKeyboardChar(row, column)
-
-	for key, value in pairs(map) do
-
-		if(row == value.row) and (column==value.column)then
-			print(value.letter)
-			return value.letter
-		
-		end
-	end
-end
-
---saves all input and can display them by pressing S
-function saveText(character)
-	if character then
-	savedText = savedText .. character
-	end
-end
-
-function getSavedText()
-	return savedText
-end
-
-
--- saves the text to the info form to be sent back to last state
-function saveInfo(myText)
-	local inputField = lastStateInfo.currentInputField
-	lastStateInfo[inputField] = myText
-end
-
--- send info back to state
-function sendInfoBackToState(state, info)
-	saveInfo(getSavedText())
-	assert(loadfile(state))(info)
 end
 
 main()

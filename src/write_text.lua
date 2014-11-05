@@ -1,6 +1,7 @@
 local text = {}
 
 gfx = require "gfx"
+
 arial = require "apple_symbols_regular_20"
 
 font_spritesheet = gfx.loadpng(arial.file)

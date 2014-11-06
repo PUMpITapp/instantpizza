@@ -84,7 +84,7 @@ end
 
 --Calls methods that builds GUI
 function buildGUI()
-local background = gfx.loadpng("images/userregistration.png")
+local background = gfx.loadpng("images/UserInfo/userregistration.png")
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 displayHighlightSurface()
 gfx.update()
@@ -98,7 +98,7 @@ function displayHighlightSurface()
 	text.print(gfx.screen, arial, tostring(newForm.city),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*3),500, 500)
 	text.print(gfx.screen, arial, tostring(newForm.phone),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*4),500, 500)
 	text.print(gfx.screen, arial, tostring(newForm.email),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*5),500, 500)
-	local highlight = gfx.loadpng("images/pressinputfield.png")
+	local highlight = gfx.loadpng("images/UserInfo/pressinputfield.png")
 	gfx.screen:copyfrom(highlight,nil,{x=gfx.screen:get_width()*(5/16), y=inputFieldY, h=gfx.screen:get_height()/18, w=gfx.screen:get_width()*(7/16)})
 end
 

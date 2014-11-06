@@ -47,6 +47,11 @@ local inputFieldY = yUnit*2.5
 local inputFieldStart = yUnit*2.5
 local inputFieldEnd = inputFieldStart+inputMovement*3
 
+--local pizzerias{
+--	picFilePath = ""
+--	pizzeriaName = ""
+	--Mer info?
+--}
 --Calls methods that builds GUI
 function buildGUI()
 	gfx.screen:fill({241,248,233})
@@ -65,10 +70,9 @@ function displayPizzerias()
 	local pizza2 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza2.png")
 	local pizza3 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza3.png")
 	local pizza4 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza4.png")
-	
+
 	for i = inputFieldStart, inputFieldEnd,inputMovement do
-			print(i)
-			gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=i, h=xUnit, w=yUnit*7})
+		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=i, h=xUnit, w=yUnit*7})
 	end
 
 	gfx.screen:copyfrom(pizza1,nil,{x=xUnit*3, y=inputFieldStart, h=xUnit, w=yUnit*2})
@@ -79,12 +83,23 @@ end
 
 function addPizzeria()
 	--Highligt pizzeria and add to form
-
-
+	local pizza1YCoordinate = inputFieldStart
+	local pizza2YCoordinate = (inputFieldStart+inputMovement)
+	local pizza3YCoordinate = inputFieldStart+(inputMovement*2)
+	local pizza4YCoordinate = inputFieldStart+(inputMovement*3)
+	if(inputFieldY == pizza1YCoordinate)then
+		print("Pizza1")
+	elseif(inputFieldY == pizza2YCoordinate)then
+		print("Pizza2")
+	elseif(inputFieldY == pizza3YCoordinate)then
+		print("Pizza3")
+	elseif(inputFieldY == pizza4YCoordinate)then
+		print("Pizza4")
+	end
 end
 function displayHighlightSurface()
 	local highlight = gfx.loadpng("images/ChoosePizzeria/pressedpizzeria.png")
-	gfx.screen:copyfrom(highlight,nil,{x=xUnit*3, y=inputFieldY, h=xUnit, w=yUnit*7})
+	gfx.screen:copyfrom(highlight,nil,{x=xUnit*3, y=inputFieldY, h=xUnit, w=yUnit*9})
 end
 
 --Moves the current inputField

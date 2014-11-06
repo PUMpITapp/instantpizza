@@ -9,8 +9,8 @@
 local text = require "write_text"
 local gfx = require "gfx"
 -- inserted these for showing to customer. remove if needed //Huy
-local pizzaPicture = gfx.loadpng("images/pizza.png")
-local logoName = gfx.loadpng("images/pizzaIP.png")
+
+local background = gfx.loadpng("images/ChoosePizzeria/chosepizzeria.png")
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -24,7 +24,7 @@ gfx.update()
 
 
 local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
-
+local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
 local pizzaMenu = {
 	p1 = {name = "Kebab", price = 75},
@@ -38,14 +38,18 @@ local pizzaMenu = {
 }
 
 --Calls methods that builds GUI
-function buildGUI()
--- displayLogo()
--- displaystatusSurface()
+function updateScreen()
+displayBackground()
 displayPizzas()
---displayHighlightSurface()
+gfx.update()
 end
 
+function displayBackground()
+	backgroundSurface:clear()
+	backgroundSurface:copyfrom(background)
 
+	gfx.screen:copyfrom(backgroundSurface)
+end
 
 --Creates new surface and display pizzas
 function displayPizzas()
@@ -65,12 +69,6 @@ function displayPizzas()
 			pizzaPosY = pizzaPosY + 2 * yUnit
 		end
 	end
-
-	
-	-- gfx.screen:copyfrom(pizzaSurface,nil,{x=0, y=230})
-
-	gfx.update()
-
 end
 
 --Creates inputsurface and displays "highlighted" input
@@ -152,8 +150,7 @@ end
 
 --Main method
 function main()
-	buildGUI()
-
+	updateScreen()
 end
 main()
 

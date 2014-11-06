@@ -12,85 +12,73 @@ local gfx = require "gfx"
 local pizzaPicture = gfx.loadpng("images/pizza.png")
 local logoName = gfx.loadpng("images/pizzaIP.png")
 
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
+
 --Start of inputFields. Needed for 
-local inputFieldY = 250
-local inputFieldX = gfx.screen:get_width()/8
+local pizzaFieldY = yUnit * 2.5
+local pizzaFieldX = xUnit * 3
 
 gfx.screen:fill({241,248,233})
 gfx.update()
 
-local logoSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
-local pizzaSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/2)
-local highlightSurface = gfx.new_surface(gfx.screen:get_width()/1, gfx.screen:get_height())
-local statusSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
+
+local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
+
+
+local pizzaMenu = {
+	p1 = {name = "Kebab", price = 75},
+	p2 = {name = "Hawaii", price = 60},
+	p3 = {name = "Vesuvio", price = 70},
+	p4 = {name = "Poker", price = 80},
+	p5 = {name = "Capri", price = 70},
+	p6 = {name = "Bella", price = 60},
+	p7 = {name = "Husets", price = 100},
+	p8 = {name = "Quatro", price = 65}
+}
 
 --Calls methods that builds GUI
 function buildGUI()
-displayLogo()
-displaystatusSurface()
+-- displayLogo()
+-- displaystatusSurface()
 displayPizzas()
 --displayHighlightSurface()
 end
 
---Creates new surface and displays logo
--- inserted these for showing to customer. your function is in comment below if needed//Huy
-function displayLogo()
-	logoSurface:clear()
-	logoSurface:fill({139,195,74})
-	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=25})
-	png_logo_width = 250
-	printPicture(logoName,(gfx.screen:get_width() - 740)/2,(gfx.screen:get_height()/5)-45)
-	printPicture(pizzaPicture,gfx.screen:get_width()/5+420,(gfx.screen:get_height()/5)-110)
-	gfx.update()
-end
--- function displayLogo()
--- 	logoSurface:clear()
--- 	logoSurface:fill({139,195,74})
--- 	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=0})
--- 	png_logo_width = 250
--- 	text.print(gfx.screen,arial,"InstantPizza",gfx.screen:get_width()/2-(png_logo_width/2),50,300,300)
---   --  gfx.screen:copyfrom(logo, nil, {x=gfx.screen:get_width()/2-(png_logo_width/2), y=100})
--- 	gfx.update()
--- end
+
 
 --Creates new surface and display pizzas
 function displayPizzas()
+	local pizzaPosX = pizzaFieldX
+	local pizzaPosY = pizzaFieldY
+	local times = 0;
 	pizzaSurface:clear()
 	pizzaSurface:fill({241,248,233})
-	gfx.screen:copyfrom(pizzaSurface,nil,{x=0, y=230})
-	text.print(gfx.screen,arial,"Pizza 1",gfx.screen:get_width()/8,300,220,300)
-	text.print(gfx.screen,arial,"Pizza 2",gfx.screen:get_width()/8+200,300,220,300)
-	text.print(gfx.screen,arial,"Pizza 3",gfx.screen:get_width()/8+400,300,220,300)
-	text.print(gfx.screen,arial,"Pizza 4",gfx.screen:get_width()/8+600,300,220,300)
-	text.print(gfx.screen,arial,"Pizza 5",gfx.screen:get_width()/8,500,220,300)
-	text.print(gfx.screen,arial,"Pizza 6",gfx.screen:get_width()/8+200,500,220,300)
-	text.print(gfx.screen,arial,"Pizza 7",gfx.screen:get_width()/8+400,500,220,300)
-	text.print(gfx.screen,arial,"Pizza 8",gfx.screen:get_width()/8+600,500,220,300)
-	text.print(gfx.screen,arial,"Choose",inputFieldX,inputFieldY,140,50)
+	for key, value in pairs(pizzaMenu) do
+		text.print(gfx.screen, arial, value.name, pizzaPosX, pizzaPosY, 2.5 * xUnit, 2 * yUnit)
+		text.print(gfx.screen, arial, tostring(value.price), pizzaPosX, pizzaPosY + 0.5 * yUnit, 2.5 * xUnit, 2 * yUnit)
+		pizzaPosX = pizzaPosX + 2.5 * xUnit
+		times = times + 1
+		if(times > 3)then
+			times = 0
+			pizzaPosX = pizzaFieldX
+			pizzaPosY = pizzaPosY + 2 * yUnit
+		end
+	end
+
+	
+	-- gfx.screen:copyfrom(pizzaSurface,nil,{x=0, y=230})
+
 	gfx.update()
 
 end
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-	--TODO:
-	--Actual inputfields and higlight. Variable highlight is the actual highlight
-	--that moves when user presses up and down.
-	--Try transparent on box
-	highlightSurface:clear()
-	highlightSurface:fill({0,0,155})
-	gfx.screen:copyfrom(inputSurface,nil,{x=0, y=gfx.screen:get_height()/5 ,h=gfx.screen:get_height()*(3/5)})
-	text.print(gfx.screen,arial,"Highlighted",inputFieldX,inputFieldY,500,200)
-	gfx.update()
+
 end
 
-function displaystatusSurface()
 
-	statusSurface:clear()
-	statusSurface:fill({255,255,255})
-	gfx.screen:copyfrom(statusSurface,nil,{x=0,y=(gfx.screen:get_height()-gfx.screen:get_height()/5)})
-	gfx.update()
-end
 
 --Moves the current inputField
 function moveHighlightedInputField(key)

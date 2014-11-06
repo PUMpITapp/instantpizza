@@ -10,8 +10,6 @@ local keyboardWidth = 10 * xUnit 	-- width of keyboard. can be changed to fit
 local keyboardHeight = 4 * yUnit 	-- height of keyabord. can be changed to fit
 local keyboardXUnit = keyboardWidth/10 -- margin in x for keyboard keys. 10 keys each row
 local keyboardYUnit = keyboardHeight/4 -- margin in y for keyboard keys. 4 keys each column
-local lastInputX = keyboardXUnit	-- last input of x
-local lastInputY = keyboardYUnit	-- last input of y
 local keyboardPosX = 3 * xUnit 		-- keyboard start posx. can be changed
 local keyboardPosY = 3 * yUnit 		-- keyboard start posy. can be changed
 local highlightPosX = 1 			-- pos on keyboard posx
@@ -22,9 +20,6 @@ local lastStateForm = ...	-- gets last state form
 local keyboardSurface = gfx.new_surface(keyboardWidth,keyboardHeight)
 local highlightSurface = gfx.new_surface(keyboardXUnit,keyboardYUnit)
 local inputSurface = gfx.new_surface(12 * xUnit, yUnit)
-
-gfx.screen:fill({0,0,0,0}) --colours the screen black
-gfx.update()
 
 local mapElement = {}
 
@@ -80,7 +75,6 @@ local map = {
 	p34 = mapElement:new("__",3,4,keyboardPosX +4 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,5,3),
 	p44 = mapElement:new(".",4,4,keyboardPosX +8 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,8,4),
 	p54 = mapElement:new("ENTER",5,4,keyboardPosX +9 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,9,5)
-
 }
 
 
@@ -165,8 +159,8 @@ function getKeyboardChar(row, column)
 	return map[coordinates].letter
 end
 
---saves all input and displays them
-function saveText(character)
+--saves character to string
+function setToString(character)
 	if character then
 	inputText = inputText .. character
 	end
@@ -263,7 +257,7 @@ function onKey(key, state)
 				inputText = removeLastChar(inputText)
 				displayInputField()
 			else 
-				saveText(letterToDisplay)
+				setToString(letterToDisplay)
 				displayInputField()
 			end
 		end

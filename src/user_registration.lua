@@ -60,10 +60,7 @@ local newForm = {
 	city = "",
 	phone="",
 	email = ""
-	}
-
-
-
+}
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
@@ -140,6 +137,7 @@ function onKey(key,state)
 			assert(loadfile("keyboard.lua"))(newForm)
 	  	elseif(key == 'red') then
 	  		--Go back
+	  		dofile("welcome_page.lua")
 	  	elseif(key == 'blue') then
 	  		--Go forward
 	  		dofile("choose_Pizzeria.lua")

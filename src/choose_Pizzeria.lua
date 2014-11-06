@@ -1,126 +1,132 @@
---TODO:
+--- Checks if the file was called from a test file.
+-- Returs true if it was, 
+--   - which would mean that the file is being tested.
+-- Returns false if it was not,
+--   - which wold mean that the file was being used.  
+function checkTestMode()
+  runFile = debug.getinfo(2, "S").source:sub(2,3)
+  if (runFile ~= './' ) then
+    underGoingTest = false
+  elseif (runFile == './') then
+    underGoingTest = true
+  end
+  return underGoingTest
+end
 
-local text = require "write_text"
-local gfx = require "gfx"
+--- Chooses either the actual or he dummy gfx.
+-- Returns dummy gfx if the file is being tested.
+-- Rerunes actual gfx if the file is being run.
+function chooseGfx(underGoingTest)
+  if not underGoingTest then
+    tempGfx = require "gfx"
+  elseif underGoingTest then
+    tempGfx = require "gfx_stub"
+  end
+  return tempGfx
+end
 
---Start of inputFields. Needed for 
-local inputFieldY = 250
+function chooseText(underGoingTest)
+  if not underGoingTest then
+    tempText = require "write_text"
+  elseif underGoingTest then
+    tempText = require "write_text_stub"
+  end
+  return tempText
+end
+local text = chooseText(checkTestMode())
+local gfx =  chooseGfx(checkTestMode())
+
+--Declare units i variables
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
+
+ --Start of inputFields. Needed for 
+local inputMovement = yUnit*1.2
 local inputFieldX = gfx.screen:get_width()/8
-local pizzaPicture = gfx.loadpng("images/pizza.png")
-local nextButton = gfx.loadpng("images/buttonnext.png")
-local backButton = gfx.loadpng("images/buttonback.png")
-local logoName = gfx.loadpng("images/pizzaIP.png")
-local logoSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/5)
-local pizzeriaSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height()/2)
---local highlightSurface = gfx.new_surface(gfx.screen:get_width(), 80)
-
-gfx.screen:fill({241,248,233})
-gfx.update()
+local inputFieldY = yUnit*2.5
+local inputFieldStart = yUnit*2.5
+local inputFieldEnd = inputFieldStart+inputMovement*3
 
 --Calls methods that builds GUI
 function buildGUI()
-	print(inputFieldX)
-	displayLogo()
-	--displayInputSurface()
+	gfx.screen:fill({241,248,233})
+	local background = gfx.loadpng("images/ChoosePizzeria/chosepizzeria.png")
+	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+	displayHighlightSurface()
 	displayPizzerias()
-end
-
---Creates new surface and displays logo
-function displayLogo()
-	logoSurface:clear()
-	logoSurface:fill({139,195,74})
-	gfx.screen:copyfrom(logoSurface,nil,{x=0, y=25})
-	png_logo_width = 250
-	printPicture(logoName,(gfx.screen:get_width() - 740)/2,(gfx.screen:get_height()/5)-45)
-	printPicture(pizzaPicture,gfx.screen:get_width()/5+420,(gfx.screen:get_height()/5)-110)
 	gfx.update()
 end
+
 function displayPizzerias()
-	--TODO
-	--Get pizzerias
-	pizzeriaSurface:clear()
-	pizzeriaSurface:fill({241,248,233})
-	gfx.screen:copyfrom(pizzeriaSurface,nil,{x=0,y=gfx.screen:get_height()/5, h=gfx.screen:get_height()*(3/5)})
-	text.print(gfx.screen,arial,"Pizzerias near you",gfx.screen:get_width()/2-320/2,160,320,300)
-	text.print(gfx.screen,arial,"Pizzeria 1",gfx.screen:get_width()/8,300,220,300)
-	text.print(gfx.screen,arial,"Pizzeria 2",gfx.screen:get_width()/8+200,300,220,300)
-	text.print(gfx.screen,arial,"Pizzeria 3",gfx.screen:get_width()/8+400,300,220,300)
-	text.print(gfx.screen,arial,"Pizzeria 4",gfx.screen:get_width()/8+600,300,220,300)
+	--Get pizzerias from file
+	--Display pictures
+	local inputField = gfx.loadpng("images/ChoosePizzeria/pizzeriatile.png")
+	local pizza1 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza1.png")
+	local pizza2 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza2.png")
+	local pizza3 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza3.png")
+	local pizza4 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza4.png")
+	
+	for i = inputFieldStart, inputFieldEnd,inputMovement do
+			print(i)
+			gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=i, h=xUnit, w=yUnit*7})
+	end
 
-	text.print(gfx.screen,arial,"Pizzeria 5",gfx.screen:get_width()/8,500,220,300)
-	text.print(gfx.screen,arial,"Pizzeria 6",gfx.screen:get_width()/8+200,500,220,300)
-	text.print(gfx.screen,arial,"Pizzeria 7",gfx.screen:get_width()/8+400,500,220,300)
-	text.print(gfx.screen,arial,"Pizzeria 8",gfx.screen:get_width()/8+600,500,220,300)
-	text.print(gfx.screen,arial,"Choose",inputFieldX,inputFieldY,140,50)
-	gfx.update()
+	gfx.screen:copyfrom(pizza1,nil,{x=xUnit*3, y=inputFieldStart, h=xUnit, w=yUnit*2})
+	gfx.screen:copyfrom(pizza2,nil,{x=xUnit*3, y=(inputFieldStart+inputMovement), h=xUnit, w=yUnit*2})
+	gfx.screen:copyfrom(pizza3,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*2), h=xUnit, w=yUnit*2})
+	gfx.screen:copyfrom(pizza4,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*3), h=xUnit, w=yUnit*2})
 end
+
+function addPizzeria()
+	--Highligt pizzeria and add to form
+
+
+end
+function displayHighlightSurface()
+	local highlight = gfx.loadpng("images/ChoosePizzeria/pressedpizzeria.png")
+	gfx.screen:copyfrom(highlight,nil,{x=xUnit*3, y=inputFieldY, h=xUnit, w=yUnit*7})
+end
+
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	 inputFieldStart = 150
-	 inputFieldEnd = 550
-	 print(inputFieldX)
-	--Up
-	if(key == 'Up')then
-		if(inputFieldY == 450) then
-			inputFieldY = 250
-			displayPizzerias()
+	if(key == 'Up') then
+		if(inputFieldY > inputFieldStart) then
+			inputFieldY = inputFieldY - inputMovement
 		end
 	end
 	--Down
-	if(key == 'Down')then
-		if(inputFieldY == 250)then
-			inputFieldY = 450
-			displayPizzerias()
+	if(key == 'Down') then
+		if(inputFieldY < inputFieldEnd)then
+			inputFieldY = inputFieldY + inputMovement
+		
+		elseif(inputFieldY == inputFieldEnd) then
+			inputFieldY = inputFieldStart
 		end
 	end
-	--Left
-	if(key == 'Left')then
-		if(inputFieldX > gfx.screen:get_width()/8) then
-			inputFieldX = inputFieldX - 200
-			displayPizzerias()
-		elseif(inputFieldX == gfx.screen:get_width()/8)then
-			inputFieldX = gfx.screen:get_width()/8+600
-			displayPizzerias()
-		end
-	end
-	--Down
-	if(key == 'Right') then
-		if(inputFieldX < gfx.screen:get_width()/8+600) then
-			inputFieldX = inputFieldX + 200 
-			displayPizzerias()
-		elseif(inputFieldX == gfx.screen:get_width()/8+600)then
-			inputFieldX = gfx.screen:get_width()/8
-			displayPizzerias()
-
-		end
-	end
+	buildGUI()
 end
 
 --Method that prints picture to screen. Takes picture and x,y coordinates as argument.
 function printPicture(pic,xx,yy)
  	gfx.screen:copyfrom(pic, nil, {x=xx,y=yy})
-
 end
 
 function onKey(key,state)
-	--TODO
+	--TODO”
 	if(state == 'up') then
-  	if(key == 'Up') then
+  		if(key == 'Up') then
 	  		--Up
 	  		moveHighlightedInputField(key)
 	  	elseif(key == 'Down') then
 	  		--Down
 	  	  	moveHighlightedInputField(key)
-	  		--Left
-	  	elseif(key == 'Left') then
-	  		moveHighlightedInputField(key)
-	  		--Right
-	  	elseif(key == 'Right') then
-	  		moveHighlightedInputField(key)
-	  	
+	  	elseif(key=='Return')then
+	  		addPizzeria()
+
 	  	elseif(key == 'blue') then
 	  	  	dofile("pizza_info.lua")
+
 	  	elseif(key == 'red')then
 	  		dofile("user_registration.lua")
 	  	end
@@ -130,7 +136,6 @@ end
 --Main method
 function main()
 	buildGUI()
-
 end
 main()
 

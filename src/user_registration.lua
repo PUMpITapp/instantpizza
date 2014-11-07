@@ -170,13 +170,16 @@ function onKey(key,state)
 				assert(loadfile(pathName))(newForm)
 			end
 	  	elseif(key == 'red') then
-	  		--Go Back (Not yet written)
-	  		if checkTestMode then
-	  			return key
+	  		--Go Back to menu
+	  		pathName = "menu.lua"
+	  		if checkTestMode() then
+	  			return pathName
+	  		else
+	  			dofile(pathName)
 	  		end
 	  	elseif(key == 'blue') then
 	  		pathName = "choose_Pizzeria.lua"
-	  		if checkTestMode then
+	  		if checkTestMode() then
 	  			return pathName
 	  		else
 	  			dofile(pathName)

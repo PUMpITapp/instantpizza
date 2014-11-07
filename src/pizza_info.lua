@@ -3,45 +3,46 @@ local gfx = require "gfx"
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
+local margin = yUnit * 0.05
 
 local pizzaFieldY = yUnit * 2.5
 local pizzaFieldX = xUnit * 3
 
-local pizzaCellX = 10/4 * xUnit
-local pizzaCellY = 4/2 * yUnit
-
 local highlightPosX = 1
 local highlightPosY = 1
 
-local pizzaLimitX = 4
-local pizzaLimitY = 2
+local showLimit = 8
+local maxChoices = 4
+local choices = 0
 
-local highligtherPNG = gfx.loadpng("images/pizzaInfo/pizzeriatile.png")
+local highligtherPNG = gfx.loadpng("images/pizzaInfo/pressedpizzeria.png")
 local backgroundPNG = gfx.loadpng("images/pizzaInfo/choosePizzas.png")
+local tilePNG = gfx.loadpng("images/pizzaInfo/pizzeriatile.png")
 
 local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
-local highlightSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
+-- local highlightSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 
 local lastStateForm = ...
 
+local pizzaMenu = {}
+pizzaMenu[1] = {name = "Kebab", price = 75}
+pizzaMenu[2] = {name = "Hawaii", price = 60}
+pizzaMenu[3] = {name = "Vesuvio", price = 70}
+pizzaMenu[4] = {name = "Poker", price = 80}
+pizzaMenu[5] = {name = "Capri", price = 70}
+pizzaMenu[6] = {name = "Bella", price = 60}
+pizzaMenu[7] = {name = "Husets", price = 100}
+pizzaMenu[8] = {name = "Quatro", price = 65}
 
-local pizzaMenu = {
-	p1 = {name = "Kebab", price = 75},
-	p2 = {name = "Hawaii", price = 60},
-	p3 = {name = "Vesuvio", price = 70},
-	p4 = {name = "Poker", price = 80},
-	p5 = {name = "Capri", price = 70},
-	p6 = {name = "Bella", price = 60},
-	p7 = {name = "Husets", price = 100},
-	p8 = {name = "Quatro", price = 65}
-}
+local choosenPizzas = {}
 
 --Calls methods that builds GUI
 function updateScreen()
 displayBackground()
-displayPizzas()
 displayHighlightSurface()
+displayPizzas()
+displayChoiceMenu()
 gfx.update()
 end
 
@@ -56,32 +57,56 @@ end
 function displayPizzas()
 	local pizzaPosX = pizzaFieldX
 	local pizzaPosY = pizzaFieldY
-	local times = 0
+	local ySpace = 0.5 * yUnit
 
 	pizzaSurface:clear()
-	pizzaSurface:fill({241,248,233})
-	for key, value in pairs(pizzaMenu) do
-		text.print(gfx.screen, arial, value.name, pizzaPosX, pizzaPosY, 2.5 * xUnit, 2 * yUnit)
-		text.print(gfx.screen, arial, tostring(value.price) .. "kr", pizzaPosX, pizzaPosY + 0.5 * yUnit, pizzaCellX, pizzaCellY)
-		pizzaPosX = pizzaPosX + 2.5 * xUnit
-		times = times + 1
-		if(times > 3)then
-			times = 0
-			pizzaPosX = pizzaFieldX
-			pizzaPosY = pizzaPosY + 2 * yUnit
-		end
+	for i=1,showLimit do
+		gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * margin, w=xUnit*7 , h=ySpace})
+		text.print(gfx.screen, arial, pizzaMenu[i].name, pizzaPosX, pizzaPosY+ (i-1) * margin, xUnit*2, ySpace)
+		text.print(gfx.screen, arial, tostring(pizzaMenu[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * margin, 2 * xUnit, ySpace)
+		pizzaPosY = pizzaPosY + ySpace
 	end
 end
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-	
-	highlightSurface:clear()
-	highlightSurface:copyfrom(highligtherPNG)
-	gfx.screen:copyfrom(highlightSurface, nil , {x = pizzaFieldX + (highlightPosX -1)*pizzaCellX, y = pizzaFieldY +(highlightPosY-1) * pizzaCellY, w =pizzaCellX, h =pizzaCellY})
+	-- highlightSurface:clear()
+	-- highlightSurface:copyfrom(highligtherPNG)
+	local pos = {x = pizzaFieldX + (highlightPosX -1)*xUnit, y = pizzaFieldY +(highlightPosY-1) * (yUnit *0.5 + margin), w = 9 * xUnit, h =0.5*yUnit}
+	gfx.screen:copyfrom(highligtherPNG, nil , pos )
+end
+
+function getPizzaOnCoordinate(posY)
+
+	return pizzaMenu[posY]
 end
 
 
+function insertOnChoiceMenu(myPizza)
+	if not choosenPizzas[myPizza.name] then
+		if(choices < maxChoices) then
+		choices = choices + 1
+		choosenPizzas[myPizza.name] = myPizza
+		end
+	end
+end
+
+function deleteOnChoiceMenu(myPizza)
+	if choosenPizzas[myPizza.name] then
+		choices = choices - 1
+		choosenPizzas[myPizza.name] = nil
+	end
+end
+
+function displayChoiceMenu()
+	local x = 13 * xUnit
+	local y = 1.5 * yUnit
+	local menuItems = 0
+	for k, v in pairs(choosenPizzas) do
+	text.print(gfx.screen, arial, v.name, x, y + 0.5*menuItems*yUnit, pizzaCellX, pizzaCellY)
+	menuItems = menuItems + 1
+	end
+end
 
 --Moves the current inputField
 function moveHighlight(key)
@@ -96,21 +121,15 @@ function moveHighlight(key)
 	--Down
 	elseif(key == 'Down')then
 		highlightPosY = highlightPosY + 1
-		if(highlightPosY > pizzaLimitY) then
+		if(highlightPosY > showLimit) then
 			highlightPosY = highlightPosY -1
 		end
 	--Left
 	elseif(key == 'Left')then
-		highlightPosX = highlightPosX - 1
-		if(highlightPosX < 1) then
-			highlightPosX = highlightPosX +1
-		end
+		
 	--Right
 	elseif(key == 'Right') then
-		highlightPosX = highlightPosX + 1
-		if(highlightPosX > pizzaLimitX) then
-			highlightPosX = highlightPosX -1
-		end
+		
 	end
 end
 
@@ -138,7 +157,15 @@ function onKey(key,state)
 	  		assert(loadfile("choose_Pizzeria.lua"))(nil)
 	  	elseif(key == 'blue') then
 
+	  	elseif(key == 'Return') then
+	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
+	  		insertOnChoiceMenu(choosenPizza)
+	  		updateScreen()
+	  	elseif(key == 'Delete') then
+	  		deleteOnChoiceMenu(getPizzaOnCoordinate(highlightPosY))
+	  		updateScreen()
 	  	end
+
 	end
 	gfx.update()
 end

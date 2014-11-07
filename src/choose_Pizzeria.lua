@@ -46,17 +46,30 @@ local inputFieldX = gfx.screen:get_width()/8
 local inputFieldY = yUnit*2.5
 local inputFieldStart = yUnit*2.5
 local inputFieldEnd = inputFieldStart+inputMovement*3
+local choosenPizzeria = true
 
---local pizzerias{
---	picFilePath = ""
---	pizzeriaName = ""
+local pizzerias = {
+	picFilePath = "",
+	pizzeriaName = "",
+	description = ""
 	--Mer info?
---}
+}
+function readPizzeriaFromFile()
+
+
+
+end
 --Calls methods that builds GUI
 function buildGUI()
 	gfx.screen:fill({241,248,233})
 	local background = gfx.loadpng("images/ChoosePizzeria/chosepizzeria.png")
+	local inputField = gfx.loadpng("images/ChoosePizzeria/pizzeriatile.png")
+
 	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+	
+	for i = inputFieldStart, inputFieldEnd,inputMovement do
+		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=i, h=xUnit, w=yUnit*7})
+	end
 	displayHighlightSurface()
 	displayPizzerias()
 	gfx.update()
@@ -65,20 +78,18 @@ end
 function displayPizzerias()
 	--Get pizzerias from file
 	--Display pictures
-	local inputField = gfx.loadpng("images/ChoosePizzeria/pizzeriatile.png")
 	local pizza1 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza1.png")
 	local pizza2 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza2.png")
 	local pizza3 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza3.png")
 	local pizza4 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza4.png")
 
-	for i = inputFieldStart, inputFieldEnd,inputMovement do
-		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=i, h=xUnit, w=yUnit*7})
-	end
 
 	gfx.screen:copyfrom(pizza1,nil,{x=xUnit*3, y=inputFieldStart, h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza2,nil,{x=xUnit*3, y=(inputFieldStart+inputMovement), h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza3,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*2), h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza4,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*3), h=xUnit, w=yUnit*2})
+	text.print(gfx.screen, arial,"Pizzeria", xUnit*13, yUnit*1, 5 * xUnit, 5 * yUnit)
+
 end
 
 function addPizzeria()
@@ -88,14 +99,16 @@ function addPizzeria()
 	local pizza3YCoordinate = inputFieldStart+(inputMovement*2)
 	local pizza4YCoordinate = inputFieldStart+(inputMovement*3)
 	if(inputFieldY == pizza1YCoordinate)then
-		print("Pizza1")
+		text.print(gfx.screen, arial,"Pizzeria 1", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
 	elseif(inputFieldY == pizza2YCoordinate)then
-		print("Pizza2")
+		text.print(gfx.screen, arial,"Pizzeria 2", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
 	elseif(inputFieldY == pizza3YCoordinate)then
-		print("Pizza3")
+		text.print(gfx.screen, arial,"Pizzeria 3", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
 	elseif(inputFieldY == pizza4YCoordinate)then
-		print("Pizza4")
+		text.print(gfx.screen, arial,"Pizzeria 4", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
+
 	end
+	gfx.update()
 end
 function displayHighlightSurface()
 	local highlight = gfx.loadpng("images/ChoosePizzeria/pressedpizzeria.png")

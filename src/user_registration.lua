@@ -60,22 +60,42 @@ local newForm = {
 	city = "",
 	phone="",
 	email = ""
-}
+	}
+
+
+
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
 inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
 index = 0
 
+function returnValuesForTesting(value)
+
+	if value == "inputFieldStart" then
+		return inputFieldStart
+	elseif value == "inputFieldY" then 
+		return inputFieldY
+	elseif value == "inputFieldEnd" then
+		return inputFieldEnd
+	elseif value == "index" then
+		return index
+	end
+end
+
 function checkForm()
 	newForm.currentInputField = "name"
-	if lastForm then
-		if lastForm.laststate == newForm.laststate then
-			newForm = lastForm
-		else
-			for k,v in pairs(lastForm) do
-				if not newForm[k] then
-					newForm[k] = v
+	if type(lastForm) == "string" then
+
+	else
+		if lastForm then
+			if lastForm.laststate == newForm.laststate then
+				newForm = lastForm
+			else
+				for k,v in pairs(lastForm) do
+					if not newForm[k] then
+						newForm[k] = v
+					end
 				end
 			end
 		end
@@ -84,6 +104,7 @@ end
 
 --Calls methods that builds GUI
 function buildGUI()
+
 local background = gfx.loadpng("images/UserInfo/userregistration.png")
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 displayHighlightSurface()
@@ -111,6 +132,8 @@ function moveHighlightedInputField(key)
 			index=index-1
 			newForm.currentInputField= inputFieldTable[index]
 		end
+		--No fucntionality if you are at the top and pushing up
+		--Test case for this also needs to be written
 	end
 	--Down
 	if(key == 'Down') then
@@ -131,16 +154,36 @@ function onKey(key,state)
 	if(state == 'up') then
 		if(key == 'Up')then
 			moveHighlightedInputField(key)
+			if checkTestMode then
+				return key
+			end
 	 	elseif(key == 'Down')then
-	 		moveHighlightedInputField(key) 	
+	 		moveHighlightedInputField(key)
+	 		if checkTestMode then
+	 			return key
+	 		end
 		elseif(key == "Return") then
-			assert(loadfile("keyboard.lua"))(newForm)
+			pathName = "keyboard.lua"
+			if checkTestMode then
+				return pathName
+			else
+				assert(loadfile(pathName))(newForm)
+			end
 	  	elseif(key == 'red') then
-	  		--Go back
-	  		dofile("welcome_page.lua")
+	  		--Go Back (Not yet written)
+	  		if checkTestMode then
+	  			return key
+	  		end
 	  	elseif(key == 'blue') then
-	  		--Go forward
-	  		dofile("choose_Pizzeria.lua")
+	  		pathName = "choose_Pizzeria.lua"
+	  		if checkTestMode then
+	  			return pathName
+	  		else
+	  			dofile(pathName)
+	  		end
+	  	else
+	  		--More options for buttonpress?
+	  		--Test cases needs to be written if more options for onKey is added
 	  	end
 	end
 end

@@ -48,12 +48,21 @@ local inputFieldStart = yUnit*2.5
 local inputFieldEnd = inputFieldStart+inputMovement*3
 local choosenPizzeria = true
 
+local background = gfx.loadpng("Images/PizzeriaPics/background.png")
+local inputField = gfx.loadpng("Images/PizzeriaPics/inputfield.png")
+local highlight = gfx.loadpng("Images/PizzeriaPics/highlighter.png")
+local pizza1 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza1.png")
+local pizza2 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza2.png")
+local pizza3 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza3.png")
+local pizza4 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza4.png")
+
 local pizzerias = {
 	picFilePath = "",
 	pizzeriaName = "",
 	description = ""
 	--Mer info?
 }
+
 function readPizzeriaFromFile()
 
 
@@ -62,8 +71,6 @@ end
 --Calls methods that builds GUI
 function buildGUI()
 	gfx.screen:fill({241,248,233})
-	local background = gfx.loadpng("images/ChoosePizzeria/chosepizzeria.png")
-	local inputField = gfx.loadpng("images/ChoosePizzeria/pizzeriatile.png")
 
 	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 	
@@ -78,12 +85,7 @@ end
 function displayPizzerias()
 	--Get pizzerias from file
 	--Display pictures
-	local pizza1 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza1.png")
-	local pizza2 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza2.png")
-	local pizza3 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza3.png")
-	local pizza4 = gfx.loadpng("images/ChoosePizzeria/pizzerias/pizza4.png")
-
-
+	
 	gfx.screen:copyfrom(pizza1,nil,{x=xUnit*3, y=inputFieldStart, h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza2,nil,{x=xUnit*3, y=(inputFieldStart+inputMovement), h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza3,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*2), h=xUnit, w=yUnit*2})
@@ -111,7 +113,6 @@ function addPizzeria()
 	gfx.update()
 end
 function displayHighlightSurface()
-	local highlight = gfx.loadpng("images/ChoosePizzeria/pressedpizzeria.png")
 	gfx.screen:copyfrom(highlight,nil,{x=xUnit*3, y=inputFieldY, h=xUnit, w=yUnit*9})
 end
 
@@ -153,10 +154,10 @@ function onKey(key,state)
 	  		addPizzeria()
 
 	  	elseif(key == 'blue') then
-	  	  	dofile("pizza_info.lua")
+	  	  	dofile("RegistrationStep3.lua")
 
 	  	elseif(key == 'red')then
-	  		dofile("user_registration.lua")
+	  		dofile("RegistrationStep1.lua")
 	  	end
  	end
 end

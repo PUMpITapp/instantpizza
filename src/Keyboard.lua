@@ -1,8 +1,8 @@
 local gfx = require "gfx"
 local text = require "write_text"
-local keyboardPNG = gfx.loadpng("images/keyboard/keyboardblank.png")
-local keyboardPressedPNG = gfx.loadpng("images/keyboard/standKeyPressed.png")
-local inputFieldPNG = gfx.loadpng("images/keyboard/standKeyPressed.png")
+local keyboardPNG = gfx.loadpng("Images/KeyboardPics/keyboardblank.png")
+local keyPressedPNG = gfx.loadpng("Images/KeyboardPics/standKeyPressed.png")
+local inputFieldPNG = gfx.loadpng("Images/KeyboardPics/standKeyPressed.png") -- change this to correct
 
 local xUnit = gfx.screen:get_width()/16	-- units of the screen. based on 16:9 ratio
 local yUnit = gfx.screen:get_height()/9	-- units of the screen. based on 16:9 ratio
@@ -106,7 +106,7 @@ function displayHighlightSurface()
 	local height = yUnit
 
 	highlightSurface:clear()
-	highlightSurface:copyfrom(keyboardPressedPNG)
+	highlightSurface:copyfrom(keyPressedPNG)
 	
 	if (highlightPosX == 1 or highlightPosX == 9) and highlightPosY ==3 then
 		width = 1.5 * xUnit
@@ -127,6 +127,7 @@ function displayKeyboardLetters()
 end
 
 -- displays the saved text on screen
+-- TODO: change pictures to fit
 function displayInputField()
 	inputSurface:clear()
 	-- inputSurface:copyfrom(inputFieldPNG)

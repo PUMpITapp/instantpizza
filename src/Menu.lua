@@ -48,10 +48,10 @@ inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
 inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
 index = 0
+local background = gfx.loadpng("Images/MenuPics/menu.png")
 
 --Calls methods that builds GUI
 function buildGUI()
-local background = gfx.loadpng("images/menu/menuInstantPizza.png")
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 gfx.update()
 end
@@ -62,7 +62,7 @@ function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then
 	  		--Go to Create Account
-        pathName = "user_registration.lua"
+        pathName = "RegistrationStep1.lua"
         if checkTestMode() then
           return pathName
         else
@@ -70,7 +70,7 @@ function onKey(key,state)
         end
       elseif(key == 'yellow') then
         --Go to About
-        pathName = "welcome_page.lua"
+        pathName = "Tutorial.lua"
         if checkTestMode() then
           return pathName
         else

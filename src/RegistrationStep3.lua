@@ -15,9 +15,9 @@ local showLimit = 8
 local maxChoices = 4
 local choices = 0
 
-local highligtherPNG = gfx.loadpng("images/pizzaInfo/pressedpizzeria.png")
-local backgroundPNG = gfx.loadpng("images/pizzaInfo/choosePizzas.png")
-local tilePNG = gfx.loadpng("images/pizzaInfo/pizzeriatile.png")
+local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
+local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
+local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
 
 local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
@@ -154,7 +154,7 @@ function onKey(key,state)
 	  		moveHighlight(key)
 			updateScreen()
 	  	elseif(key == 'red') then
-	  		assert(loadfile("choose_Pizzeria.lua"))(nil)
+	  		assert(loadfile("RegistrationStep2.lua"))(nil)
 	  	elseif(key == 'blue') then
 
 	  	elseif(key == 'Return') then

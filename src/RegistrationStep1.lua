@@ -162,22 +162,22 @@ end
 function onKey(key,state)
 	if(state == 'up') then
 		if(key == 'Up')then
-			moveHighlightedInputField(key)
-			if checkTestMode then
+			if checkTestMode() then
 				return key
 			end
+			moveHighlightedInputField(key)
 	 	elseif(key == 'Down')then
-	 		moveHighlightedInputField(key)
-	 		if checkTestMode then
+	 		if checkTestMode() then
 	 			return key
 	 		end
+	 		moveHighlightedInputField(key)
 		elseif(key == "Return") then
 			pathName = "Keyboard.lua"
-			-- if checkTestMode then
-			-- 	return pathName
-			-- else
+			if checkTestMode() then
+			 	return pathName
+			else
 				assert(loadfile(pathName))(newForm)
-			-- end
+			end
 	  	elseif(key == 'red') then
 	  		--Go Back to menu
 	  		pathName = "Menu.lua"

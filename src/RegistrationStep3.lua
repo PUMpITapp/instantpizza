@@ -156,7 +156,7 @@ function onKey(key,state)
 	  	elseif(key == 'red') then
 	  		assert(loadfile("RegistrationStep2.lua"))(nil)
 	  	elseif(key == 'blue') then
-
+	  		assert(loadfile("RegistrationReview.lua"))(nil)
 	  	elseif(key == 'Return') then
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
 	  		insertOnChoiceMenu(choosenPizza)
@@ -165,6 +165,7 @@ function onKey(key,state)
 	  		deleteOnChoiceMenu(getPizzaOnCoordinate(highlightPosY))
 	  		updateScreen()
 	  	end
+
 
 	end
 	gfx.update()

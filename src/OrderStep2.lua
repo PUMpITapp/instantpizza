@@ -51,7 +51,7 @@ index = 0
 
 --Calls methods that builds GUI
 function buildGUI()
-local background = gfx.loadpng("images/OrderPics/createorder.png") 
+local background = gfx.loadpng("Images/OrderPics/createorder.png") 
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 gfx.update()
 end

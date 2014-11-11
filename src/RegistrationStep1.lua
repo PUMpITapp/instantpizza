@@ -85,12 +85,17 @@ function returnValuesForTesting(value)
 		return inputFieldY
 	elseif value == "inputFieldEnd" then
 		return inputFieldEnd
-	elseif value == "index" then
-		return index
+	elseif value == "height" then
+		return gfx.screen:get_height()
 	end
 end
 
+function setValuesForTesting(value)
+	inputFieldY = value
+end
+
 function checkForm()
+	--No test case written, not sure what this function does
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
 

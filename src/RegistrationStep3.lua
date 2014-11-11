@@ -36,7 +36,7 @@ pizzaMenu[6] = {name = "Bella", price = 60}
 pizzaMenu[7] = {name = "Husets", price = 100}
 pizzaMenu[8] = {name = "Quatro", price = 65}
 
-local choosenPizzas = {}
+local pizza = {}
 
 function checkForm()
 	if type(lastForm) == "string" then
@@ -105,27 +105,28 @@ end
 
 
 function insertOnChoiceMenu(myPizza)
-	if not choosenPizzas[myPizza.name] then
+
 		if(choices < maxChoices) then
 		choices = choices + 1
-		choosenPizzas[myPizza.name] = myPizza
+		pizza[choices] = myPizza
 		end
-	end
+	
 end
 
 function insertOnTable(pizzaTable)
-	local i = 0
-	for key, value in pairs(pizzaTable) do
-		i = i + 1
-		pos = "pizza"..i
-		newForm[pos] = value.name
-	end
+	newForm.pizzeria["pizza"] = pizzaTable
+	-- local i = 0
+	-- for key, value in pairs(pizzaTable) do
+	-- 	i = i + 1
+	-- 	pos = "pizza"..i
+	-- 	newForm[pos] = value.name
+	-- end
 end
 
 function deleteOnChoiceMenu(myPizza)
-	if choosenPizzas[myPizza.name] then
+	if pizza[myPizza.name] then
 		choices = choices - 1
-		choosenPizzas[myPizza.name] = nil
+		pizza[myPizza.name] = nil
 	end
 end
 
@@ -133,7 +134,7 @@ function displayChoiceMenu()
 	local x = 13 * xUnit
 	local y = 1.5 * yUnit
 	local menuItems = 0
-	for k, v in pairs(choosenPizzas) do
+	for k, v in pairs(pizza) do
 	text.print(gfx.screen, arial, v.name, x, y + 0.5*menuItems*yUnit, pizzaCellX, pizzaCellY)
 	menuItems = menuItems + 1
 	end
@@ -185,10 +186,10 @@ function onKey(key,state)
 	  		moveHighlight(key)
 			updateScreen()
 	  	elseif(key == 'red') then
-	  		-- insertOnTable(choosenPizzas)
+	  		-- insertOnTable(pizza)
 	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
 	  	elseif(key == 'blue') then
-	  		insertOnTable(choosenPizzas)
+	  		insertOnTable(pizza)
 	  		assert(loadfile("RegistrationReview.lua"))(newForm)
 	  	elseif(key == 'Return') then
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)

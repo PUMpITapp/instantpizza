@@ -43,6 +43,10 @@ end
 local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 local lastForm = ...
+
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
+
 inputFieldTable = {}
 inputFieldTable[0] = "name"
 inputFieldTable[1] = "address"
@@ -119,13 +123,13 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-	text.print(gfx.screen, arial, tostring(newForm.name),gfx.screen:get_width()*(5/16),inputFieldStart, 500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.address),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*(0.7/9),500,500)
-	text.print(gfx.screen, arial, tostring(newForm.zipCode),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*2),500,500)
-	text.print(gfx.screen, arial, tostring(newForm.city),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*3),500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.phone),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*4),500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.email),gfx.screen:get_width()*(5/16),inputFieldStart+gfx.screen:get_height()*((0.7/9)*5),500, 500)
-	gfx.screen:copyfrom(highlight,nil,{x=gfx.screen:get_width()*(5/16), y=inputFieldY, h=gfx.screen:get_height()/18, w=gfx.screen:get_width()*(7/16)})
+	text.print(gfx.screen, arial, tostring(newForm.name),xUnit *5,inputFieldStart, 500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.address),xUnit *5,inputFieldStart+yUnit*0.7,500,500)
+	text.print(gfx.screen, arial, tostring(newForm.zipCode),xUnit *5,inputFieldStart+yUnit*0.7*2,500,500)
+	text.print(gfx.screen, arial, tostring(newForm.city),xUnit *5,inputFieldStart+yUnit*0.7*3,500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.phone),xUnit *5,inputFieldStart+yUnit*0.7*4,500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.email),xUnit *5,inputFieldStart+yUnit*0.7*5,500, 500)
+	gfx.screen:copyfrom(highlight,nil,{x=xUnit *5, y=inputFieldY, h=yUnit * 0.5, w=xUnit*7})
 end
 
 --Moves the current inputField

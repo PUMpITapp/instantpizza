@@ -103,6 +103,9 @@ function checkForm()
 			end
 		end
 	end
+	for k,v in pairs(newForm) do
+		print(k,v)
+	end
 end
 
 --Calls methods that builds GUI
@@ -177,14 +180,14 @@ function onKey(key,state)
 	  		if checkTestMode() then
 	  			return pathName
 	  		else
-	  			dofile(pathName)
+	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif(key == 'blue') then
 	  		pathName = "RegistrationStep2.lua"
 	  		if checkTestMode() then
 	  			return pathName
 	  		else
-	  			dofile(pathName)
+	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	else
 	  		--More options for buttonpress?

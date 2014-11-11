@@ -23,7 +23,8 @@ local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 -- local highlightSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 
-local lastStateForm = ...
+local lastForm = ...
+local newForm = {}
 
 local pizzaMenu = {}
 pizzaMenu[1] = {name = "Kebab", price = 75}
@@ -36,6 +37,27 @@ pizzaMenu[7] = {name = "Husets", price = 100}
 pizzaMenu[8] = {name = "Quatro", price = 65}
 
 local choosenPizzas = {}
+
+function checkForm()
+	if type(lastForm) == "string" then
+
+	else
+		if lastForm then
+			if lastForm.laststate == newForm.laststate then
+				newForm = lastForm
+			else
+				for k,v in pairs(lastForm) do
+					if not newForm[k] then
+						newForm[k] = v
+					end
+				end
+			end
+		end
+	end
+		for k,v in pairs(newForm) do
+		print(k,v)
+	end
+end
 
 --Calls methods that builds GUI
 function updateScreen()
@@ -88,6 +110,15 @@ function insertOnChoiceMenu(myPizza)
 		choices = choices + 1
 		choosenPizzas[myPizza.name] = myPizza
 		end
+	end
+end
+
+function insertOnTable(pizzaTable)
+	local i = 0
+	for key, value in pairs(pizzaTable) do
+		i = i + 1
+		pos = "pizza"..i
+		newForm[pos] = value.name
 	end
 end
 
@@ -154,9 +185,11 @@ function onKey(key,state)
 	  		moveHighlight(key)
 			updateScreen()
 	  	elseif(key == 'red') then
-	  		assert(loadfile("RegistrationStep2.lua"))(nil)
+	  		-- insertOnTable(choosenPizzas)
+	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
 	  	elseif(key == 'blue') then
-	  		assert(loadfile("RegistrationReview.lua"))(nil)
+	  		insertOnTable(choosenPizzas)
+	  		assert(loadfile("RegistrationReview.lua"))(newForm)
 	  	elseif(key == 'Return') then
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
 	  		insertOnChoiceMenu(choosenPizza)
@@ -173,6 +206,7 @@ end
 
 --Main method
 function main()
+	checkForm()
 	updateScreen(q)
 end
 main()

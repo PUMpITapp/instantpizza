@@ -47,6 +47,7 @@ local inputFieldY = yUnit*2.5
 local inputFieldStart = yUnit*2.5
 local inputFieldEnd = inputFieldStart+inputMovement*3
 local choosenPizzeria = true
+local pizzeriaToAdd = ""
 
 local background = gfx.loadpng("Images/PizzeriaPics/background.png")
 local inputField = gfx.loadpng("Images/PizzeriaPics/inputfield.png")
@@ -56,12 +57,36 @@ local pizza2 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza2.png")
 local pizza3 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza3.png")
 local pizza4 = gfx.loadpng("Images/PizzeriaPics/Pizzerias/pizza4.png")
 
+local lastForm = ...
+local newForm = {}
+
 local pizzerias = {
 	picFilePath = "",
 	pizzeriaName = "",
 	description = ""
 	--Mer info?
 }
+
+function checkForm()
+	if type(lastForm) == "string" then
+
+	else
+		if lastForm then
+			if lastForm.laststate == newForm.laststate then
+				newForm = lastForm
+			else
+				for k,v in pairs(lastForm) do
+					if not newForm[k] then
+						newForm[k] = v
+					end
+				end
+			end
+		end
+	end
+		for k,v in pairs(newForm) do
+		print(k,v)
+	end
+end
 
 function readPizzeriaFromFile()
 
@@ -90,28 +115,39 @@ function displayPizzerias()
 	gfx.screen:copyfrom(pizza2,nil,{x=xUnit*3, y=(inputFieldStart+inputMovement), h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza3,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*2), h=xUnit, w=yUnit*2})
 	gfx.screen:copyfrom(pizza4,nil,{x=xUnit*3, y=inputFieldStart+(inputMovement*3), h=xUnit, w=yUnit*2})
-	text.print(gfx.screen, arial,"Pizzeria", xUnit*13, yUnit*1, 5 * xUnit, 5 * yUnit)
+	-- text.print(gfx.screen, arial,"Pizzeria", xUnit*13, yUnit*1, 5 * xUnit, 5 * yUnit)
 
 end
 
 function addPizzeria()
 	--Highligt pizzeria and add to form
+	-- local pizzeriaToAdd = nil
 	local pizza1YCoordinate = inputFieldStart
 	local pizza2YCoordinate = (inputFieldStart+inputMovement)
 	local pizza3YCoordinate = inputFieldStart+(inputMovement*2)
 	local pizza4YCoordinate = inputFieldStart+(inputMovement*3)
+
 	if(inputFieldY == pizza1YCoordinate)then
 		text.print(gfx.screen, arial,"Pizzeria 1", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
+		pizzeriaToAdd = "pizzeria1"
 	elseif(inputFieldY == pizza2YCoordinate)then
 		text.print(gfx.screen, arial,"Pizzeria 2", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
+		pizzeriaToAdd = "pizzeria2"
 	elseif(inputFieldY == pizza3YCoordinate)then
 		text.print(gfx.screen, arial,"Pizzeria 3", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
+		pizzeriaToAdd = "pizzeria3"
 	elseif(inputFieldY == pizza4YCoordinate)then
 		text.print(gfx.screen, arial,"Pizzeria 4", xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
+		pizzeriaToAdd = "pizzeria4"
 
 	end
 	gfx.update()
 end
+
+function addToForm(pizzeria)
+	newForm["pizzeria"] = pizzeria
+end
+
 function displayHighlightSurface()
 	gfx.screen:copyfrom(highlight,nil,{x=xUnit*3, y=inputFieldY, h=xUnit, w=yUnit*9})
 end
@@ -152,18 +188,21 @@ function onKey(key,state)
 	  	  	moveHighlightedInputField(key)
 	  	elseif(key=='Return')then
 	  		addPizzeria()
+	  		print(pizzeriaToAdd)
 
 	  	elseif(key == 'blue') then
-	  	  	dofile("RegistrationStep3.lua")
+	  		addToForm(pizzeriaToAdd)
+	  	  	assert(loadfile("RegistrationStep3.lua"))(newForm)
 
 	  	elseif(key == 'red')then
-	  		dofile("RegistrationStep1.lua")
+	  		assert(loadfile("RegistrationStep1.lua"))(newForm)
 	  	end
  	end
 end
 
 --Main method
 function main()
+	checkForm()
 	buildGUI()
 end
 main()

@@ -1,0 +1,9 @@
+1, Vesuvio, 65
+1, Calzone, 70
+1, Kebab, 90
+2, Hawaii, 50
+2, Hawaii Special, 60
+3, Kebab Special, 90
+3, Kebabrulle, 65
+4, Gyrosrulle, 70
+4, Vesuvio Special, 80

@@ -43,6 +43,8 @@ end
 local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 
+local io = require "IOHandler"
+
 --Form from earlier step
 local lastForm = ...
 
@@ -67,7 +69,7 @@ function displayHighlightSurface()
   text.print(gfx.screen, arial, "City: "..tostring(lastForm.city), xUnit*3*1.1, yUnit * 3.5,500, 500)
   text.print(gfx.screen, arial, "Phone: "..tostring(lastForm.phone), xUnit*3*1.1, yUnit * 4,500, 500)
   text.print(gfx.screen, arial, "Email: "..tostring(lastForm.email), xUnit*3*1.1, yUnit * 4.5,500, 50)
-  text.print(gfx.screen, arial, "Pizzeria: "..tostring(lastForm.pizzeria), xUnit*3*1.1, yUnit * 5,500, 50)
+  text.print(gfx.screen, arial, "Pizzeria: "..tostring(lastForm.pizzeria.name), xUnit*3*1.1, yUnit * 5,500, 50)
   local pizzaText = ""
   for i=1,#lastForm.pizzeria.pizza do
     pizzaText = pizzaText..lastForm.pizzeria.pizza[i].name..", "
@@ -76,10 +78,15 @@ function displayHighlightSurface()
 
 end
 
+function saveAccount()
+  io.saveUser(lastForm)
+end
+
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'yellow') then
 	  		--Save account and go to menu
+        saveAccount()
         pathName = "Menu.lua"
         if checkTestMode() then
           return pathName

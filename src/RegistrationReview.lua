@@ -43,6 +43,12 @@ end
 local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 
+--Form from earlier step
+local lastForm = ...
+
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
+
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
@@ -53,7 +59,19 @@ index = 0
 function buildGUI()
 local background = gfx.loadpng("Images/UserRegistrationPics/registrationreview.png") 
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+displayHighlightSurface()
 gfx.update()
+end
+
+--Creates inputsurface and displays "highlighted" input
+function displayHighlightSurface()
+  text.print(gfx.screen, arial, tostring(lastForm.name),xUnit*5,inputFieldStart, 500, 500)
+  text.print(gfx.screen, arial, tostring(lastForm.address),xUnit*5,inputFieldStart+yUnit*0.7,500,500)
+  text.print(gfx.screen, arial, tostring(lastForm.zipCode),xUnit*5,inputFieldStart+yUnit*0.7*2,500,500)
+  text.print(gfx.screen, arial, tostring(lastForm.city),xUnit*5,inputFieldStart+yUnit*0.7*3,500, 500)
+  text.print(gfx.screen, arial, tostring(lastForm.phone),xUnit*5,inputFieldStart+yUnit*0.7*4,500, 500)
+  text.print(gfx.screen, arial, tostring(lastForm.email),xUnit*5,inputFieldStart+yUnit*0.7*5,500, 500)
+  gfx.screen:copyfrom(highlight,nil,{x=gfx.screen:get_width()*(5/16), y=inputFieldY, h=gfx.screen:get_height()/18, w=gfx.screen:get_width()*(7/16)})
 end
 
 function onKey(key,state)

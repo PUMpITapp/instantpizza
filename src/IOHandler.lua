@@ -61,7 +61,7 @@ function ioHandler.readUsers()
   i = 1
   for line in io.open("TextFiles/users.txt"):lines()do
     local userTable = line:split(", ")
-    usersTable[i] = User:new(userTable[1],userTable[2],userTable[3],userTable[4],userTable[5],userTable[6],userTable[7],userTable[8],userTable[9],userTable[10],userTable[11])
+    --usersTable[i] = User:new(userTable[1],userTable[2],userTable[3],userTable[4],userTable[5],userTable[6],userTable[7],userTable[8],userTable[9],userTable[10],userTable[11])
     i = i+1
   end
   return usersTable
@@ -101,9 +101,22 @@ function ioHandler.saveUser(userForm)
   file = io.open("TextFiles/users.txt", "a")
   io.output(file)
   --Append string. Not the best solution at the moment, hard to iterate through table because the order is not sorted
-  userString = userForm.name .. ", " .. userForm.address .. ", " .. userForm.zipCode .. ", " .. userForm.city .. ", " .. userForm.phone .. ", " .. userForm.email .. ", " .. userForm.pizzeria .. ", " .. userForm.pizzaOne .. ", " .. userForm.pizzaTwo .. ", " .. userForm.pizzaThree .. ", " .. userForm.pizzaFour
+  userString = userForm.name .. ", " .. userForm.address .. ", " .. userForm.zipCode .. ", " .. userForm.city .. ", " .. userForm.phone .. ", " .. userForm.email .. ", " .. userForm.pizzeria.name
+  counter = 1
+  for i=1,#userForm.pizzeria.pizza do
+    userString = userString..", "..userForm.pizzeria.pizza[i].name
+    counter = counter +1
+  end
+  while(counter <= 4)do
+    userString = userString.. ", "
+    counter = counter +1
+  end
   io.write("\n")
   io.write(userString)
   io.close()
 end
+function main()
+  ioHandler.readUsers()
+end
+main()
 return ioHandler

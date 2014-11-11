@@ -1,5 +1,7 @@
 local text = require "write_text"
 local gfx = require "gfx"
+local io = require "IOHandler"
+
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -26,16 +28,8 @@ local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get
 local lastForm = ...
 local newForm = {}
 
-local pizzaMenu = {}
-pizzaMenu[1] = {name = "Kebab", price = 75}
-pizzaMenu[2] = {name = "Hawaii", price = 60}
-pizzaMenu[3] = {name = "Vesuvio", price = 70}
-pizzaMenu[4] = {name = "Poker", price = 80}
-pizzaMenu[5] = {name = "Capri", price = 70}
-pizzaMenu[6] = {name = "Bella", price = 60}
-pizzaMenu[7] = {name = "Husets", price = 100}
-pizzaMenu[8] = {name = "Quatro", price = 65}
 
+local pizzaMenu = {}
 local pizza = {}
 
 function checkForm()
@@ -58,7 +52,6 @@ function checkForm()
 		print(k,v)
 	end
 end
-
 --Calls methods that builds GUI
 function updateScreen()
 displayBackground()
@@ -74,18 +67,21 @@ function displayBackground()
 
 	gfx.screen:copyfrom(backgroundSurface)
 end
+function getPizzas()
+	currentPizzeria = newForm.pizzeria
+	currentPizzeria.pizzas = io.readPizzas(currentPizzeria.id)
 
+end
 --Creates new surface and display pizzas
 function displayPizzas()
 	local pizzaPosX = pizzaFieldX
 	local pizzaPosY = pizzaFieldY
 	local ySpace = 0.5 * yUnit
-
 	pizzaSurface:clear()
-	for i=1,showLimit do
+	for i,v in ipairs(currentPizzeria.pizzas) do
 		gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * margin, w=xUnit*7 , h=ySpace})
-		text.print(gfx.screen, arial, pizzaMenu[i].name, pizzaPosX, pizzaPosY+ (i-1) * margin, xUnit*2, ySpace)
-		text.print(gfx.screen, arial, tostring(pizzaMenu[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * margin, 2 * xUnit, ySpace)
+		text.print(gfx.screen, arial, currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * margin, xUnit*2, ySpace)
+		text.print(gfx.screen, arial, tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * margin, 2 * xUnit, ySpace)
 		pizzaPosY = pizzaPosY + ySpace
 	end
 end
@@ -100,7 +96,7 @@ end
 
 function getPizzaOnCoordinate(posY)
 
-	return pizzaMenu[posY]
+	return currentPizzeria.pizzas[posY]
 end
 
 
@@ -208,6 +204,7 @@ end
 --Main method
 function main()
 	checkForm()
+	getPizzas()
 	updateScreen(q)
 end
 main()

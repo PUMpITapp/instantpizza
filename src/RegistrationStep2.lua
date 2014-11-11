@@ -126,7 +126,6 @@ end
 --Adds pizzeria to form
 function addToForm(pizzeria)
 	newForm["pizzeria"] = pizzeria
-	print(pizzeria.name)
 end
 
 function displayHighlightSurface()

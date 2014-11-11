@@ -51,17 +51,32 @@ index = 0
 
 --Calls methods that builds GUI
 function buildGUI()
-local background = gfx.loadpng("images/tutorial.png") -- change this
+local background = gfx.loadpng("images/OrderPics/createorder.png") 
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 gfx.update()
 end
 
-
 function onKey(key,state)
 	if(state == 'up') then
-	  	if(key == 'green') then
-	  		--Go forward
+	  	if(key == 'red') then
+	  		--Choose account and go to next step
+        pathName = "OrderStep1.lua"
+        if checkTestMode() then
+          return pathName
+        else
+          dofile(pathName)
+        end
+      elseif(key == 'green') then
+        --Go back to menu
         pathName = "Menu.lua"
+        if checkTestMode() then
+          return pathName
+        else
+          dofile(pathName)
+        end
+      elseif(key == 'blue') then
+        --Go back to menu
+        pathName = "OrderStep3.lua"
         if checkTestMode() then
           return pathName
         else

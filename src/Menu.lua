@@ -76,6 +76,14 @@ function onKey(key,state)
         else
           dofile(pathName)
         end
+        elseif(key == 'blue') then
+        --Go to About
+        pathName = "OrderStep1.lua"
+          if checkTestMode() then
+            return pathName
+          else
+            dofile(pathName)
+        end
 	  	end
 	end
 end

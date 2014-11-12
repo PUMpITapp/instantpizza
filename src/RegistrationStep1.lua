@@ -5,6 +5,9 @@
 --Create user from input
 --Buttons
 --Transparency not working
+
+
+-- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
 -- Returs true if it was, 
 --   - which would mean that the file is being tested.
@@ -66,8 +69,6 @@ local newForm = {
 	email = ""
 	}
 
-
-
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
@@ -77,43 +78,23 @@ index = 0
 local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
-function returnValuesForTesting(value)
-
-	if value == "inputFieldStart" then
-		return inputFieldStart
-	elseif value == "inputFieldY" then 
-		return inputFieldY
-	elseif value == "inputFieldEnd" then
-		return inputFieldEnd
-	elseif value == "height" then
-		return gfx.screen:get_height()
-	end
-end
-
-function setValuesForTesting(value)
-	inputFieldY = value
-end
-
 function checkForm()
 	--No test case written, not sure what this function does
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
-
+		--Nothing
 	else
-		if lastForm then
+		if lastForm then			
 			if lastForm.laststate == newForm.laststate then
 				newForm = lastForm
 			else
-				for k,v in pairs(lastForm) do
-					if not newForm[k] then
-						newForm[k] = v
+				for key,value in pairs(lastForm) do
+					if not newForm[key] then
+						newForm[key] = value
 					end
 				end
 			end
 		end
-	end
-	for k,v in pairs(newForm) do
-		print(k,v)
 	end
 end
 
@@ -146,8 +127,8 @@ function moveHighlightedInputField(key)
 			index=index-1
 			newForm.currentInputField= inputFieldTable[index]
 		end
-		--No fucntionality if you are at the top and pushing up
-		--Test case for this also needs to be written
+			--No fucntionality if you are at the top and pushing up
+			--Test case for this also needs to be written
 	end
 	--Down
 	if(key == 'Down') then
@@ -177,6 +158,7 @@ function onKey(key,state)
 	 		end
 	 		moveHighlightedInputField(key)
 		elseif(key == "Return") then
+			-- Open keyboard
 			pathName = "Keyboard.lua"
 			if checkTestMode() then
 			 	return pathName
@@ -192,6 +174,7 @@ function onKey(key,state)
 	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif(key == 'blue') then
+	  		-- Next Step
 	  		pathName = "RegistrationStep2.lua"
 	  		if checkTestMode() then
 	  			return pathName
@@ -203,6 +186,60 @@ function onKey(key,state)
 	  		--Test cases needs to be written if more options for onKey is added
 	  	end
 	end
+end
+-- Below are functions that is required for the testing of this file
+
+-- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+function createFormsForTest(String)
+	if String == "Not equal, State equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name", name = "Mikael"}
+		newForm.laststate = "1"
+		lastForm.laststate = "1"
+	elseif String == "Not equal, State not equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name", name = "Mikael"}
+		newForm.laststate = "1"
+		lastForm.laststate = "2"
+	elseif String == "Equal, State equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm.laststate = "1"
+		lastForm.laststate = "1"
+	elseif String == "Equal, State not equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm.laststate = "1"
+		lastForm.laststate = "2"
+	end
+end
+
+-- This functions returns some of the values on local variables to be used when testing
+function returnValuesForTesting(value)
+
+	if value == "inputFieldStart" then
+		return inputFieldStart
+	elseif value == "inputFieldY" then 
+		return inputFieldY
+	elseif value == "inputFieldEnd" then
+		return inputFieldEnd
+	elseif value == "height" then
+		return gfx.screen:get_height()
+	end
+end
+-- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
+function setValuesForTesting(value)
+	inputFieldY = value
+end
+
+-- Function that returns the newForm variable so that it can be used in testing
+function returnNewForm()
+	return newForm
+end
+
+-- Function that returns the lastForm variable so that it can be used in testing
+function returnLastForm()
+	return lastForm
 end
 
 --Main method

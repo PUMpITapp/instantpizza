@@ -1,9 +1,24 @@
 1, Vesuvio, 65
 1, Calzone, 70
 1, Kebab, 90
+1, Husets pizza, 90
+1, Calzone special, 80
+1, Sorento, 70
+1, Banana, 65
 2, Hawaii, 50
-2, Hawaii Special, 60
+2, Hawaii Special, 70
+2, Husets pizza, 90
+2, Calzone special, 80
+2, Disco, 80
+2, Milano, 70
 3, Kebab Special, 90
 3, Kebabrulle, 65
+3, Acapulco, 70
+3, Azteka, 65
+3, Kycklingpizza, 75
+4, Mexicana, 75
+4, Disco, 80
+4, Opera, 75
+4, Milano, 80
 4, Gyrosrulle, 70
 4, Vesuvio Special, 80

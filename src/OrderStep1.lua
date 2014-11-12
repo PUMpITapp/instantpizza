@@ -65,6 +65,12 @@ function displayUsers()
   end
   inputFieldEnd = yCoord
 end
+
+function getUser()
+  account = usersTable[highlightFieldPos]
+  return account
+
+end
 function displayHighlighInput()
   gfx.screen:copyfrom(highlightTile,nil,{x=xUnit*3, y=inputFieldY, h=xUnit*0.7, w=yUnit*10})
 end

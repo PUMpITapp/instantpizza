@@ -178,7 +178,8 @@ function onKey(key,state)
 	  		addPizzeria()
 	  		updateScreen()
 	  	elseif(key == 'blue') then
-			if ifChoosen then
+
+			if isChoosen then
 				assert(loadfile("RegistrationStep3.lua"))(newForm)
 			else
 				text.print(gfx.screen, arial, "Need pizzeria to proceed", xUnit*12, yUnit*4, xUnit*4, yUnit)

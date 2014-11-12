@@ -49,13 +49,42 @@ inputFieldY = gfx.screen:get_height()*(2.5/9)
 inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
 index = 0
 
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
+local tilePNG = gfx.loadpng("Images/OrderPics/ordertile.png")
+local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
+
+
 --Calls methods that builds GUI
 function buildGUI()
 local background = gfx.loadpng("Images/OrderPics/createorder.png") 
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-gfx.update()
+  gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=16*xUnit, h=9*yUnit})
+  displayMenu()
+  gfx.update()
 end
 
+function displayMenu()
+  text.print(gfx.screen, arial, "Pizzas", xUnit, 2 * yUnit, xUnit * 10, yUnit)
+  gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= 2.5 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = 6 * xUnit, y= 2.5 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= 3 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = 6 * xUnit, y= 3 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(highlighterPNG, nil, {x = xUnit, y= 2.5 * yUnit, w = xUnit * 5, h =yUnit*0.5})
+
+  text.print(gfx.screen, arial, "Drinks", xUnit, 3.5 * yUnit, xUnit * 10, yUnit)
+  gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= 4 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = 6 * xUnit, y= 4 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= 4.5 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = 6 * xUnit, y= 4.5 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+
+
+  text.print(gfx.screen, arial, "Extra sauce", xUnit, 5 * yUnit, xUnit * 10, yUnit)
+    gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= 5.5 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = 6 * xUnit, y= 5.5 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= 6 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+  gfx.screen:copyfrom(tilePNG, nil, {x = 6 * xUnit, y= 6 * yUnit, w = xUnit * 3.5, h =yUnit*0.5})
+
+end
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then

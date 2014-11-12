@@ -48,7 +48,7 @@ local inputFieldX = gfx.screen:get_width()/8
 local inputFieldY = yUnit*2.5
 local inputFieldStart = yUnit*2.5
 local inputFieldEnd = inputFieldStart+inputMovement*3
-local choosenPizzeria = false
+local isChoosen = false
 local pizzeriaToAdd = ""
 
 local background = gfx.loadpng("Images/PizzeriaPics/background.png")
@@ -93,11 +93,11 @@ function buildGUI()
 	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 	displayHighlightSurface()
 	displayPizzerias()
-	displayChoosenPizzeria()
+	displayisChoosen()
 end
 --Displays chosen pizzeria in cart
-function displayChoosenPizzeria()
-	if (choosenPizzeria)then
+function displayisChoosen()
+	if (isChoosen)then
 		text.print(gfx.screen, arial,pizzeria.name, xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
 	end
 end
@@ -121,7 +121,7 @@ end
 function addPizzeria()
 	pizzeria = pizzerias[highlightFieldPos]
 	addToForm(pizzeria)
-	choosenPizzeria = true
+	isChoosen = true
 end
 --Adds pizzeria to form
 function addToForm(pizzeria)
@@ -178,8 +178,11 @@ function onKey(key,state)
 	  		addPizzeria()
 	  		updateScreen()
 	  	elseif(key == 'blue') then
-	  	  	assert(loadfile("RegistrationStep3.lua"))(newForm)
-
+			if ifChoosen then
+				assert(loadfile("RegistrationStep3.lua"))(newForm)
+			else
+				text.print(gfx.screen, arial, "Need pizzeria to proceed", xUnit*12, yUnit*4, xUnit*4, yUnit)
+			end
 	  	elseif(key == 'red')then
 	  		assert(loadfile("RegistrationStep1.lua"))(newForm)
 	  	end

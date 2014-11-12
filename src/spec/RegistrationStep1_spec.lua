@@ -98,3 +98,47 @@ describe("Test UserRegistration1, moveHighlightedInputField", function()
 		assert.are.same(expected_value,got)
 	end)
 end)
+
+describe("Test UserRegistration1, checkForm()", function()
+	it("something", function()
+		createFormsForTest("Not equal, State equal")
+		checkForm()
+		newForm = returnNewForm()
+		lastForm = returnLastForm()
+		assert.are.same(newForm,lastForm)
+	end)
+	it("something 2", function()
+		createFormsForTest("Not equal, State not equal")
+		checkForm()
+		newForm = returnNewForm()
+		lastForm = returnLastForm()
+		for key,value in pairs(lastForm) do
+			if key == "laststate" then
+				assert.are_not.equal(lastForm[key],newForm[key])
+			else
+				assert.are.same(lastForm[key],newForm[key])
+			end
+		end
+	end)
+	it("something 3", function()
+		createFormsForTest("Equal, State equal")
+		checkForm()
+		newForm = returnNewForm()
+		lastForm = returnLastForm()
+		assert.are.same(newForm,lastForm)
+	end)
+	it("something 4", function()
+		createFormsForTest("Equal, State not equal")
+		checkForm()
+		newForm = returnNewForm()
+		lastForm = returnLastForm()
+		for key,value in pairs(lastForm) do
+			if key == "laststate" then
+				assert.are_not.equal(lastForm[key],newForm[key])
+			else
+				assert.are.same(lastForm[key],newForm[key])
+			end
+		end
+	end)
+end)
+

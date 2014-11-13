@@ -50,7 +50,7 @@ describe("Test UserRegistration1, onKey", function()
 		assert.are.same(expected_value,got)
 		end)
 	it("test Keyboard", function()
-		local expected_value = 'Return'
+		local expected_value = 'Keyboard.lua'
 		local got = onKey("Return",'up')
 		assert.are.same(expected_value,got)
 		end)

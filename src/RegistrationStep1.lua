@@ -158,7 +158,7 @@ function onKey(key,state)
 	 		moveHighlightedInputField(key)
 		elseif(key == "Return") then
 			-- Open keyboard
-			pathName = "Return"
+			pathName = "Keyboard.lua"
 			if checkTestMode() then
 			 	return pathName
 			else

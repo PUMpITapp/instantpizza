@@ -16,6 +16,7 @@ local highlightPosY = 1
 local showLimit = 8
 local maxChoices = 4
 local choices = 0
+local noOfPizzas = 0
 
 local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
 local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
@@ -80,16 +81,17 @@ function displayPizzas()
 	pizzaSurface:clear()
 	for i,v in ipairs(currentPizzeria.pizzas) do
 		gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * margin, w=xUnit*7 , h=ySpace})
-		text.print(gfx.screen, arial, currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * margin, xUnit*2, ySpace)
+		text.print(gfx.screen, arial, currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * margin, xUnit*5, ySpace)
 		text.print(gfx.screen, arial, tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * margin, 2 * xUnit, ySpace)
 		pizzaPosY = pizzaPosY + ySpace
+		noOfPizzas = i
+		if(i == showLimit)then 
+			break
+		end
 	end
 end
 
---Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-	-- highlightSurface:clear()
-	-- highlightSurface:copyfrom(highligtherPNG)
 	local pos = {x = pizzaFieldX + (highlightPosX -1)*xUnit, y = pizzaFieldY +(highlightPosY-1) * (yUnit *0.5 + margin), w = 9 * xUnit, h =0.5*yUnit}
 	gfx.screen:copyfrom(highligtherPNG, nil , pos )
 end
@@ -145,11 +147,10 @@ function moveHighlight(key)
 		if(highlightPosY < 1) then
 			highlightPosY = highlightPosY +1
 		end
-
 	--Down
 	elseif(key == 'Down')then
 		highlightPosY = highlightPosY + 1
-		if(highlightPosY > showLimit) then
+		if(highlightPosY > noOfPizzas) then
 			highlightPosY = highlightPosY -1
 		end
 	--Left
@@ -195,8 +196,6 @@ function onKey(key,state)
 	  		deleteOnChoiceMenu(getPizzaOnCoordinate(highlightPosY))
 	  		updateScreen()
 	  	end
-
-
 	end
 	gfx.update()
 end

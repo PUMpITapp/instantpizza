@@ -103,7 +103,7 @@ end
 function getPizzas()
 	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
 		currentPizzeria = newForm.pizzeria
-		currentPizzeria.pizzas = io.readPizzas(currentPizzeria.id)
+		--currentPizzeria.pizzas = io.readPizzas(currentPizzeria.id)
 	end
 end
 

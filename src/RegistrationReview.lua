@@ -79,7 +79,7 @@ function displayHighlightSurface()
 end
 
 function saveAccount()
-  io.saveUser(lastForm)
+  io.saveUserData(lastForm)
 end
 
 function onKey(key,state)

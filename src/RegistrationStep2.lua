@@ -83,6 +83,7 @@ end
 --Reads pizzerias from file. Returns a table containing pizzeria objects. 
 function readPizzeriaFromFile()
 	pizzerias = io.readPizzerias()
+
 end
 --Builds GUI
 function buildGUI()
@@ -103,6 +104,7 @@ function displayPizzerias()
 	yCoord = inputFieldStart
 	counter = 1
 	for index,value in ipairs(pizzerias) do
+
 		pngPath = pizzerias[index].imgPath
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
 		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*7})

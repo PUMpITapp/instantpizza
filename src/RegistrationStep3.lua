@@ -24,12 +24,11 @@ local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
 
 local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
--- local highlightSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 
 local lastForm = ...
 local newForm = {}
 
-
+local isChosen = false
 local pizzaMenu = {}
 local pizza = {}
 
@@ -103,11 +102,11 @@ end
 
 
 function insertOnChoiceMenu(myPizza)
-
-		if(choices < maxChoices) then
-		choices = choices + 1
-		pizza[choices] = myPizza
-		end
+	isChosen = true
+	if(choices < maxChoices) then
+	choices = choices + 1
+	pizza[choices] = myPizza
+	end
 	
 end
 
@@ -186,8 +185,12 @@ function onKey(key,state)
 	  		-- insertOnTable(pizza)
 	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
 	  	elseif(key == 'blue') then
-	  		insertOnTable(pizza)
-	  		assert(loadfile("RegistrationReview.lua"))(newForm)
+	  		if isChosen then
+	  			insertOnTable(pizza)
+	  			assert(loadfile("RegistrationReview.lua"))(newForm)
+	  		else
+	  			text.print(gfx.screen, arial, "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
+	  		end
 	  	elseif(key == 'Return') then
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
 	  		insertOnChoiceMenu(choosenPizza)

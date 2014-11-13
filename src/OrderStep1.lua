@@ -32,8 +32,8 @@ local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 
 local background = gfx.loadpng("Images/OrderPics/chooseaccount.png") 
-local accountTile = gfx.loadpng("images/OrderPics/accounttile.png")
-local highlightTile = gfx.loadpng("images/OrderPics/acconttilepressed.png")
+local accountTile = gfx.loadpng("Images/OrderPics/accounttile.png")
+local highlightTile = gfx.loadpng("Images/OrderPics/acconttilepressed.png")
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9

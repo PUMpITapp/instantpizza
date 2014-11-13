@@ -8,7 +8,7 @@ return {
 {
    ["rating"]="5.0",
    ["pizzas"]={4},
-   ["name"]="Pizzeria Mona Lisa",
+   ["name"]="Pizzeria Baguetten",
    ["imgPath"]="pizza1.png",
    ["drink"]={5},
 },
@@ -16,7 +16,7 @@ return {
 {
    ["rating"]="5.0",
    ["pizzas"]={6},
-   ["name"]="Pizzeria Baguetten",
+   ["name"]="Pizzeria Mona Lisa",
    ["imgPath"]="pizza2.png",
    ["drink"]={7},
 },

@@ -1,78 +1,42 @@
 return {
 -- Table: {1}
 {
-   ["zipCode"]="",
-   ["address"]="",
-   ["phone"]={2},
-   ["pizzeria"]="",
-   ["city"]="",
-   ["name"]="",
+   {2},
 },
 -- Table: {2}
 {
-   ["zipCode"]="",
-   ["laststate"]="RegistrationStep1.lua",
-   ["email"]="",
-   ["phone"]="",
-   ["address"]="",
+   ["address"]="aaa",
+   ["city"]="xxcvb",
+   ["name"]="q",
    ["pizzeria"]={3},
-   ["currentInputField"]="name",
-   ["city"]="",
-   ["name"]="",
+   ["phone"]="wert",
+   ["zipCode"]="rtyu",
+   ["email"]="dfghj",
 },
 -- Table: {3}
 {
-   ["imgPath"]="pizza1.png",
-   ["drink"]={4},
+   ["pizzas"]={4},
+   ["name"]="Pizzeria Baguetten",
    ["rating"]="5.0",
-   ["pizza"]={5},
-   ["name"]="Pizzeria Mona Lisa",
-   ["pizzas"]={6},
+   ["drink"]={5},
+   ["imgPath"]="pizza1.png",
 },
 -- Table: {4}
 {
-   {7},
-   {8},
+   {6},
 },
 -- Table: {5}
 {
-   {9},
+   {7},
 },
 -- Table: {6}
 {
-   {9},
-   {10},
-   {11},
-   {12},
+   ["price"]="70",
+   ["name"]="Vesuvio",
 },
 -- Table: {7}
 {
+   ["price"]="10",
    ["name"]="Coca cola",
-   ["price"]="10",
-},
--- Table: {8}
-{
-   ["name"]="Fanta",
-   ["price"]="10",
-},
--- Table: {9}
-{
-   ["name"]="Vesuvio",
-   ["price"]="70",
-},
--- Table: {10}
-{
-   ["name"]="Kebab",
-   ["price"]="75",
-},
--- Table: {11}
-{
-   ["name"]="Mexicana",
-   ["price"]="70",
-},
--- Table: {12}
-{
-   ["name"]="Azteka",
-   ["price"]="65",
 },
 }

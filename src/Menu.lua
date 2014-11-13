@@ -23,19 +23,19 @@ end
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText

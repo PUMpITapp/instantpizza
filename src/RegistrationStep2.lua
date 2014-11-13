@@ -47,7 +47,7 @@ local inputMovement = yUnit*1.2
 local inputFieldX = gfx.screen:get_width()/8
 local inputFieldY = yUnit*2.5
 local inputFieldStart = yUnit*2.5
-local inputFieldEnd = inputFieldStart+inputMovement*3
+local inputFieldEnd = 0
 local isChoosen = false
 local pizzeriaToAdd = ""
 
@@ -110,11 +110,13 @@ function displayPizzerias()
 		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*7})
 		gfx.screen:copyfrom(pizzeriaImg,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*2})
 		text.print(gfx.screen, arial,pizzerias[index].name, xUnit*5.1, yCoord*1.1, xUnit*6, yUnit*4)
+		inputFieldEnd = yCoord
 		yCoord = yCoord+inputMovement
 		if(counter == 4)then
 			break
 		end
 		counter = counter+1
+
 	end
 end
 --Find the selected pizzeria and send i to addToForm()

@@ -45,12 +45,50 @@ local inputFieldStart = yUnit*2.5
 local inputFieldEnd = 0
 local highlightFieldPos =0
 
+User = {}
+function User:new(name,address,zipCode,city,phone,email,pizzeria,pizzaOne,pizzaTwo,pizzaThree,pizzaFour)
+  newObj ={
+  name = name,
+  address = address,
+  zipCode = zipCode,
+  city = city,
+  phone = phone,
+  email = email,
+  pizzeria = pizzeria,
+  }
+  self.__index = self
+  return setmetatable(newObj, self)
+end
+--Create new pizzeria. Each pizzeria object has one table of pizzas. 
+Pizzeria = {}
+function Pizzeria:new(name,imgPath,rating,pizzas)
+  newObj = {
+  name = name,
+  imgPath = imgPath,
+  rating = rating,
+  pizzas = pizzas
+  }
+  self.__index = self
+  return setmetatable(newObj, self)
+end
+--Create pizza
+Pizza = {}
+function Pizza:new(name,price)
+  newObj = {
+  name = name,
+  price = price
+  }
+  self.__index = self
+  return setmetatable(newObj, self)
+end
 
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
 inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
 index = 0
+
+dofile("table.save.lua")
 
 function readUsers()
   usersTable = io.readUsers()
@@ -63,7 +101,7 @@ function displayUsers()
     text.print(gfx.screen, arial,tostring(usersTable[index].email), xUnit*3.1, yCoord, xUnit*7, yUnit)
     yCoord = yCoord+inputMovement
   end
-  inputFieldEnd = yCoord
+  inputFieldEnd = yCoord-inputMovement
 end
 
 function getUser()

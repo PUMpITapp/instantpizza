@@ -43,7 +43,7 @@ local inputFieldX = gfx.screen:get_width()/8
 local inputFieldY = yUnit*2.5
 local inputFieldStart = yUnit*2.5
 local inputFieldEnd = 0
-local highlightFieldPos =0
+local highlightFieldPos = 0
 
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
@@ -54,21 +54,26 @@ index = 0
 dofile("table.save.lua")
 
 function readUsers()
-  usersTable = io.readUsers()
+  io.addTestUser()
+  userTable = io.readUserData()
+  for i,v in pairs(userTable)do
+    print(i,v)
+  end
 end
 
 function displayUsers()
   yCoord = inputFieldStart
-  for index,v in ipairs(usersTable)do
+  for index,v in ipairs(userTable)do
     gfx.screen:copyfrom(accountTile,nil,{x=xUnit*3, y=yCoord, h=xUnit*0.7, w=yUnit*7})
-    text.print(gfx.screen, arial,tostring(usersTable[index].email), xUnit*3.1, yCoord, xUnit*7, yUnit)
+    text.print(gfx.screen, arial,tostring(userTable[index].email), xUnit*3.1, yCoord, xUnit*7, yUnit)
+    print("Test"..index,v)
     yCoord = yCoord+inputMovement
   end
   inputFieldEnd = yCoord-inputMovement
 end
 
 function getUser()
-  account = usersTable[highlightFieldPos]
+  account = userTable[highlightFieldPos]
   return account
 end
 

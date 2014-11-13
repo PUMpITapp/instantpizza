@@ -26,25 +26,25 @@ end
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
 end
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
+local text = chooseText()
+local gfx =  chooseGfx()
 local lastForm = ...
 
 local xUnit = gfx.screen:get_width()/16
@@ -79,7 +79,6 @@ local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
 function checkForm()
-	--No test case written, not sure what this function does
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
 		--Nothing
@@ -159,7 +158,7 @@ function onKey(key,state)
 	 		moveHighlightedInputField(key)
 		elseif(key == "Return") then
 			-- Open keyboard
-			pathName = "Keyboard.lua"
+			pathName = "Return"
 			if checkTestMode() then
 			 	return pathName
 			else

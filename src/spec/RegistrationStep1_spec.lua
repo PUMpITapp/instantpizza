@@ -1,39 +1,39 @@
 require "RegistrationStep1"
 
 describe("Test newForm format", function()
-	it("test form, name", function()
+	it("name", function()
 		local expected_value="name"
 		local got = inputFieldTable[0]
 		assert.are.same(expected_value,got)
 		end)
-	it("test form, address", function()
+	it("address", function()
 		local expected_value="address"
 		local got = inputFieldTable[1]
 		assert.are.same(expected_value,got)
 		end)
-	it("test form, zipCode", function()
+	it("zipCode", function()
 		local expected_value="zipCode"
 		local got = inputFieldTable[2]
 		assert.are.same(expected_value,got)
 		end)
-	it("test form, city", function()
+	it("city", function()
 		local expected_value="city"
 		local got = inputFieldTable[3]
 		assert.are.same(expected_value,got)
 		end)
-	it("test form, phone", function()
+	it("phone", function()
 		local expected_value="phone"
 		local got = inputFieldTable[4]
 		assert.are.same(expected_value,got)
 		end)
-	it("test form, email", function()
+	it("email", function()
 		local expected_value="email"
 		local got = inputFieldTable[5]
 		assert.are.same(expected_value,got)
 		end)
 	end)
 
-describe("Test UserRegistration1 onKey", function()
+describe("Test UserRegistration1, onKey", function()
 	it("test Up", function()
 		local expected_value = "Up"
 		local got = onKey('Up','up')
@@ -50,7 +50,7 @@ describe("Test UserRegistration1 onKey", function()
 		assert.are.same(expected_value,got)
 		end)
 	it("test Keyboard", function()
-		local expected_value = "Keyboard.lua"
+		local expected_value = 'Return'
 		local got = onKey("Return",'up')
 		assert.are.same(expected_value,got)
 		end)
@@ -61,11 +61,23 @@ describe("Test UserRegistration1 onKey", function()
 		end)	
 end)
 
-describe("Test UserRegistration1 checkTestMode", function()
+describe("Test UserRegistration1, checkTestMode", function()
 
 	it("test checkTestMode",function()
 		local got = checkTestMode()
 		assert.is_true(got)
+		end)
+
+	it("test chooseGfx", function()
+		local got = chooseGfx()
+		local expected_value = require "gfx_stub"
+		assert.are.same(expected_value,got)
+		end)
+
+	it("test chooseText", function()
+		local got = chooseText()
+		local expected_value = require "write_text_stub"
+		assert.are.same(expected_value,got)
 		end)
 end)
 
@@ -100,14 +112,14 @@ describe("Test UserRegistration1, moveHighlightedInputField", function()
 end)
 
 describe("Test UserRegistration1, checkForm()", function()
-	it("something", function()
+	it("Forms not equal, states equal", function()
 		createFormsForTest("Not equal, State equal")
 		checkForm()
 		newForm = returnNewForm()
 		lastForm = returnLastForm()
 		assert.are.same(newForm,lastForm)
 	end)
-	it("something 2", function()
+	it("Forms not equal, states not equal", function()
 		createFormsForTest("Not equal, State not equal")
 		checkForm()
 		newForm = returnNewForm()
@@ -120,14 +132,14 @@ describe("Test UserRegistration1, checkForm()", function()
 			end
 		end
 	end)
-	it("something 3", function()
+	it("Forms equal, states equal", function()
 		createFormsForTest("Equal, State equal")
 		checkForm()
 		newForm = returnNewForm()
 		lastForm = returnLastForm()
 		assert.are.same(newForm,lastForm)
 	end)
-	it("something 4", function()
+	it("Forms equal, states not equal", function()
 		createFormsForTest("Equal, State not equal")
 		checkForm()
 		newForm = returnNewForm()

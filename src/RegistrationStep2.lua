@@ -16,19 +16,19 @@ end
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
@@ -78,9 +78,6 @@ function checkForm()
 				end
 			end
 		end
-	end
-		for k,v in pairs(newForm) do
-		print(k,v)
 	end
 end
 --Reads pizzerias from file. Returns a table containing pizzeria objects. 
@@ -140,10 +137,11 @@ function moveHighlightedInputField(key)
 			inputFieldY = inputFieldY - inputMovement
 			highlightFieldPos = highlightFieldPos -1
 		end
+		-- No functionality written for when user is at the top position and pressing 'Up'
 	end
 	--Down
 	if(key == 'Down') then
-		if(inputFieldY < inputFieldEnd)then
+		if(inputFieldY < inputFieldEnd) then
 			inputFieldY = inputFieldY + inputMovement
 			highlightFieldPos = highlightFieldPos + 1
 		
@@ -168,26 +166,111 @@ function onKey(key,state)
 	if(state == 'up') then
   		if(key == 'Up') then
 	  		--Up
+	  		if checkTestMode() then
+				return key
+			end
 	  		moveHighlightedInputField(key)
 	  		updateScreen()
 	  	elseif(key == 'Down') then
 	  		--Down
+	  		if checkTestMode() then
+	 			return key
+	 		end
 	  	  	moveHighlightedInputField(key)
 	  	  	updateScreen()
 	  	elseif(key=='Return')then
+	  		if checkTestMode() then
+	 			return key
+	 		end
 	  		addPizzeria()
 	  		updateScreen()
 	  	elseif(key == 'blue') then
-
 			if isChoosen then
-				assert(loadfile("RegistrationStep3.lua"))(newForm)
+				pathName = "RegistrationStep3.lua"
+				if checkTestMode() then
+					return pathName
+				else
+					assert(loadfile(pathName))(newForm)
+				end
 			else
-				text.print(gfx.screen, arial, "Need pizzeria to proceed", xUnit*12, yUnit*4, xUnit*4, yUnit)
+				message = "Need pizzeria to proceed"
+				if checkTestMode() then
+					return message
+				else
+					text.print(gfx.screen, arial, message , xUnit*12, yUnit*4, xUnit*4, yUnit)
+				end
 			end
 	  	elseif(key == 'red')then
-	  		assert(loadfile("RegistrationStep1.lua"))(newForm)
+	  		pathName = "RegistrationStep1.lua"
+	  		if checkTestMode() then
+	  			return pathName
+	  		else
+	  			assert(loadfile(pathName))(newForm)
+	  		end
 	  	end
  	end
+end
+
+-- Below are functions that is required for the testing of this file
+
+-- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+function createFormsForTest(String)
+	if String == "Not equal, State equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name", name = "Mikael"}
+		newForm.laststate = "1"
+		lastForm.laststate = "1"
+	elseif String == "Not equal, State not equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name", name = "Mikael"}
+		newForm.laststate = "1"
+		lastForm.laststate = "2"
+	elseif String == "Equal, State equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm.laststate = "1"
+		lastForm.laststate = "1"
+	elseif String == "Equal, State not equal" then
+		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
+		newForm.laststate = "1"
+		lastForm.laststate = "2"
+	end
+end
+
+-- This functions returns some of the values on local variables to be used when testing
+function returnValuesForTesting(value)
+
+	if value == "inputFieldStart" then
+		return inputFieldStart
+	elseif value == "inputFieldY" then 
+		return inputFieldY
+	elseif value == "inputFieldEnd" then
+		return inputFieldEnd
+	elseif value == "height" then
+		return gfx.screen:get_height()
+	elseif value == "inputMovement" then
+		return inputMovement
+	end
+end
+-- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
+function setValuesForTesting(value)
+	inputFieldY = value
+end
+
+-- Function that returns the newForm variable so that it can be used in testing
+function returnNewForm()
+	return newForm
+end
+
+-- Function that returns the lastForm variable so that it can be used in testing
+function returnLastForm()
+	return lastForm
+end
+
+-- Function that sets the variable isChoosen to a boolean
+function setIsChoosen(value)
+	isChoosen = value
 end
 
 --Main method

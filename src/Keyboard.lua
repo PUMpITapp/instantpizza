@@ -1,7 +1,9 @@
 local gfx = require "gfx"
 local text = require "write_text"
+
+--preload all the PNG
 local keyboardPNG = gfx.loadpng("Images/KeyboardPics/keyboardblank.png")
-local textAreaPNG = gfx.loadpng("Images/KeyboardPics/textArea.png") -- change this to correct
+local textAreaPNG = gfx.loadpng("Images/KeyboardPics/textArea.png")
 local lowerCasePNG = gfx.loadpng("Images/KeyboardPics/lowerCase.png")
 local upperCasePNG = gfx.loadpng("Images/KeyboardPics/upperCase.png")
 local symbolsPNG = gfx.loadpng("Images/KeyboardPics/symbols.png")
@@ -11,7 +13,7 @@ local enterPressedPNG = gfx.loadpng("Images/KeyboardPics/enterPressed.png")
 local shiftPressedPNG = gfx.loadpng("Images/KeyboardPics/shiftPressed.png")
 local symbolPressedPNG = gfx.loadpng("Images/KeyboardPics/symbolPressed.png")
 local spacePressedPNG = gfx.loadpng("Images/KeyboardPics/spacePressed.png")
-local keyboardState = lowerCasePNG
+local keyboardState = lowerCasePNG -- which layer that should be shown in keyboard
 
 local xUnit = gfx.screen:get_width()/16	-- units of the screen. based on 16:9 ratio
 local yUnit = gfx.screen:get_height()/9	-- units of the screen. based on 16:9 ratio
@@ -79,7 +81,7 @@ local map = {
 	p83 = mapElement:new("m",8,3,keyboardPosX +8.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,8,4),
 	p93 = mapElement:new("DELETE",9,3,keyboardPosX +9.5 * keyboardXUnit, keyboardPosY +3*keyboardYUnit,9,5),
 
-	p14 = mapElement:new("SYMBOLS",1,4,keyboardPosX + 1 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,1,1),
+	p14 = mapElement:new("symbols",1,4,keyboardPosX + 1 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,1,1),
 	p24 = mapElement:new(",",2,4,keyboardPosX +3 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,2,3),
 	p34 = mapElement:new(" ",3,4,keyboardPosX +4 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,5,5),
 	p44 = mapElement:new(".",4,4,keyboardPosX +8 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,8,8),

@@ -69,8 +69,8 @@ end
 function getUser()
   account = usersTable[highlightFieldPos]
   return account
-
 end
+
 function displayHighlighInput()
   gfx.screen:copyfrom(highlightTile,nil,{x=xUnit*3, y=inputFieldY, h=xUnit*0.7, w=yUnit*10})
 end
@@ -112,11 +112,13 @@ function onKey(key,state)
       moveHighlightedInputField(key)
 	  elseif(key == 'Return') then
 	  	--Choose account and go to next step
+
       pathName = "OrderStep2.lua"
       if checkTestMode() then
         return pathName
       else
-        dofile(pathName)
+        account = getUser()
+        assert(loadfile(pathName))(account)
       end
     elseif(key == 'green') then
       --Go back to menu

@@ -52,7 +52,40 @@ local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 local background = gfx.loadpng("Images/UserRegistrationPics/registrationreview.png")
 
-
+--Create new pizzeria. Each pizzeria object has one table of pizzas. 
+Pizzeria = {}
+function Pizzeria:new(name,imgPath,rating,pizzas,drink)
+  newObj = {
+  id = id,
+  name = name,
+  imgPath = imgPath,
+  rating = rating,
+  pizzas = pizzas,
+  drink = drink
+  }
+  self.__index = self
+  return setmetatable(newObj, self)
+end
+--Create pizza
+Pizza = {}
+function Pizza:new(name,price)
+  newObj = {
+  name = name,
+  price = price
+  }
+  self.__index = self
+  return setmetatable(newObj, self)
+end
+--Create drinks
+Drink = {}
+function Drink:new(name,price)
+  newObj = {
+  name = name,
+  price = price
+  }
+  self.__index = self
+  return setmetatable(newObj, self)
+end
 
 --Calls methods that builds GUI
 function buildGUI()
@@ -79,7 +112,18 @@ function displayHighlightSurface()
 end
 
 function saveAccount()
-  io.saveUserData(lastForm)
+  account = lastForm
+  pizzas = {}
+  for i=1,#lastForm.pizzeria.pizza do
+    name = lastForm.pizzeria.pizza[i].name
+    price = lastForm.pizzeria.pizza[i].price
+    pizzas[i] = Pizza:new(name,price)
+  end
+  drinks = {}
+  drink = Drink:new("Coca cola","10")
+  drinks[1] = drink
+  pizzeria = Pizzeria:new(account.pizzeria.name,account.pizzeria.imgPath,account.pizzeria.rating,pizzas,drinks)
+  io.saveUserData(account.name,account.address,account.zipCode,account.city,account.phone,account.email,pizzeria)
 end
 
 function onKey(key,state)

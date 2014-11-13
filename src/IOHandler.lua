@@ -53,14 +53,14 @@ end
 --Function to read users. Users are stored in a table containing user "objects"
 function ioHandler.readUserData()
   local usersTable = {}
-  usersTable = table.load("UserDB.lua")
+  usersTable = table.load("UserData.lua")
+  --print(usersTable.email)
   return usersTable
 end
 -- Function to read pizzerias. Are stored in a table, every pizzeria has a table of pizzas. 
 function ioHandler.readPizzerias()
   local pizzeriaTable = {}
   pizzeriaTable = table.load("PizzeriaData.lua")
-  --print(pizzeriaTable[1].name)
   return pizzeriaTable
 end
 function ioHandler.addTestPizzerias()
@@ -104,10 +104,43 @@ function ioHandler.addTestPizzerias()
   table.save(pizzeriasTable,"PizzeriaData.lua")
 end
 
+function ioHandler.addTestUser()
+  users = {}
+  pizzas = {}
+  Pizza1 = Pizza:new("Vesuvio","70")
+  Pizza2 = Pizza:new("Kebab","75")
+  Pizza3 = Pizza:new("Mexicana","70")
+  drinks ={}
+  Drink1 = Drink:new("Coca cola","10")
+  Drink2 = Drink:new("Fanta","10")
+  Drink3 = Drink:new("Ramlösa","10")
+  pizzas[1] = Pizza1
+  pizzas[2] = Pizza2
+  pizzas[3] = Pizza3
+  drinks[1] = Drink1
+  drinks[2] = Drink2
+  drinks[3] = Drink3
+  Pizzeria = Pizzeria:new("Test pizzeria","pizza2.png","5",pizzas,drinks)
+  user = User:new("Johan Stenius","Ryd","593","Link","07060034","johan@me.com",Pizzeria)
+  user1 = User:new("Johan","Ryd","593","Link","07060034","johan@com",Pizzeria)
+  users[1] = user
+  users[2] = user1
 
---Function to save user to file. Appends string from userForm and saves it to file, file info i appended so nothing is overwritten. 
-function ioHandler.saveUserData(userTable)
-  user = User:new(userTable.name,userTable.address,userTable.zipCode,userTable.city,userTable,phone,userTable.email,userTable.pizzeria)
-  table.save(user,"UserData.lua")
+  table.save(users,"UserData.lua")
+end
+function ioHandler.saveUserData(name,address,zipCode,city,phone,email,pizzeria)
+  tempUserTable = {}
+  usersTable = {}
+  j=2
+  user = User:new(account.name,account.address,account.zipCode,account.city,account.phone,account.email,pizzeria)
+  tempUserTable = ioHandler.readUserData()
+  usersTable[1]=user
+  if not (tempUserTable == nil)then
+    for i=1,#tempUserTable do
+    usersTable[j]=tempUserTable[i]
+    j=j+1
+    end
+  end
+  table.save(usersTable,"UserData.lua")
 end
 return ioHandler

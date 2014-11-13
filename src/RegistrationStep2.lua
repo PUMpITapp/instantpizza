@@ -109,6 +109,7 @@ function displayPizzerias()
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
 		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*7})
 		gfx.screen:copyfrom(pizzeriaImg,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*2})
+		text.print(gfx.screen, arial,pizzerias[index].name, xUnit*5.1, yCoord*1.1, xUnit*6, yUnit*4)
 		yCoord = yCoord+inputMovement
 		if(counter == 4)then
 			break

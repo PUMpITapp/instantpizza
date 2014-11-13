@@ -1,78 +1,79 @@
 return {
 -- Table: {1}
 {
-   ["zipCode"]="",
-   ["address"]="",
-   ["phone"]={2},
-   ["pizzeria"]="",
-   ["city"]="",
-   ["name"]="",
+   {2},
+   {3},
 },
 -- Table: {2}
 {
-   ["zipCode"]="",
-   ["laststate"]="RegistrationStep1.lua",
-   ["email"]="",
-   ["phone"]="",
-   ["address"]="",
-   ["pizzeria"]={3},
-   ["currentInputField"]="name",
-   ["city"]="",
-   ["name"]="",
+   ["pizzeria"]={4},
+   ["email"]="johan@mail.com",
+   ["name"]="Johan",
+   ["zipCode"]="58434",
+   ["phone"]="32424",
+   ["city"]="Linköping",
+   ["address"]="Ryd",
 },
 -- Table: {3}
 {
-   ["imgPath"]="pizza1.png",
-   ["drink"]={4},
-   ["rating"]="5.0",
-   ["pizza"]={5},
-   ["name"]="Pizzeria Mona Lisa",
-   ["pizzas"]={6},
+   ["address"]="Vägen",
+   ["city"]="Staden",
+   ["email"]="test@test.com",
+   ["zipCode"]="58434",
+   ["phone"]="3242342",
+   ["pizzeria"]={5},
+   ["name"]="Test Testsson",
 },
 -- Table: {4}
 {
-   {7},
-   {8},
+   ["drink"]={6},
+   ["name"]="Pizzeria Mona Lisa",
+   ["imgPath"]="pizza2.png",
+   ["rating"]="5.0",
+   ["pizzas"]={7},
 },
 -- Table: {5}
 {
-   {9},
+   ["drink"]={8},
+   ["name"]="Pizzeria Baguetten",
+   ["imgPath"]="pizza1.png",
+   ["rating"]="5.0",
+   ["pizzas"]={9},
 },
 -- Table: {6}
 {
-   {9},
    {10},
-   {11},
-   {12},
 },
 -- Table: {7}
 {
-   ["name"]="Coca cola",
-   ["price"]="10",
+   {11},
 },
 -- Table: {8}
 {
-   ["name"]="Fanta",
-   ["price"]="10",
+   {12},
 },
 -- Table: {9}
 {
-   ["name"]="Vesuvio",
-   ["price"]="70",
+   {13},
 },
 -- Table: {10}
 {
-   ["name"]="Kebab",
-   ["price"]="75",
+   ["price"]="10",
+   ["name"]="Coca cola",
 },
 -- Table: {11}
 {
-   ["name"]="Mexicana",
    ["price"]="70",
+   ["name"]="Kebabrulle",
 },
 -- Table: {12}
 {
-   ["name"]="Azteka",
-   ["price"]="65",
+   ["price"]="10",
+   ["name"]="Coca cola",
+},
+-- Table: {13}
+{
+   ["price"]="70",
+   ["name"]="Vesuvio",
 },
 }

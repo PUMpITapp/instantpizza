@@ -54,11 +54,7 @@ index = 0
 dofile("table.save.lua")
 
 function readUsers()
-  io.addTestUser()
   userTable = io.readUserData()
-  for i,v in pairs(userTable)do
-    print(i,v)
-  end
 end
 
 function displayUsers()
@@ -66,7 +62,6 @@ function displayUsers()
   for index,v in ipairs(userTable)do
     gfx.screen:copyfrom(accountTile,nil,{x=xUnit*3, y=yCoord, h=xUnit*0.7, w=yUnit*7})
     text.print(gfx.screen, arial,tostring(userTable[index].email), xUnit*3.1, yCoord, xUnit*7, yUnit)
-    print("Test"..index,v)
     yCoord = yCoord+inputMovement
   end
   inputFieldEnd = yCoord-inputMovement

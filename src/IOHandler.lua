@@ -122,23 +122,25 @@ function ioHandler.addTestUser()
   drinks[3] = Drink3
   Pizzeria = Pizzeria:new("Test pizzeria","pizza2.png","5",pizzas,drinks)
   user = User:new("Johan Stenius","Ryd","593","Link","07060034","johan@me.com",Pizzeria)
- -- user1 = User:new("Johan","Ryd","593","Link","07060034","johan@com",Pizzeria)
+  user1 = User:new("Johan","Ryd","593","Link","07060034","johan@com",Pizzeria)
   users[1] = user
-  --users[2] = user1
+  users[2] = user1
 
   table.save(users,"UserData.lua")
 end
 function ioHandler.saveUserData(name,address,zipCode,city,phone,email,pizzeria)
-  
-  print(name)
-  print(address)
-  print(zipCode)
-  print(city)
-  print(phone)
-  print(email)
-  print(pizzeria.name)
+  tempUserTable = {}
+  usersTable = {}
+  j=2
   user = User:new(account.name,account.address,account.zipCode,account.city,account.phone,account.email,pizzeria)
-  usersTable = ioHandler.readUserData()
-  table.save(user,"UserData.lua")
+  tempUserTable = ioHandler.readUserData()
+  usersTable[1]=user
+  if not (tempUserTable == nil)then
+    for i=1,#tempUserTable do
+    usersTable[j]=tempUserTable[i]
+    j=j+1
+    end
+  end
+  table.save(usersTable,"UserData.lua")
 end
 return ioHandler

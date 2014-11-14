@@ -43,14 +43,13 @@ local yUnit = gfx.screen:get_height()/9
 
 
  --Start of inputFields. Needed for 
-local inputMovement = yUnit*1.2
-local inputFieldX = gfx.screen:get_width()/8
-local inputFieldY = yUnit*2.5
-local inputFieldStart = yUnit*2.5
-local inputFieldEnd = 0
-local isChoosen = false
-local pizzeriaToAdd = ""
-
+local startPosY = yUnit*2.5
+local startPosX = 5*xUnit
+local startPosPicX = xUnit*3
+local marginY = yUnit*1.2
+local lowerBoundary = 1
+local upperBoundary = 0
+local highlightPosY = 1
 local background = gfx.loadpng("Images/PizzeriaPics/background.png")
 local inputField = gfx.loadpng("Images/PizzeriaPics/inputfield.png")
 local highlight = gfx.loadpng("Images/PizzeriaPics/highlighter.png")
@@ -60,8 +59,8 @@ local newForm = {}
 
 --Pizzeria tables
 local pizzerias = {}
-local pizzeria = {}
-local highlightFieldPos = 1
+local chosenPizzeria = {}
+
 
 function checkForm()
 	if type(lastForm) == "string" then
@@ -89,82 +88,64 @@ end
 function buildGUI()
 	gfx.screen:fill({241,248,233})
 	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-	displayHighlightSurface()
+	displayHighlighter()
 	displayPizzerias()
-	displayisChoosen()
 end
---Displays chosen pizzeria in cart
-function displayisChoosen()
-	if (isChoosen)then
-		text.print(gfx.screen, arial,pizzeria.name, xUnit*13, yUnit*1.5, 5 * xUnit, 5 * yUnit)
-	end
-end
+
 --Display pizzerias. TODO: Add functionality to display more than four pizzerias. And display only in zip code area
 function displayPizzerias()
-	yCoord = inputFieldStart
-	counter = 1
+	yCoord = startPosY
 	for index,value in ipairs(pizzerias) do
 		pngPath = pizzerias[index].imgPath
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
-		gfx.screen:copyfrom(inputField,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*7})
-		gfx.screen:copyfrom(pizzeriaImg,nil,{x=xUnit*3, y=yCoord, h=xUnit, w=yUnit*2})
-		text.print(gfx.screen, arial,pizzerias[index].name, xUnit*5.1, yCoord*1.1, xUnit*6, yUnit*4)
-		inputFieldEnd = yCoord
-		yCoord = yCoord+inputMovement
-		if(counter == 4)then
+		gfx.screen:copyfrom(inputField,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
+		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=xUnit, w=yUnit*2})
+		text.print(gfx.screen, arial,pizzerias[index].name, startPosX*1.05, yCoord+marginY*0.2, xUnit*6, yUnit*4)
+		upperBoundary = index
+		yCoord = yCoord+marginY
+		if(index == 4)then
 			break
 		end
-		counter = counter+1
 
 	end
 end
 --Find the selected pizzeria and send i to addToForm()
 function addPizzeria()
-	pizzeria = pizzerias[highlightFieldPos]
-	addToForm(pizzeria)
-	isChoosen = true
+	chosenPizzeria = pizzerias[highlightPosY]
+	addToForm(chosenPizzeria)
 end
 --Adds pizzeria to form
-function addToForm(pizzeria)
-	newForm["pizzeria"] = pizzeria
+function addToForm(chosenPizzeria)
+	newForm["pizzeria"] = chosenPizzeria
 end
 
-function displayHighlightSurface()
-	gfx.screen:copyfrom(highlight,nil,{x=xUnit*3, y=inputFieldY, h=xUnit, w=yUnit*9})
+function displayHighlighter()
+  gfx.screen:copyfrom(highlight, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
 end
-
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	if(key == 'up') then
-		if(inputFieldY > inputFieldStart) then
-			inputFieldY = inputFieldY - inputMovement
-			highlightFieldPos = highlightFieldPos -1
-		end
-		-- No functionality written for when user is at the top position and pressing 'Up'
-	end
-	--Down
-	if(key == 'down') then
-		if(inputFieldY < inputFieldEnd) then
-			inputFieldY = inputFieldY + inputMovement
-			highlightFieldPos = highlightFieldPos + 1
-		
-		elseif(inputFieldY == inputFieldEnd) then
-			inputFieldY = inputFieldStart
-			highlightFieldPos = 1
-		end
-	end
-end
+  if(key == 'up')then
+    highlightPosY = highlightPosY - 1
 
---Method that prints picture to screen. Takes picture and x,y coordinates as argument.
-function printPicture(pic,xx,yy)
- 	gfx.screen:copyfrom(pic, nil, {x=xx,y=yy})
+    if(highlightPosY < lowerBoundary) then
+      highlightPosY = upperBoundary
+    end
+  --Down
+  elseif(key == 'down')then
+    highlightPosY = highlightPosY + 1
+    if(highlightPosY > upperBoundary) then
+      highlightPosY = 1
+    end
+end
+updateScreen()
 end
 
 function updateScreen()
 	buildGUI()
 	gfx.update()
 end
+
 function onKey(key,state)
 	--TODO”
 	if(state == 'up') then
@@ -189,24 +170,6 @@ function onKey(key,state)
 	  		if checkTestMode() then
 	 			return key
 	 		end
-	  		--addPizzeria()
-	  		--updateScreen()
-	  	elseif(key == 'blue') then
-			if isChoosen then
-				pathName = "RegistrationStep3.lua"
-				if checkTestMode() then
-					return pathName
-				else
-					assert(loadfile(pathName))(newForm)
-				end
-			else
-				message = "Need pizzeria to proceed"
-				if checkTestMode() then
-					return message
-				else
-					text.print(gfx.screen, arial, message , xUnit*12, yUnit*4, xUnit*4, yUnit)
-				end
-			end
 	  	elseif(key == 'red')then
 	  		pathName = "RegistrationStep1.lua"
 	  		if checkTestMode() then
@@ -248,21 +211,21 @@ end
 -- This functions returns some of the values on local variables to be used when testing
 function returnValuesForTesting(value)
 
-	if value == "inputFieldStart" then
-		return inputFieldStart
-	elseif value == "inputFieldY" then 
-		return inputFieldY
-	elseif value == "inputFieldEnd" then
-		return inputFieldEnd
+	if value == "startPosY" then
+		return startPosY
+	elseif value == "highlightPosY" then 
+		return highlightPosY
+	elseif value == "upperBoundary" then
+		return upperBoundary
 	elseif value == "height" then
 		return gfx.screen:get_height()
-	elseif value == "inputMovement" then
-		return inputMovement
+	elseif value == "marginY" then
+		return marginY
 	end
 end
--- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
+-- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
 function setValuesForTesting(value)
-	inputFieldY = value
+	highlightPosY = value
 end
 
 -- Function that returns the newForm variable so that it can be used in testing
@@ -275,10 +238,11 @@ function returnLastForm()
 	return lastForm
 end
 
+--Ischoosen is not necessary anymore
 -- Function that sets the variable isChoosen to a boolean
-function setIsChoosen(value)
-	isChoosen = value
-end
+--function setIsChoosen(value)
+--	isChoosen = value
+--end
 
 --Main method
 function main()

@@ -131,15 +131,15 @@ end
 function ioHandler.saveUserData(name,address,zipCode,city,phone,email,pizzeria)
   tempUserTable = {}
   usersTable = {}
-  j=2
+  j=1
   user = User:new(account.name,account.address,account.zipCode,account.city,account.phone,account.email,pizzeria)
   tempUserTable = ioHandler.readUserData()
-  usersTable[1]=user
   if not (tempUserTable == nil)then
     for i=1,#tempUserTable do
     usersTable[j]=tempUserTable[i]
     j=j+1
     end
+  usersTable[j]=user
   end
   table.save(usersTable,"UserData.lua")
 end

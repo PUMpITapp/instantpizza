@@ -3,77 +3,151 @@ return {
 {
    {2},
    {3},
+   {4},
+   {5},
 },
 -- Table: {2}
 {
-   ["pizzeria"]={4},
-   ["email"]="johan@mail.com",
-   ["name"]="Johan",
-   ["zipCode"]="58434",
-   ["phone"]="32424",
-   ["city"]="Linköping",
-   ["address"]="Ryd",
+   ["email"]="fghj",
+   ["city"]="",
+   ["zipCode"]="",
+   ["name"]="",
+   ["pizzeria"]={6},
+   ["phone"]="",
+   ["address"]="",
 },
 -- Table: {3}
 {
-   ["address"]="Vägen",
-   ["city"]="Staden",
-   ["email"]="test@test.com",
+   ["phone"]="32424",
+   ["city"]="Linköping",
    ["zipCode"]="58434",
-   ["phone"]="3242342",
-   ["pizzeria"]={5},
-   ["name"]="Test Testsson",
+   ["name"]="Johan",
+   ["pizzeria"]={7},
+   ["email"]="johan@mail.com",
+   ["address"]="Ryd",
 },
 -- Table: {4}
 {
-   ["drink"]={6},
-   ["name"]="Pizzeria Mona Lisa",
-   ["imgPath"]="pizza2.png",
-   ["rating"]="5.0",
-   ["pizzas"]={7},
+   ["email"]="test@test.com",
+   ["city"]="Staden",
+   ["zipCode"]="58434",
+   ["name"]="Test Testsson",
+   ["pizzeria"]={8},
+   ["phone"]="3242342",
+   ["address"]="Vägen",
 },
 -- Table: {5}
 {
-   ["drink"]={8},
-   ["name"]="Pizzeria Baguetten",
-   ["imgPath"]="pizza1.png",
-   ["rating"]="5.0",
-   ["pizzas"]={9},
+   ["phone"]="",
+   ["address"]="",
+   ["zipCode"]="",
+   ["name"]="",
+   ["pizzeria"]={9},
+   ["email"]="mail@mail.com",
+   ["city"]="",
 },
 -- Table: {6}
 {
-   {10},
+   ["rating"]="5.0",
+   ["imgPath"]="pizza1.png",
+   ["name"]="Pizzeria Baguetten",
+   ["drink"]={10},
+   ["pizzas"]={11},
 },
 -- Table: {7}
 {
-   {11},
+   ["rating"]="5.0",
+   ["name"]="Pizzeria Mona Lisa",
+   ["imgPath"]="pizza2.png",
+   ["drink"]={12},
+   ["pizzas"]={13},
 },
 -- Table: {8}
 {
-   {12},
+   ["rating"]="5.0",
+   ["name"]="Pizzeria Baguetten",
+   ["imgPath"]="pizza1.png",
+   ["drink"]={14},
+   ["pizzas"]={15},
 },
 -- Table: {9}
 {
-   {13},
+   ["drink"]={16},
+   ["rating"]="5.0",
+   ["name"]="Pizzeria Baguetten",
+   ["pizzas"]={17},
+   ["imgPath"]="pizza1.png",
 },
 -- Table: {10}
 {
-   ["price"]="10",
-   ["name"]="Coca cola",
+   {18},
 },
 -- Table: {11}
 {
-   ["price"]="70",
-   ["name"]="Kebabrulle",
+   {19},
 },
 -- Table: {12}
 {
-   ["price"]="10",
-   ["name"]="Coca cola",
+   {20},
 },
 -- Table: {13}
 {
+   {21},
+},
+-- Table: {14}
+{
+   {22},
+},
+-- Table: {15}
+{
+   {23},
+},
+-- Table: {16}
+{
+   {24},
+},
+-- Table: {17}
+{
+   {25},
+},
+-- Table: {18}
+{
+   ["name"]="Coca cola",
+   ["price"]="10",
+},
+-- Table: {19}
+{
+   ["name"]="Mexicana",
    ["price"]="70",
+},
+-- Table: {20}
+{
+   ["name"]="Coca cola",
+   ["price"]="10",
+},
+-- Table: {21}
+{
+   ["name"]="Kebabrulle",
+   ["price"]="70",
+},
+-- Table: {22}
+{
+   ["name"]="Coca cola",
+   ["price"]="10",
+},
+-- Table: {23}
+{
    ["name"]="Vesuvio",
+   ["price"]="70",
+},
+-- Table: {24}
+{
+   ["name"]="Coca cola",
+   ["price"]="10",
+},
+-- Table: {25}
+{
+   ["name"]="Kebab",
+   ["price"]="75",
 },
 }

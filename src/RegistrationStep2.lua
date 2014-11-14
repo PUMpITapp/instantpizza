@@ -183,11 +183,14 @@ function onKey(key,state)
 	  	  	moveHighlightedInputField(key)
 	  	  	updateScreen()
 	  	elseif(key=='ok')then
+	  		pathName = "RegistrationStep3.lua"
+	  		addPizzeria()
+	  		assert(loadfile(pathName))(newForm)
 	  		if checkTestMode() then
 	 			return key
 	 		end
-	  		addPizzeria()
-	  		updateScreen()
+	  		--addPizzeria()
+	  		--updateScreen()
 	  	elseif(key == 'blue') then
 			if isChoosen then
 				pathName = "RegistrationStep3.lua"

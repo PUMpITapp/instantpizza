@@ -47,17 +47,25 @@ local text = chooseText()
 local gfx =  chooseGfx()
 local lastForm = ...
 
+--Position variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
+local startPosY = yUnit*2.5
+local startPosX = 6*xUnit
+local startPosXText = startPosX*1.01
+local startPosYText = startPosY*0.99
+local highlightPosY = 1
+local marginY = yUnit*0.7
+local upperBoundary = 6
+local lowerBoundary = 1
 
-inputFieldTable = {}
-inputFieldTable[0] = "name"
-inputFieldTable[1] = "address"
-inputFieldTable[2] = "zipCode"
-inputFieldTable[3] = "city"
-inputFieldTable[4] = "phone"
-inputFieldTable[5] = "email"
-
+local inputFieldTable = {}
+inputFieldTable[1] = "name"
+inputFieldTable[2] = "address"
+inputFieldTable[3] = "zipCode"
+inputFieldTable[4] = "city"
+inputFieldTable[5] = "phone"
+inputFieldTable[6] = "email"
 local newForm = {
 	laststate = "RegistrationStep1.lua",
 	currentInputField = "name",
@@ -68,12 +76,6 @@ local newForm = {
 	phone="",
 	email = ""
 	}
-
---Start of inputFields.
-inputFieldStart = gfx.screen:get_height()*(2.5/9)
-inputFieldY = gfx.screen:get_height()*(2.5/9)
-inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
-index = 0
 
 local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
@@ -99,51 +101,50 @@ end
 
 --Calls methods that builds GUI
 function buildGUI()
-
-
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-displayHighlightSurface()
-gfx.update()
+displayFormData()
+displayHighlighter()
+end
+
+function displayHighlighter()
+  gfx.screen:copyfrom(highlight, nil, {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 7, h =yUnit*0.5})
 end
 
 --Creates inputsurface and displays "highlighted" input
-function displayHighlightSurface()
-	text.print(gfx.screen, arial, tostring(newForm.name),xUnit *6,inputFieldStart, 500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.address),xUnit *5,inputFieldStart+yUnit*0.7,500,500)
-	text.print(gfx.screen, arial, tostring(newForm.zipCode),xUnit *5,inputFieldStart+yUnit*0.7*2,500,500)
-	text.print(gfx.screen, arial, tostring(newForm.city),xUnit *5,inputFieldStart+yUnit*0.7*3,500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.phone),xUnit *5,inputFieldStart+yUnit*0.7*4,500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.email),xUnit *5,inputFieldStart+yUnit*0.7*5,500, 500)
-	gfx.screen:copyfrom(highlight,nil,{x=xUnit *6, y=inputFieldY, h=yUnit * 0.5, w=xUnit*7})
+function displayFormData()
+	text.print(gfx.screen, arial, tostring(newForm.name),startPosXText,startPosYText, 500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
+	text.print(gfx.screen, arial, tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)
+	text.print(gfx.screen, arial, tostring(newForm.city),startPosXText,startPosYText+marginY*3,500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.phone),startPosXText,startPosYText+marginY*4,500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.email),startPosXText,startPosYText+marginY*5,500, 500)
 end
 
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	if(key == 'up') then
-		if(inputFieldY > inputFieldStart) then
-			inputFieldY = inputFieldY - gfx.screen:get_height()*(0.7/9)
-			index=index-1
-			newForm.currentInputField= inputFieldTable[index]
-		end
-			--No fucntionality if you are at the top and pushing up
-			--Test case for this also needs to be written
-	end
-	--Down
-	if(key == 'down') then
-		if(inputFieldY < inputFieldEnd)then
-			inputFieldY = inputFieldY + gfx.screen:get_height()*(0.7/9)
-			index=index+1
-			newForm.currentInputField= inputFieldTable[index]
-		
-		elseif(inputFieldY == inputFieldEnd) then
-			inputFieldY = inputFieldStart
-			index = 0
-			newForm.currentInputField= inputFieldTable[index]
-		end
-	end
-	buildGUI()
+  if(key == 'up')then
+    highlightPosY = highlightPosY - 1
+
+    if(highlightPosY < lowerBoundary) then
+      highlightPosY = upperBoundary
+    end
+  --Down
+  elseif(key == 'down')then
+    highlightPosY = highlightPosY + 1
+    if(highlightPosY > upperBoundary) then
+      highlightPosY = 1
+    end
 end
+newForm.currentInputField = inputFieldTable[highlightPosY]
+updateScreen()
+end
+
+function updateScreen()
+	buildGUI()
+	gfx.update()
+end
+
 function onKey(key,state)
 	if(state == 'up') then
 		print(key)
@@ -217,19 +218,19 @@ end
 -- This functions returns some of the values on local variables to be used when testing
 function returnValuesForTesting(value)
 
-	if value == "inputFieldStart" then
-		return inputFieldStart
-	elseif value == "inputFieldY" then 
-		return inputFieldY
+	if value == "startPosY" then
+		return startPosY
+	elseif value == "highlightPosY" then 
+		return highlightPosY
 	elseif value == "inputFieldEnd" then
 		return inputFieldEnd
 	elseif value == "height" then
 		return gfx.screen:get_height()
 	end
 end
--- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
+-- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
 function setValuesForTesting(value)
-	inputFieldY = value
+	highlightPosY = value
 end
 
 -- Function that returns the newForm variable so that it can be used in testing
@@ -245,7 +246,7 @@ end
 --Main method
 function main()
 	checkForm()
-	buildGUI()
+	updateScreen()
 	newForm.currentInputField = "name"
 end
 main()

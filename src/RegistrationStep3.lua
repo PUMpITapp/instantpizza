@@ -61,7 +61,7 @@ local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
 local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
-local lastForm = ...
+-- local lastForm = ...
 local newForm = {}
 
 local isChosen = false

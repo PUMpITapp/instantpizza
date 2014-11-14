@@ -136,7 +136,7 @@ end
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	if(key == 'Up') then
+	if(key == 'up') then
 		if(inputFieldY > inputFieldStart) then
 			inputFieldY = inputFieldY - inputMovement
 			highlightFieldPos = highlightFieldPos -1
@@ -144,7 +144,7 @@ function moveHighlightedInputField(key)
 		-- No functionality written for when user is at the top position and pressing 'Up'
 	end
 	--Down
-	if(key == 'Down') then
+	if(key == 'down') then
 		if(inputFieldY < inputFieldEnd) then
 			inputFieldY = inputFieldY + inputMovement
 			highlightFieldPos = highlightFieldPos + 1
@@ -168,21 +168,21 @@ end
 function onKey(key,state)
 	--TODO”
 	if(state == 'up') then
-  		if(key == 'Up') then
+  		if(key == 'up') then
 	  		--Up
 	  		if checkTestMode() then
 				return key
 			end
 	  		moveHighlightedInputField(key)
 	  		updateScreen()
-	  	elseif(key == 'Down') then
+	  	elseif(key == 'down') then
 	  		--Down
 	  		if checkTestMode() then
 	 			return key
 	 		end
 	  	  	moveHighlightedInputField(key)
 	  	  	updateScreen()
-	  	elseif(key=='Return')then
+	  	elseif(key=='ok')then
 	  		if checkTestMode() then
 	 			return key
 	 		end

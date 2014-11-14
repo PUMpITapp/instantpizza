@@ -108,19 +108,19 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-	text.print(gfx.screen, arial, tostring(newForm.name),xUnit *5,inputFieldStart, 500, 500)
+	text.print(gfx.screen, arial, tostring(newForm.name),xUnit *6,inputFieldStart, 500, 500)
 	text.print(gfx.screen, arial, tostring(newForm.address),xUnit *5,inputFieldStart+yUnit*0.7,500,500)
 	text.print(gfx.screen, arial, tostring(newForm.zipCode),xUnit *5,inputFieldStart+yUnit*0.7*2,500,500)
 	text.print(gfx.screen, arial, tostring(newForm.city),xUnit *5,inputFieldStart+yUnit*0.7*3,500, 500)
 	text.print(gfx.screen, arial, tostring(newForm.phone),xUnit *5,inputFieldStart+yUnit*0.7*4,500, 500)
 	text.print(gfx.screen, arial, tostring(newForm.email),xUnit *5,inputFieldStart+yUnit*0.7*5,500, 500)
-	gfx.screen:copyfrom(highlight,nil,{x=xUnit *5, y=inputFieldY, h=yUnit * 0.5, w=xUnit*7})
+	gfx.screen:copyfrom(highlight,nil,{x=xUnit *6, y=inputFieldY, h=yUnit * 0.5, w=xUnit*7})
 end
 
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-	if(key == 'Up') then
+	if(key == 'up') then
 		if(inputFieldY > inputFieldStart) then
 			inputFieldY = inputFieldY - gfx.screen:get_height()*(0.7/9)
 			index=index-1
@@ -130,7 +130,7 @@ function moveHighlightedInputField(key)
 			--Test case for this also needs to be written
 	end
 	--Down
-	if(key == 'Down') then
+	if(key == 'down') then
 		if(inputFieldY < inputFieldEnd)then
 			inputFieldY = inputFieldY + gfx.screen:get_height()*(0.7/9)
 			index=index+1
@@ -146,17 +146,18 @@ function moveHighlightedInputField(key)
 end
 function onKey(key,state)
 	if(state == 'up') then
-		if(key == 'Up')then
+		print(key)
+		if(key == 'up')then
 			if checkTestMode() then
 				return key
 			end
 			moveHighlightedInputField(key)
-	 	elseif(key == 'Down')then
+	 	elseif(key == 'down')then
 	 		if checkTestMode() then
 	 			return key
 	 		end
 	 		moveHighlightedInputField(key)
-		elseif(key == "Return") then
+		elseif(key == "ok") then
 			-- Open keyboard
 			pathName = "Keyboard.lua"
 			if checkTestMode() then

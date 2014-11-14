@@ -332,7 +332,7 @@ end
 
 -- moves the highligther around
 function movehighlightKey(key)
-	if(key == 'Down')then
+	if(key == 'down')then
 		--down
 
 		highlightPosX = getYmove(highlightPosX,highlightPosY,"down")
@@ -344,7 +344,7 @@ function movehighlightKey(key)
 			updateScreen()
 		end
 	end
-	if(key == 'Up')then
+	if(key == 'up')then
 		--up
 		highlightPosX = getYmove(highlightPosX,highlightPosY,"up")
 		highlightPosY = highlightPosY - 1
@@ -356,7 +356,7 @@ function movehighlightKey(key)
 		end
 
 	end
-	if(key == 'Left')then
+	if(key == 'left')then
 		--left
 		highlightPosX = highlightPosX - 1
 		highlightPosY = highlightPosY + 0
@@ -369,7 +369,7 @@ function movehighlightKey(key)
 		end
 
 	end
-	if(key == 'Right')then
+	if(key == 'right')then
 		--right
 		highlightPosX = highlightPosX + 1
 		highlightPosY = highlightPosY + 0
@@ -386,15 +386,15 @@ end
 -- calls functions on keys
 function onKey(key, state)
 	if(state == 'up')then
-		if(key == 'Up') then
+		if(key == 'up') then
 			movehighlightKey(key)
-		elseif(key == 'Down') then
+		elseif(key == 'down') then
 			movehighlightKey(key)
-		elseif(key == 'Left') then
+		elseif(key == 'left') then
 			movehighlightKey(key)
-		elseif(key == 'Right') then
+		elseif(key == 'right') then
 			movehighlightKey(key)
-		elseif(key == 'Return') then
+		elseif(key == 'ok') then
 			local letterToDisplay = getKeyboardChar(highlightPosX,highlightPosY)
 			if (letterToDisplay == "ENTER") then
 				sendFormBackToState(lastStateForm.laststate, lastStateForm)

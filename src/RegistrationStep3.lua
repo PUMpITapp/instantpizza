@@ -41,30 +41,31 @@ local io = require "IOHandler"
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
-local margin = yUnit * 0.05
+local marginY = yUnit * 0.05
 
-local pizzaFieldY = yUnit * 2.5
-local pizzaFieldX = xUnit * 3
+local startPosY = yUnit * 2.5
+local startPosX = xUnit * 3
 
-local highlightPosX = 1
 local highlightPosY = 1
 
 local showLimit = 8
 local maxChoices = 4
 local choices = 0
-local noOfPizzas = 0
+local upperBoundary = 0
+local lowerBoundary = 1
+local cartPosX = 12.9 * xUnit
+local cartPosY = 4.3 * yUnit
 
 local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
 local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
 local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
 
-local pizzaSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
 local lastForm = ...
 local newForm = {}
 
-local isChosen = false
+
 local pizzaMenu = {}
 local pizza = {}
 
@@ -86,12 +87,16 @@ function checkForm()
 	end
 end
 --Calls methods that builds GUI
-function updateScreen()
+function buildGUI()
 displayBackground()
 displayHighlightSurface()
 displayPizzas()
 displayChoiceMenu()
-gfx.update()
+end
+
+function updateScreen()
+	buildGUI()
+	gfx.update()
 end
 
 function displayBackground()
@@ -100,6 +105,7 @@ function displayBackground()
 
 	gfx.screen:copyfrom(backgroundSurface)
 end
+
 function getPizzas()
 	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
 		currentPizzeria = newForm.pizzeria
@@ -110,16 +116,15 @@ end
 --Creates new surface and display pizzas
 function displayPizzas()
 	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
-		local pizzaPosX = pizzaFieldX
-		local pizzaPosY = pizzaFieldY
+		local pizzaPosX = startPosX
+		local pizzaPosY = startPosY
 		local ySpace = 0.5 * yUnit
-		pizzaSurface:clear()
 		for i,v in ipairs(currentPizzeria.pizzas) do
-			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * margin, w=xUnit*7 , h=ySpace})
-			text.print(gfx.screen, arial, currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * margin, xUnit*5, ySpace)
-			text.print(gfx.screen, arial, tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * margin, 2 * xUnit, ySpace)
+			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * marginY, w=xUnit*7 , h=ySpace})
+			text.print(gfx.screen, arial, currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * marginY, xUnit*5, ySpace)
+			text.print(gfx.screen, arial, tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
-			noOfPizzas = i
+			upperBoundary = i
 			if(i == showLimit)then 
 				break
 			end
@@ -128,8 +133,8 @@ function displayPizzas()
 end
 
 function displayHighlightSurface()
-	local pos = {x = pizzaFieldX + (highlightPosX -1)*xUnit, y = pizzaFieldY +(highlightPosY-1) * (yUnit *0.5 + margin), w = 9 * xUnit, h =0.5*yUnit}
-	gfx.screen:copyfrom(highligtherPNG, nil , pos )
+	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 9 * xUnit, h =0.5*yUnit}
+	gfx.screen:copyfrom(highligtherPNG, nil , pos)
 end
 
 function getPizzaOnCoordinate(posY)
@@ -137,24 +142,29 @@ function getPizzaOnCoordinate(posY)
 	return currentPizzeria.pizzas[posY]
 end
 
+function isAlreadyPicked(myPizza)
+	local isPicked = false
+	for i, v in pairs(pizza) do
+		if myPizza.name == pizza[i].name then
+			isPicked = true
+		end
+	end
+	return isPicked
+end
+
+
 
 function insertOnChoiceMenu(myPizza)
-	isChosen = true
-	if(choices < maxChoices) then
-	choices = choices + 1
-	pizza[choices] = myPizza
+
+	local isPicked = isAlreadyPicked(myPizza)
+	if not isPicked then
+		choices = choices + 1
+		pizza[choices] = myPizza
 	end
-	
 end
 
 function insertOnTable(pizzaTable)
 	newForm.pizzeria["pizza"] = pizzaTable
-	-- local i = 0
-	-- for key, value in pairs(pizzaTable) do
-	-- 	i = i + 1
-	-- 	pos = "pizza"..i
-	-- 	newForm[pos] = value.name
-	-- end
 end
 
 function deleteOnChoiceMenu(myPizza)
@@ -165,11 +175,10 @@ function deleteOnChoiceMenu(myPizza)
 end
 
 function displayChoiceMenu()
-	local x = 13 * xUnit
-	local y = 1.5 * yUnit
+
 	local menuItems = 0
 	for k, v in pairs(pizza) do
-	text.print(gfx.screen, arial, v.name, x, y + 0.5*menuItems*yUnit, pizzaCellX, pizzaCellY)
+	text.print(gfx.screen, arial, v.name, cartPosX, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
 	menuItems = menuItems + 1
 	end
 end
@@ -178,22 +187,22 @@ end
 function moveHighlight(key)
 
 	--Up
-	if(key == 'Up')then
+	if(key == 'up')then
 		highlightPosY = highlightPosY - 1
-		if(highlightPosY < 1) then
-			highlightPosY = highlightPosY +1
+		if(highlightPosY < lowerBoundary) then
+			highlightPosY = upperBoundary
 		end
 	--Down
-	elseif(key == 'Down')then
+	elseif(key == 'down')then
 		highlightPosY = highlightPosY + 1
-		if(highlightPosY > noOfPizzas) then
-			highlightPosY = highlightPosY -1
+		if(highlightPosY > upperBoundary) then
+			highlightPosY = lowerBoundary
 		end
 	--Left
-	elseif(key == 'Left')then
+	elseif(key == 'left')then
 		
 	--Right
-	elseif(key == 'Right') then
+	elseif(key == 'right') then
 		
 	end
 end
@@ -201,43 +210,34 @@ end
 function onKey(key,state)
 	--TODO
 	if(state == 'up') then
-	  	if(key == 'Up') then
+	  	if(key == 'up') then
 	  		--Up
 	  		moveHighlight(key)
-	  		updateScreen()
 	  		
-	  	elseif(key == 'Down') then
+	  	elseif(key == 'down') then
 	  		--Down
 	  		moveHighlight(key)
-	  		updateScreen()
 	  		--Left
-	  	elseif(key == 'Left') then
+	  	elseif(key == 'left') then
 	  		moveHighlight(key)
-	  		updateScreen()
 	  		--Right
-	  	elseif(key == 'Right') then
+	  	elseif(key == 'right') then
 	  		moveHighlight(key)
-			updateScreen()
 	  	elseif(key == 'red') then
-	  		-- insertOnTable(pizza)
 	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
 	  	elseif(key == 'blue') then
-	  		if isChosen then
+	  		if not pizza[1] then
 	  			insertOnTable(pizza)
 	  			assert(loadfile("RegistrationReview.lua"))(newForm)
 	  		else
 	  			text.print(gfx.screen, arial, "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
 	  		end
-	  	elseif(key == 'Return') then
+	  	elseif(key == 'ok') then
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
 	  		insertOnChoiceMenu(choosenPizza)
-	  		updateScreen()
-	  	elseif(key == 'Delete') then
-	  		deleteOnChoiceMenu(getPizzaOnCoordinate(highlightPosY))
-	  		updateScreen()
 	  	end
 	end
-	gfx.update()
+	updateScreen()
 end
 
 -- Below are functions that is required for the testing of this file
@@ -306,7 +306,7 @@ end
 function main()
 	checkForm()
 	getPizzas()
-	updateScreen(q)
+	updateScreen()
 end
 main()
 

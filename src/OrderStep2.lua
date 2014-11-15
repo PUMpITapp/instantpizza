@@ -44,10 +44,6 @@ local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 
 --Start of inputFields.
-inputFieldStart = gfx.screen:get_height()*(2.5/9)
-inputFieldY = gfx.screen:get_height()*(2.5/9)
-inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
-index = 0
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -183,20 +179,20 @@ end
 function moveHighlight(key)
 --Moves the current inputField
   --Up
-  if(key == 'Up')then
+  if(key == 'up')then
     highlightPosY = highlightPosY - 1
     if(highlightPosY < lowerBoundary) then
       highlightPosY = highlightPosY +1
     end
 
   --Down
-  elseif(key == 'Down')then
+  elseif(key == 'down')then
     highlightPosY = highlightPosY + 1
     if(highlightPosY > upperBoundary) then
       highlightPosY = highlightPosY -1
     end
   --Left
-  elseif(key == 'Left')then
+  elseif(key == 'left')then
     highlightPosX = highlightPosX -1
     if(highlightPosX < 1) then
       highlightPosX = highlightPosX + 1
@@ -205,7 +201,7 @@ function moveHighlight(key)
       highlightPosY = 1
     
   --Right
-  elseif(key == 'Right') then
+  elseif(key == 'right') then
     highlightPosX = highlightPosX +1
     if(highlightPosX > 4) then
       highlightPosX = highlightPosX -1
@@ -243,13 +239,13 @@ function onKey(key,state)
           dofile(pathName)
         end
 
-      elseif key == "Up" then
+      elseif key == "up" then
         moveHighlight(key)
-      elseif key == 'Down' then
+      elseif key == 'down' then
         moveHighlight(key)
-      elseif key == 'Left' then
+      elseif key == 'left' then
         moveHighlight(key)
-      elseif key == 'Right' then
+      elseif key == 'right' then
         moveHighlight(key)
 	  	end
 	end

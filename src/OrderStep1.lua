@@ -85,14 +85,14 @@ end
 
 function moveHighlightedInputField(key)
   --Starting coordinates for current inputField
-  if(key == 'Up') then
+  if(key == 'up') then
     if(inputFieldY > inputFieldStart) then
       inputFieldY = inputFieldY - inputMovement
       highlightFieldPos = highlightFieldPos -1
     end
   end
   --Down
-  if(key == 'Down') then
+  if(key == 'down') then
     if(inputFieldY < inputFieldEnd)then
       inputFieldY = inputFieldY + inputMovement
       highlightFieldPos = highlightFieldPos + 1
@@ -107,11 +107,11 @@ end
 
 function onKey(key,state)
 	if(state == 'up') then
-    if(key == 'Up')then
+    if(key == 'up')then
       moveHighlightedInputField(key)
-    elseif(key == 'Down')then
+    elseif(key == 'down')then
       moveHighlightedInputField(key)
-	  elseif(key == 'Return') then
+	  elseif(key == 'ok') then
 	  	--Choose account and go to next step
 
       pathName = "OrderStep2.lua"

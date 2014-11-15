@@ -152,7 +152,9 @@ function isAlreadyPicked(myPizza)
 	return isPicked
 end
 
-
+function pizzaIsChoosen()
+	return #pizza~=0
+end
 
 function insertOnChoiceMenu(myPizza)
 
@@ -226,7 +228,7 @@ function onKey(key,state)
 	  	elseif(key == 'red') then
 	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
 	  	elseif(key == 'blue') then
-	  		if not pizza[1] then
+	  		if pizzaIsChoosen() then
 	  			insertOnTable(pizza)
 	  			assert(loadfile("RegistrationReview.lua"))(newForm)
 	  		else

@@ -54,7 +54,7 @@ local marginX = xUnit * 4
 local totalSum = 0
 local lastPizzaIndex = 0
 local lastDrinkIndex = 0
-local background = gfx.loadpng("Images/UserRegistrationPics/registrationreview.png") 
+local background = gfx.loadpng("Images/OrderPics/orderstep3.png") 
 local user = {}
 
 --Calls methods that builds GUI
@@ -70,7 +70,7 @@ function printHeadLines()
   text.print(gfx.screen, arial,"Amount", startPosX+marginX*0.84, startPosY, 6* xUnit,200)
   text.print(gfx.screen, arial,"Price", startPosX+marginX*1.4, startPosY, 6* xUnit,200)
 
-  for i,v in pairs(user.pizzeria.pizzas)do
+  for i=1, #user.pizzeria.pizzas do
     amount = 2
     totalSum = totalSum+(amount*user.pizzeria.pizzas[i].price)
     text.print(gfx.screen, arial,tostring(user.pizzeria.pizzas[i].name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
@@ -78,7 +78,7 @@ function printHeadLines()
     text.print(gfx.screen, arial,tostring(amount*user.pizzeria.pizzas[i].price), startPosX+marginX*1.4, startPosY+(marginY*i), 6* xUnit,200)
     lastPizzaIndex = i
   end
-  for i,v in pairs(user.pizzeria.drink)do
+  for i=1, #user.pizzeria.drink do
     amount = 2
     totalSum = totalSum+(amount*user.pizzeria.drink[i].price)
     text.print(gfx.screen, arial,tostring(user.pizzeria.drink[i].name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)

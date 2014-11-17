@@ -61,14 +61,23 @@ local fieldWith = 2 * xUnit
 local fieldHeight = 0.5 * yUnit
 local lowerBoundary = 1
 local upperBoundary = 1
--- local inPizzas = true
--- local inDrinks = false
--- local inSauces = false
--- local in
+
 local menuSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 
 local account = ...
-local newOrder = {}
+
+local newOrder = {
+	name = account.name,
+	address = account.address,
+	phone = account.phone,
+	email = account.email,
+	pizzas = {},
+	drinks = {},
+	sauces = {},
+	salads = {},
+	totalPrice = 0
+}
+
 local menu = {
   pizzas = {},
   drinks = {},
@@ -76,18 +85,38 @@ local menu = {
   salads = {}
 }
 
+local refToMenu = {}
+local refToOrder = {}
+
+local indexMenu = {}
+indexMenu[1] = "pizzas"
+indexMenu[2] = "drinks"
+indexMenu[3] = "sauces"
+indexMenu[4] = "salads"
+
+local cart = {}
+
 -- 
 --Calls methods that builds GUI
 function updateScreen()
   gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=16*xUnit, h=9*yUnit})
   displayMenu()
   displayHighlighter()
+  showCart()
   gfx.update()
 end
 
 function createMenu()
-  -- menu.pizzas = account.pizzerias.pizzas
+  menu.pizzas = account.pizzeria.pizzas -- array with numbers
+  -- print(menu.pizzas[1].name)
+
   -- menu.drinks = account.pizzerias.drinks
+  menu.drinks[1] = {name = "Sprite", price = "5kr"}
+  menu.drinks[2] = {name = "Coke", price = "5kr"}
+  menu.drinks[3] = {name = "Beer", price = "5kr"}
+  menu.drinks[4] = {name = "Fanta", price = "5kr"}
+  menu.drinks[5] = {name = "Spring Water", price = "5kr"}
+
   menu.sauces[1] = {name = "hotsauce", price = "5kr"}
   menu.sauces[2] = {name = "hotsauce", price = "5kr"}
   menu.sauces[3] = {name = "hotsauce", price = "5kr"}
@@ -100,6 +129,17 @@ function createMenu()
   menu.salads[4] = {name = "pizzasalad", price = "10kr"}
   menu.salads[5] = {name = "pizzasalad", price = "10kr"}
   menu.salads[6] = {name = "pizzasalad", price = "10kr"}
+
+  refToMenu[1] = menu.pizzas
+refToMenu[2] = menu.drinks
+refToMenu[3] = menu.sauces
+refToMenu[4] = menu.salads
+
+refToOrder[1] = newOrder.pizzas
+refToOrder[2] = newOrder.drinks
+refToOrder[3] = newOrder.sauces
+refToOrder[4] = newOrder.salads
+
 end
 
 -- function createMenuSurface()
@@ -125,8 +165,6 @@ end
 -- end
 
 function displayMenu()
-  local xPos = 1
-  local yPos = 1
 
   text.print(gfx.screen, arial, "Pizzas", startPosX, 2 * yUnit, xUnit * 10, yUnit)
   text.print(gfx.screen, arial, "Drinks", startPosX + marginX, 2 * yUnit, xUnit * 10, yUnit)
@@ -135,19 +173,18 @@ function displayMenu()
 
 
   -- gfx.screen:copyfrom(menuSurface)
-  
-  -- for k, v in pairs(menu.pizza)do
-  --   gfx.screen:copyfrom(tilePNG, nil, {x = xUnit, y= (2 + 0.5*yPos)* yUnit, w = xUnit * 3.5, h =yUnit*0.5})
-  --   yPos = yPos + 1
-  -- then
-  for i=1,4 do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+
+  for i =1,#menu.pizzas do
+  	    gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+    text.print(gfx.screen, arial, menu.pizzas[i].name..": "..menu.pizzas[i].price, startPosX, startPosY+ (i-1) * marginY, fieldWith, fieldHeight)
+ 
   end
 
-  for i=1,4 do
+  for i =1,#menu.drinks do
     gfx.screen:copyfrom(tilePNG, nil, {x = startPosX + marginX, y= startPosY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
+    text.print(gfx.screen, arial, menu.drinks[i].name..": "..menu.drinks[i].price, startPosX+ marginX, startPosY+ (i-1) * marginY, fieldWith, fieldHeight)
+ 
   end
-
   for i=1,#menu.sauces do
     gfx.screen:copyfrom(tilePNG, nil, {x = startPosX+ marginX * 2, y= startPosY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
     text.print(gfx.screen, arial, menu.sauces[i].name..": "..menu.sauces[i].price, startPosX+ marginX * 2, startPosY+ (i-1) * marginY, fieldWith * 2, fieldHeight)
@@ -174,6 +211,26 @@ end
 
 function displayHighlighter()
   gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 2.9, h =yUnit*0.5})
+end
+
+function addToOrder(posX,posY)
+	local order = refToMenu[posX][posY]
+	cart[#cart+1] = order
+
+	if refToOrder[posX].order == nil then
+		refToOrder[posX].order=order
+		refToOrder[posX].order.amount=1
+	else
+		refToOrder[posX].order.amount = refToOrder[posX].order.amount +1 
+	end
+end
+
+function showCart()
+	local menuItems = 0
+	for k, v in pairs(cart) do
+	text.print(gfx.screen, arial, v.name, 14 * xUnit, yUnit * 5 + 0.5*menuItems*yUnit, xUnit*3, yUnit)
+	menuItems = menuItems + 1
+	end
 end
 
 function moveHighlight(key)
@@ -230,13 +287,27 @@ function onKey(key,state)
           dofile(pathName)
         end
       elseif(key == 'blue') then
-        --Go back to menu
+        -- Go back to menu
+        -- print("PIZZAS")
+        -- for k,v in pairs(newOrder.pizzas) do
+        -- 	print(k,v)
+        -- 	for i,j in pairs(v) do
+        -- 		print(i,j)
+        -- 	end
+        -- end
+        -- print("DRINKS")
+        --         for k,v in pairs(newOrder.drinks) do
+        -- 	print(k,v)
+        -- 	for i,j in pairs(v) do
+        -- 		print(i,j)
+        -- 	end
+        -- end
         pathName = "OrderStep3.lua"
         if checkTestMode() then
           return pathName
 
         else
-          dofile(pathName)
+          assert(loadfile(pathName))(newOrder)
         end
 
       elseif key == "up" then
@@ -247,6 +318,10 @@ function onKey(key,state)
         moveHighlight(key)
       elseif key == 'right' then
         moveHighlight(key)
+	  elseif key == 'ok' then
+	  	addToOrder(highlightPosX,highlightPosY)
+	  	
+
 	  	end
 	end
   updateScreen()

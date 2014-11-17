@@ -49,17 +49,32 @@ local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 local tilePNG = gfx.loadpng("Images/OrderPics/ordertile.png")
 local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
-local background = gfx.loadpng("Images/OrderPics/createorder.png") 
+local background = gfx.loadpng("Images/OrderPics/orderstep2.png") 
 
 local highlightPosX = 1
 local highlightPosY = 1
-local startPosX = 0.4*xUnit
+local column = 1
+local row = 1
+local startPosX = 1*xUnit
 local startPosY = 2.5 * yUnit
-local marginX = 2.9*xUnit
-local marginY = 0.7*yUnit
-local fieldWith = 2 * xUnit
+
+local startHighlightY = startPosY
+
+local startDrinksY = startPosY
+local startDrinksX = 6 * startPosX
+
+local startSauceY = 5.5 * yUnit
+local startSauceX = startPosX
+
+local startSaladY = 6.1 * yUnit
+local startSaladX = 6 * startPosX
+
+local marginX = 5*xUnit
+local marginY = 0.6*yUnit
+local fieldWith = 3.5 * xUnit
 local fieldHeight = 0.5 * yUnit
 local lowerBoundary = 1
+local middleBoundary = 1
 local upperBoundary = 1
 
 local menuSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
@@ -88,12 +103,6 @@ local menu = {
 local refToMenu = {}
 local refToOrder = {}
 
-local indexMenu = {}
-indexMenu[1] = "pizzas"
-indexMenu[2] = "drinks"
-indexMenu[3] = "sauces"
-indexMenu[4] = "salads"
-
 local cart = {}
 
 -- 
@@ -108,29 +117,21 @@ end
 
 function createMenu()
   menu.pizzas = account.pizzeria.pizzas -- array with numbers
-  -- print(menu.pizzas[1].name)
 
-  -- menu.drinks = account.pizzerias.drinks
-  menu.drinks[1] = {name = "Sprite", price = "5kr"}
-  menu.drinks[2] = {name = "Coke", price = "5kr"}
-  menu.drinks[3] = {name = "Beer", price = "5kr"}
-  menu.drinks[4] = {name = "Fanta", price = "5kr"}
-  menu.drinks[5] = {name = "Spring Water", price = "5kr"}
+  menu.drinks[1] = {name = "Sprite", price = "5"}
+  menu.drinks[2] = {name = "Coke", price = "5"}
+  menu.drinks[3] = {name = "Beer", price = "5"}
+  menu.drinks[4] = {name = "Fanta", price = "5"}
+  menu.drinks[5] = {name = "Loka", price = "5"}
 
-  menu.sauces[1] = {name = "hotsauce", price = "5kr"}
-  menu.sauces[2] = {name = "hotsauce", price = "5kr"}
-  menu.sauces[3] = {name = "hotsauce", price = "5kr"}
-  menu.sauces[4] = {name = "hotsauce", price = "5kr"}
-  menu.sauces[5] = {name = "hotsauce", price = "5kr"}
+  menu.sauces[1] = {name = "hotsauce", price = "5"}
+  menu.sauces[2] = {name = "hotsauce", price = "5"}
+  menu.sauces[3] = {name = "hotsauce", price = "5"}
 
-  menu.salads[1] = {name = "pizzasalad", price = "10kr"}
-  menu.salads[2] = {name = "pizzasalad", price = "10kr"}
-  menu.salads[3] = {name = "pizzasalad", price = "10kr"}
-  menu.salads[4] = {name = "pizzasalad", price = "10kr"}
-  menu.salads[5] = {name = "pizzasalad", price = "10kr"}
-  menu.salads[6] = {name = "pizzasalad", price = "10kr"}
+  menu.salads[1] = {name = "pizzasalad", price = "10"}
+  menu.salads[2] = {name = "pizzasalad", price = "10"}
 
-  refToMenu[1] = menu.pizzas
+refToMenu[1] = menu.pizzas
 refToMenu[2] = menu.drinks
 refToMenu[3] = menu.sauces
 refToMenu[4] = menu.salads
@@ -166,12 +167,6 @@ end
 
 function displayMenu()
 
-  text.print(gfx.screen, arial, "Pizzas", startPosX, 2 * yUnit, xUnit * 10, yUnit)
-  text.print(gfx.screen, arial, "Drinks", startPosX + marginX, 2 * yUnit, xUnit * 10, yUnit)
-  text.print(gfx.screen, arial, "Extra sauce", startPosX + marginX * 2, 2* yUnit, xUnit * 10, yUnit)
-  text.print(gfx.screen, arial, "Sallads", startPosX + marginX * 3, 2 * yUnit, xUnit * 10, yUnit)
-
-
   -- gfx.screen:copyfrom(menuSurface)
 
   for i =1,#menu.pizzas do
@@ -181,56 +176,66 @@ function displayMenu()
   end
 
   for i =1,#menu.drinks do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startPosX + marginX, y= startPosY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.drinks[i].name..": "..menu.drinks[i].price, startPosX+ marginX, startPosY+ (i-1) * marginY, fieldWith, fieldHeight)
+    gfx.screen:copyfrom(tilePNG, nil, {x = startDrinksX, y= startDrinksY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
+    text.print(gfx.screen, arial, menu.drinks[i].name..": "..menu.drinks[i].price, startDrinksX, startDrinksY+ (i-1) * marginY, fieldWith, fieldHeight)
  
   end
   for i=1,#menu.sauces do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startPosX+ marginX * 2, y= startPosY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.sauces[i].name..": "..menu.sauces[i].price, startPosX+ marginX * 2, startPosY+ (i-1) * marginY, fieldWith * 2, fieldHeight)
+    gfx.screen:copyfrom(tilePNG, nil, {x = startSauceX, y= startSauceY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
+    text.print(gfx.screen, arial, menu.sauces[i].name..": "..menu.sauces[i].price, startSauceX, startSauceY+ (i-1) * marginY, fieldWith * 2, fieldHeight)
   end
 
   for i=1,#menu.salads do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startPosX+ marginX *3, y= startPosY+ (i-1)* marginY, w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.salads[i].name..": "..menu.salads[i].price, startPosX+ marginX *3, startPosY+ (i-1)* marginY, fieldWith* 2, fieldHeight)
+    gfx.screen:copyfrom(tilePNG, nil, {x = startSaladX, y= startSaladY+ (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+    text.print(gfx.screen, arial, menu.salads[i].name..": "..menu.salads[i].price, startSaladX, startSaladY+ (i-1)* marginY, fieldWith* 2, fieldHeight)
   end
 
 end
 
 function setUpperBoundary(column)
   if column == 1 then
-    upperBoundary = #menu.pizzas
+    middleBoundary = #menu.pizzas
+    upperBoundary = middleBoundary + #menu.sauces
+    startHighlightY = startPosY
   elseif column == 2 then
-    upperBoundary = #menu.drinks
-  elseif column == 3 then
-    upperBoundary = #menu.sauces
-  elseif column == 4 then
-    upperBoundary = #menu.salads
+  	middleBoundary = #menu.drinks
+    upperBoundary = middleBoundary + #menu.salads
+    startHighlightY = startPosY
   end
 end
 
 function displayHighlighter()
-  gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 2.9, h =yUnit*0.5})
+  gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5})
 end
 
 function addToOrder(posX,posY)
-	local order = refToMenu[posX][posY]
-	cart[#cart+1] = order
+	local item = refToMenu[posX][posY]
+	cart[#cart+1] = item
 
-	if refToOrder[posX].order == nil then
-		refToOrder[posX].order=order
-		refToOrder[posX].order.amount=1
+	if refToOrder[posX][item.name] == nil then
+		refToOrder[posX][item.name]=item
+		refToOrder[posX][item.name].amount=1
 	else
-		refToOrder[posX].order.amount = refToOrder[posX].order.amount +1 
+		refToOrder[posX][item.name].amount = refToOrder[posX][item.name].amount +1 
 	end
+	newOrder.totalPrice = newOrder.totalPrice + item.price
 end
 
 function showCart()
 	local menuItems = 0
-	for k, v in pairs(cart) do
-	text.print(gfx.screen, arial, v.name, 14 * xUnit, yUnit * 5 + 0.5*menuItems*yUnit, xUnit*3, yUnit)
-	menuItems = menuItems + 1
+	-- print(#refToOrder)
+	for i=1,#refToOrder do
+		for k, v in pairs(refToOrder[i]) do
+			text.print(gfx.screen, arial, v.amount.." x "..v.name, 12.2 * xUnit, yUnit * 2.8 + 0.5*menuItems*yUnit, xUnit*3.8, yUnit)
+			menuItems = menuItems + 1
+		end
 	end
+	text.print(gfx.screen, arial, "tot:".." "..newOrder.totalPrice, 12.2 * xUnit, yUnit * 8, xUnit*3.8, yUnit)
+end
+
+function setCoordinates(x,y)
+	column = x
+	row = y
 end
 
 function moveHighlight(key)
@@ -238,33 +243,52 @@ function moveHighlight(key)
   --Up
   if(key == 'up')then
     highlightPosY = highlightPosY - 1
-    if(highlightPosY < lowerBoundary) then
-      highlightPosY = highlightPosY +1
+    if(highlightPosY<middleBoundary+1) then
+    	setCoordinates(highlightPosX,highlightPosY)
+    	if(highlightPosY < lowerBoundary) then
+      	highlightPosY = middleBoundary
+      	end
+    	startHighlightY = startPosY
+    else
+    	setCoordinates(highlightPosX+2,highlightPosY-middleBoundary)
+
     end
 
   --Down
   elseif(key == 'down')then
     highlightPosY = highlightPosY + 1
-    if(highlightPosY > upperBoundary) then
-      highlightPosY = highlightPosY -1
+    if(highlightPosY>middleBoundary) then
+    	setCoordinates(highlightPosX+2, highlightPosY-middleBoundary)
+    	if(highlightPosY > upperBoundary) then
+      	highlightPosY = middleBoundary + 1
+      	end
+      	startHighlightY = startPosY + 1.2* yUnit - marginY
+    else
+		setCoordinates(highlightPosX,highlightPosY)
+
     end
   --Left
   elseif(key == 'left')then
     highlightPosX = highlightPosX -1
     if(highlightPosX < 1) then
       highlightPosX = highlightPosX + 1
+
     end
       setUpperBoundary(highlightPosX)
-      highlightPosY = 1
-    
+      highlightPosY = lowerBoundary
+      setCoordinates(highlightPosX,highlightPosY)
+
+
   --Right
   elseif(key == 'right') then
     highlightPosX = highlightPosX +1
-    if(highlightPosX > 4) then
-      highlightPosX = highlightPosX -1
+    if(highlightPosX > 2) then
+    	highlightPosX = highlightPosX -1
     end
-    setUpperBoundary(highlightPosX)
-    highlightPosY = 1
+	    setUpperBoundary(highlightPosX)
+	    highlightPosY = lowerBoundary
+   		setCoordinates(highlightPosX,highlightPosY)
+
   end
 end
 
@@ -288,20 +312,20 @@ function onKey(key,state)
         end
       elseif(key == 'blue') then
         -- Go back to menu
-        -- print("PIZZAS")
-        -- for k,v in pairs(newOrder.pizzas) do
-        -- 	print(k,v)
-        -- 	for i,j in pairs(v) do
-        -- 		print(i,j)
-        -- 	end
-        -- end
-        -- print("DRINKS")
-        --         for k,v in pairs(newOrder.drinks) do
-        -- 	print(k,v)
-        -- 	for i,j in pairs(v) do
-        -- 		print(i,j)
-        -- 	end
-        -- end
+        print("PIZZAS")
+        for k,v in pairs(newOrder.pizzas) do
+        	print(k,v)
+        	for i,j in pairs(v) do
+        		print(i,j)
+        	end
+        end
+        print("DRINKS")
+                for k,v in pairs(newOrder.drinks) do
+        	print(k,v)
+        	for i,j in pairs(v) do
+        		print(i,j)
+        	end
+        end
         pathName = "OrderStep3.lua"
         if checkTestMode() then
           return pathName
@@ -319,7 +343,7 @@ function onKey(key,state)
       elseif key == 'right' then
         moveHighlight(key)
 	  elseif key == 'ok' then
-	  	addToOrder(highlightPosX,highlightPosY)
+	  	addToOrder(column,row)
 	  	
 
 	  	end
@@ -330,6 +354,8 @@ end
 --Main method
 function main()
   createMenu()
+  setUpperBoundary(highlightPosX)
+
   -- createMenuSurface()
 	updateScreen()
 end

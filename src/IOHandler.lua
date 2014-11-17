@@ -136,8 +136,8 @@ function ioHandler.saveUserData(name,address,zipCode,city,phone,email,pizzeria)
     usersTable[j]=tempUserTable[i]
     j=j+1
     end
-  usersTable[j]=user
   end
+  usersTable[j]=user
   table.save(usersTable,"UserData.lua")
 end
 return ioHandler

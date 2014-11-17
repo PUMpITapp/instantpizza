@@ -121,12 +121,9 @@ function ioHandler.addTestUser()
   drinks[2] = Drink2
   drinks[3] = Drink3
   Pizzeria = Pizzeria:new("Test pizzeria","pizza2.png","5",pizzas,drinks)
-  user = User:new("Johan Stenius","Ryd","593","Link","07060034","johan@me.com",Pizzeria)
-  user1 = User:new("Johan","Ryd","593","Link","07060034","johan@com",Pizzeria)
-  users[1] = user
-  users[2] = user1
-
-  table.save(users,"UserData.lua")
+  user = User:new("Test user","Ryd","584 34","Link","070600334","johan@me.com",Pizzeria)
+  return user
+  --table.save(users,"UserData.lua")
 end
 function ioHandler.saveUserData(name,address,zipCode,city,phone,email,pizzeria)
   tempUserTable = {}

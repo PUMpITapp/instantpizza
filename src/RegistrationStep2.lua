@@ -99,7 +99,7 @@ function displayPizzerias()
 		pngPath = pizzerias[index].imgPath
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
 		gfx.screen:copyfrom(inputField,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
-		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=xUnit, w=yUnit*2})
+		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=yUnit, w=xUnit*2})
 		text.print(gfx.screen, arial,pizzerias[index].name, startPosX*1.05, yCoord+marginY*0.2, xUnit*6, yUnit*4)
 		upperBoundary = index
 		yCoord = yCoord+marginY

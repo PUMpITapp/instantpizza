@@ -32,24 +32,22 @@ local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 
 local background = gfx.loadpng("Images/OrderPics/chooseaccount.png") 
-local accountTile = gfx.loadpng("Images/OrderPics/accounttile.png")
-local highlightTile = gfx.loadpng("Images/OrderPics/acconttilepressed.png")
+local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
+local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
-local inputMovement = yUnit*1
-local inputFieldX = gfx.screen:get_width()/8
-local inputFieldY = yUnit*2.5
-local inputFieldStart = yUnit*2.5
-local inputFieldEnd = 0
-local highlightFieldPos = 0
+--2.3 13.8 
+local startPosY = yUnit*2.5
+--Rutan startposition är 2.3. För att centrera inputfield 2.3+2.25. 
+local startPosX = xUnit*4.55
+local marginY = yUnit*1.2
+local highlightPosY = 1
 
---Start of inputFields.
-inputFieldStart = gfx.screen:get_height()*(2.5/9)
-inputFieldY = gfx.screen:get_height()*(2.5/9)
-inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
-index = 0
+local lowerBoundary = 1
+local upperBoundary = 0
+local inputFieldEnd = 0
 
 dofile("table.save.lua")
 
@@ -58,51 +56,54 @@ function readUsers()
 end
 
 function displayUsers()
-  yCoord = inputFieldStart
+  yCoord = startPosY
   for index,v in ipairs(userTable)do
-    gfx.screen:copyfrom(accountTile,nil,{x=xUnit*3, y=yCoord, h=xUnit*0.7, w=yUnit*7})
-    text.print(gfx.screen, arial,tostring(userTable[index].email), xUnit*3.1, yCoord, xUnit*7, yUnit)
-    inputFieldEnd = yCoord
-    yCoord = yCoord+inputMovement
+    gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
+    text.print(gfx.screen, arial,tostring(userTable[index].email), startPosX*1.02, yCoord+marginY*0.2, xUnit*7, yUnit)
+    upperBoundary = index
+    yCoord = yCoord+marginY
+    if(index == 4)then
+      break
+    end
   end
 end
 
 function getUser()
-  account = userTable[highlightFieldPos]
+  account = userTable[highlightPosY]
   return account
 end
 
-function displayHighlighInput()
-  gfx.screen:copyfrom(highlightTile,nil,{x=xUnit*3, y=inputFieldY, h=xUnit*0.7, w=yUnit*10})
+function displayHighlighter()
+  gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
 end
 --Calls methods that builds GUI
 function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 displayUsers()
-displayHighlighInput()
-gfx.update()
+displayHighlighter()
 end
 
 function moveHighlightedInputField(key)
   --Starting coordinates for current inputField
-  if(key == 'up') then
-    if(inputFieldY > inputFieldStart) then
-      inputFieldY = inputFieldY - inputMovement
-      highlightFieldPos = highlightFieldPos -1
+  if(key == 'up')then
+    highlightPosY = highlightPosY - 1
+
+    if(highlightPosY < lowerBoundary) then
+      highlightPosY = upperBoundary
     end
-  end
   --Down
-  if(key == 'down') then
-    if(inputFieldY < inputFieldEnd)then
-      inputFieldY = inputFieldY + inputMovement
-      highlightFieldPos = highlightFieldPos + 1
-    
-    elseif(inputFieldY == inputFieldEnd) then
-      inputFieldY = inputFieldStart
-      highlightFieldPos = 1
+  elseif(key == 'down')then
+    highlightPosY = highlightPosY + 1
+    if(highlightPosY > upperBoundary) then
+      highlightPosY = 1
     end
-  end
+end
+updateScreen()
+end
+
+function updateScreen()
   buildGUI()
+  gfx.update()
 end
 
 function onKey(key,state)
@@ -112,8 +113,6 @@ function onKey(key,state)
     elseif(key == 'down')then
       moveHighlightedInputField(key)
 	  elseif(key == 'ok') then
-	  	--Choose account and go to next step
-
       pathName = "OrderStep2.lua"
       if checkTestMode() then
         return pathName
@@ -136,7 +135,7 @@ end
 --Main method
 function main()
   readUsers()
-	buildGUI()
+	updateScreen()
 end
 main()
 

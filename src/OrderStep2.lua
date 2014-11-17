@@ -102,7 +102,6 @@ local menu = {
 
 local refToMenu = {}
 local refToOrder = {}
-
 local cart = {}
 
 -- 
@@ -312,20 +311,6 @@ function onKey(key,state)
         end
       elseif(key == 'blue') then
         -- Go back to menu
-        print("PIZZAS")
-        for k,v in pairs(newOrder.pizzas) do
-        	print(k,v)
-        	for i,j in pairs(v) do
-        		print(i,j)
-        	end
-        end
-        print("DRINKS")
-                for k,v in pairs(newOrder.drinks) do
-        	print(k,v)
-        	for i,j in pairs(v) do
-        		print(i,j)
-        	end
-        end
         pathName = "OrderStep3.lua"
         if checkTestMode() then
           return pathName

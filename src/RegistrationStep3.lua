@@ -133,7 +133,7 @@ function displayPizzas()
 end
 
 function displayHighlightSurface()
-	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 9 * xUnit, h =0.5*yUnit}
+	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
 	gfx.screen:copyfrom(highligtherPNG, nil , pos)
 end
 

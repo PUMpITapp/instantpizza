@@ -53,19 +53,24 @@ local inputFieldEnd = 0
 dofile("table.save.lua")
 
 function readUsers()
+  print("He")
   userTable = io.readUserData()
+  if userTable == nil then
+    print("Hejeh")
+  end
 end
 
 function displayUsers()
   yCoord = startPosY
-  for index,v in ipairs(userTable)do
-    gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
-    text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
-    upperBoundary = index
-    yCoord = yCoord+marginY
-    if(index == 4)then
-      break
+  if not (userTable == nil) then
+    for index,v in ipairs(userTable)do
+      gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
+      text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
+      upperBoundary = index
+      yCoord = yCoord+marginY
     end
+  else
+    text.print(gfx.screen,"lato","black","medium","No users registered!", startPosX*1.3, yCoord+marginY*0.2, xUnit*7, yUnit)
   end
 end
 
@@ -75,7 +80,9 @@ function getUser()
 end
 
 function displayHighlighter()
-  gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
+  if(upperBoundary >0)then
+    gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
+  end
 end
 --Calls methods that builds GUI
 function buildGUI()

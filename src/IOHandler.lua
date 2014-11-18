@@ -54,7 +54,6 @@ end
 function ioHandler.readUserData()
   local usersTable = {}
   usersTable = table.load("UserData.lua")
-  --print(usersTable.email)
   return usersTable
 end
 -- Function to read pizzerias. Are stored in a table, every pizzeria has a table of pizzas. 

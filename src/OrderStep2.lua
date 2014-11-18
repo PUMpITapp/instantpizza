@@ -214,6 +214,7 @@ function displayHighlighter()
   gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5})
 end
 
+
 function addToOrder(posX,posY)
 	local item = refToMenu[posX][posY]
 	cart[#cart+1] = item
@@ -225,6 +226,18 @@ function addToOrder(posX,posY)
 		refToOrder[posX][item.name].amount = refToOrder[posX][item.name].amount +1 
 	end
 	newOrder.totalPrice = newOrder.totalPrice + item.price
+end
+
+function deleteOrder(posX,posY)
+  local item = refToMenu[posX][posY]
+  if refToOrder[posX][item.name] then
+    refToOrder[posX][item.name].amount= refToOrder[posX][item.name].amount-1
+    if(refToOrder[posX][item.name].amount== 0) then
+      refToOrder[posX][item.name] = nil
+    end
+  newOrder.totalPrice = newOrder.totalPrice - item.price  
+  end
+
 end
 
 function showCart()
@@ -330,6 +343,8 @@ function onKey(key,state)
         else
           assert(loadfile(pathName))(newOrder)
         end
+        elseif key == 'yellow' then
+          deleteOrder(column,row)
 
       elseif key == "up" then
         moveHighlight(key)

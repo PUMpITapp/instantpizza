@@ -59,6 +59,7 @@ local cartPosY = 4.3 * yUnit
 local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
 local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
 local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
+local deletePNG = gfx.loadpng("Images/PizzaPics/deleteHighlighter.png")
 
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
@@ -121,8 +122,8 @@ function displayPizzas()
 		local ySpace = 0.5 * yUnit
 		for i,v in ipairs(currentPizzeria.pizzas) do
 			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * marginY, w=xUnit*7 , h=ySpace})
-			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * marginY, xUnit*5, ySpace)
-			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * marginY, 2 * xUnit, ySpace)
+			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[i].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (i-1) * marginY, xUnit*5, ySpace)
+			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (i-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
 			upperBoundary = i
 			if(i == showLimit)then 
@@ -133,6 +134,7 @@ function displayPizzas()
 end
 
 function displayHighlightSurface()
+	isAlreadyPicked
 	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
 	gfx.screen:copyfrom(highligtherPNG, nil , pos)
 end

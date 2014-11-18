@@ -165,11 +165,11 @@ function onKey(key,state)
 	  	  	updateScreen()
 	  	elseif(key=='ok')then
 	  		pathName = "RegistrationStep3.lua"
+	  		if checkTestMode() then
+	  			return pathName
+	 		end
 	  		addPizzeria()
 	  		assert(loadfile(pathName))(newForm)
-	  		if checkTestMode() then
-	 			return key
-	 		end
 	  	elseif(key == 'red')then
 	  		pathName = "RegistrationStep1.lua"
 	  		if checkTestMode() then
@@ -217,12 +217,15 @@ function returnValuesForTesting(value)
 		return highlightPosY
 	elseif value == "upperBoundary" then
 		return upperBoundary
+	elseif value == "lowerBoundary" then
+		return lowerBoundary
 	elseif value == "height" then
 		return gfx.screen:get_height()
 	elseif value == "marginY" then
 		return marginY
 	end
 end
+
 -- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
 function setValuesForTesting(value)
 	highlightPosY = value
@@ -237,12 +240,6 @@ end
 function returnLastForm()
 	return lastForm
 end
-
---Ischoosen is not necessary anymore
--- Function that sets the variable isChoosen to a boolean
---function setIsChoosen(value)
---	isChoosen = value
---end
 
 --Main method
 function main()

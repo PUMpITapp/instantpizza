@@ -280,7 +280,7 @@ function displayInputField()
 	-- inputSurface:fill({r=255, g=255, b=255, a=0})
 	gfx.screen:copyfrom(inputSurface, nil ,{x=2 * xUnit, y=2 * yUnit, w=12 * xUnit, h=yUnit}) --colours the saved text field
 	-- gfx.screen:copyfrom(textAreaPNG, nil ,{x=2 * xUnit, y=2 *yUnit,w = 12* xUnit, h = yUnit})
-	text.print(gfx.screen, "lato","black","medium", inputText, 2 * xUnit, 2 * yUnit, 12 * xUnit, yUnit)
+	text.print(gfx.screen, "lato","black","medium", inputText, 2.5 * xUnit, 2.2 * yUnit, 12 * xUnit, yUnit)
 end
 
 --gets the coordinate of arguments

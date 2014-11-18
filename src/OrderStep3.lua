@@ -46,10 +46,10 @@ local io = require "IOHandler"
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
-local startPosY = yUnit * 2
-local startPosX = xUnit * 2.4
-local endPosY = yUnit*7
-local marginY = yUnit / 2
+local startPosY = yUnit * 2.6
+local startPosX = xUnit * 4
+local endPosY = yUnit*6.8
+local marginY = yUnit*0.3
 local marginX = xUnit * 4
 local totalSum = 0
 local lastPizzaIndex = 0
@@ -66,10 +66,11 @@ printOrder()
 end
 
 function printHeadLines()
-  text.print(gfx.screen,"lato","black","small","Product", startPosX, startPosY, 6* xUnit,200)
-  text.print(gfx.screen,"lato","black","small","Amount", startPosX+marginX*0.84, startPosY, 6* xUnit,200)
-  text.print(gfx.screen,"lato","black","small","Price", startPosX+marginX*1.6, startPosY, 6* xUnit,200)
-  text.print(gfx.screen,"lato","black","small","Total sum:", startPosX,endPosY, 6* xUnit,200)
+  startPosYHeader = startPosY*0.9
+  text.print(gfx.screen,"lato","black","medium","Product", startPosX, startPosYHeader, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","medium","Amount", startPosX+marginX*0.84, startPosYHeader, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","medium","Price", startPosX+marginX*1.6, startPosYHeader, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","medium","Total sum:", startPosX+marginX*1.4,endPosY, 6* xUnit,200)
 end
 
 function printOrder()
@@ -79,7 +80,7 @@ function printOrder()
     amount = v.amount
     text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
     text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
     lastPizzaIndex = i
     i=i+1
   end
@@ -88,7 +89,7 @@ function printOrder()
     amount = v.amount
     text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
@@ -96,7 +97,7 @@ function printOrder()
     amount = v.amount
     text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
@@ -104,11 +105,11 @@ function printOrder()
     amount = v.amount
     text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
-  text.print(gfx.screen,"lato","black","small",tostring(newOrder.totalPrice), startPosX+marginX*1.6,endPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
 end
 
 function onKey(key,state)
@@ -131,12 +132,15 @@ function onKey(key,state)
         end
       elseif(key == 'yellow') then
         --Go back to menu
-        pathName = "OrderStep4.lua"
+        pathName = "OrderFail.lua"
         if checkTestMode() then
           return pathName
         else
-          dofile(pathName)
+          assert(loadfile(pathName))(newOrder)
         end
+        elseif(key == 'blue') then
+        	
+
 	  	end
 	end
 end

@@ -59,6 +59,7 @@ local cartPosY = 4.3 * yUnit
 local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
 local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
 local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
+local deletePNG = gfx.loadpng("Images/PizzaPics/deleteHighlighter.png")
 
 local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
@@ -133,6 +134,7 @@ function displayPizzas()
 end
 
 function displayHighlightSurface()
+	isAlreadyPicked
 	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
 	gfx.screen:copyfrom(highligtherPNG, nil , pos)
 end

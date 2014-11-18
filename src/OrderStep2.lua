@@ -332,7 +332,8 @@ function onKey(key,state)
         if checkTestMode() then
           return pathName
         else
-          dofileW(pathName)
+          dofile(pathName)
+          -- assert(loadfile(pathName))
         end
       elseif(key == 'blue') then
         -- Go back to menu

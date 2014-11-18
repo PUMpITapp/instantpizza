@@ -136,11 +136,15 @@ end
 
 function displayHighlightSurface()
 	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
+	
+	if isAlreadyPicked(getPizzaOnCoordinate(highlightPosY)) then
+	gfx.screen:copyfrom(deletePNG, nil , pos)
+	else
 	gfx.screen:copyfrom(highligtherPNG, nil , pos)
+	end
 end
 
 function getPizzaOnCoordinate(posY)
-
 	return currentPizzeria.pizzas[posY]
 end
 
@@ -172,10 +176,15 @@ function insertOnTable(pizzaTable)
 end
 
 function deleteOnChoiceMenu(myPizza)
-	if pizza[myPizza.name] then
-		choices = choices - 1
-		pizza[myPizza.name] = nil
+		print('delete')
+		for i,v in pairs(pizza) do
+		if pizza[i].name == myPizza.name then
+		pizza[i] = nil
+
+		end
 	end
+		choices = choices - 1
+
 end
 
 function displayChoiceMenu()
@@ -260,7 +269,11 @@ function onKey(key,state)
 				return key
 			end
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
+	  		if isAlreadyPicked(choosenPizza) then
+	  		deleteOnChoiceMenu(choosenPizza)
+	  		else
 	  		insertOnChoiceMenu(choosenPizza)
+	  		end
 	  	end
 	end
 	updateScreen()

@@ -155,8 +155,7 @@ function isAlreadyPicked(myPizza)
 end
 
 function pizzaIsChoosen()
-	local isChosen = (#pizza~=0)
-	return isChosen
+	isChosen = (#pizza~=0)
 end
 
 function insertOnChoiceMenu(myPizza)
@@ -239,15 +238,15 @@ function onKey(key,state)
 	  		if checkTestMode() then
 	  			-- Nothing
 	  		else
-	  				pizzaIsChoosen()
+	  			pizzaIsChoosen()
 	  		end
 	  		if isChosen then
 	  			pathName = "RegistrationReview.lua"
 	  			if checkTestMode() then
 			 		return pathName
 				else
-	  			insertOnTable(pizza)
-	  			assert(loadfile("RegistrationReview.lua"))(newForm)
+	  				insertOnTable(pizza)
+	  				assert(loadfile("RegistrationReview.lua"))(newForm)
 	  			end
 	  		else
 	  			if checkTestMode() then

@@ -82,7 +82,8 @@ function displayText()
   text.print(gfx.screen, "lato","black","small", "There seems to be a problem with your internet connection.",textPosX,textPosY,9 *xUnit, 1 *yUnit)
   text.print(gfx.screen, "lato","black","small", "Do not worry, your order is saved as a QR-code on the left.",textPosX,textPosY + 0.5 *yUnit,9 *xUnit, 1 *yUnit)
   text.print(gfx.screen, "lato","black","small", "Please scan the QR-code and send it to:",textPosX,textPosY + yUnit,9 *xUnit, 1 *yUnit)
-  text.print(gfx.screen, "lato","black","medium", order.pizzeria.name..":0705834633",textPosX,textPosY + 2 *yUnit,9 *xUnit, 1 *yUnit)
+  text.print(gfx.screen, "lato","black","medium", order.pizzeria.name..":",textPosX,textPosY + 2 *yUnit,9 *xUnit, 1 *yUnit)
+  text.print(gfx.screen, "lato","black","medium", "0705834633",textPosX,textPosY + 2.5 *yUnit,9 *xUnit, 1 *yUnit)
 
 end
 

@@ -86,6 +86,7 @@ local newOrder = {
 	address = account.address,
 	phone = account.phone,
 	email = account.email,
+  pizzeria = account.pizzeria,
 	pizzas = {},
 	drinks = {},
 	sauces = {},

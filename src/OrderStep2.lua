@@ -261,7 +261,11 @@ function moveHighlight(key)
     	if(highlightPosY > upperBoundary) then
       	highlightPosY = middleBoundary + 1
       	end
-      	startHighlightY = startPosY + 1.2* yUnit - marginY
+      	if(highlightPosX==1) then
+    	  	startHighlightY = startPosY + 1.2 *yUnit + (3-#menu.pizzas) * marginY
+      	elseif(highlightPosX==2) then
+      		startHighlightY = startPosY + 1.2 *yUnit + (4-#menu.drinks) * marginY
+      	end
     else
 		setCoordinates(highlightPosX,highlightPosY)
 

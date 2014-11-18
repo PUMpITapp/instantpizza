@@ -235,7 +235,6 @@ function displayHighlightSurface()
 	local height = yUnit
 	local highlighter = nil
 	local currentKey = getKeyboardChar(highlightPosX, highlightPosY)
-	print(currentKey)
 
 	if string.upper(currentKey) == "SHIFT" then
 		highlighter = shiftPressedPNG
@@ -280,7 +279,7 @@ function displayInputField()
 	-- inputSurface:fill({r=255, g=255, b=255, a=0})
 	gfx.screen:copyfrom(inputSurface, nil ,{x=2 * xUnit, y=2 * yUnit, w=12 * xUnit, h=yUnit}) --colours the saved text field
 	-- gfx.screen:copyfrom(textAreaPNG, nil ,{x=2 * xUnit, y=2 *yUnit,w = 12* xUnit, h = yUnit})
-	text.print(gfx.screen, "lato","black","medium", inputText, 2.5 * xUnit, 2.2 * yUnit, 12 * xUnit, yUnit)
+	text.print(gfx.screen, "lato","black","medium", inputText.."|", 2.5 * xUnit, 2.2 * yUnit, 12 * xUnit, yUnit)
 end
 
 --gets the coordinate of arguments
@@ -296,7 +295,6 @@ end
 --gets the correct movement of cursor when moving in y-axis
 function getYmove(xVal,yVal,move)
 	local coordinates = "p"..xVal..yVal
-	print(coordinates)
 	return map[coordinates][move]
 end
 
@@ -339,10 +337,8 @@ function movehighlightKey(key)
 		highlightPosY = highlightPosY + 1
 		if highlightPosY > 4 then
 			highlightPosY = 1
-			updateScreen()
-		else
-			updateScreen()
 		end
+		updateScreen()
 	end
 	if(key == 'up')then
 		--up
@@ -350,10 +346,8 @@ function movehighlightKey(key)
 		highlightPosY = highlightPosY - 1
 		if highlightPosY < 1 then
 			highlightPosY = 4
-			updateScreen()
-		else
-			updateScreen()
 		end
+			updateScreen()
 
 	end
 	if(key == 'left')then
@@ -363,10 +357,8 @@ function movehighlightKey(key)
 
 		if not(getCoordinates(highlightPosX,highlightPosY))then
 			highlightPosX = highlightPosX + 1
-			updateScreen()
-		else
-			updateScreen()
 		end
+		updateScreen()
 
 	end
 	if(key == 'right')then
@@ -375,10 +367,8 @@ function movehighlightKey(key)
 		highlightPosY = highlightPosY + 0
 		if not(getCoordinates(highlightPosX,highlightPosY))then
 			highlightPosX = highlightPosX - 1
-			updateScreen()
-		else
-			updateScreen()
 		end
+		updateScreen()
 
 	end
 end
@@ -426,8 +416,6 @@ function onKey(key, state)
 			end
 		end
 	end
-	gfx.update()
-
 end
 
 main()

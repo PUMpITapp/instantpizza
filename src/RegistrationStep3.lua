@@ -160,6 +160,7 @@ end
 
 function pizzaIsChoosen()
 	isChosen = (#pizza~=0)
+	return isChosen
 end
 
 function insertOnChoiceMenu(myPizza)
@@ -176,7 +177,6 @@ function insertOnTable(pizzaTable)
 end
 
 function deleteOnChoiceMenu(myPizza)
-		print('delete')
 		for i,v in pairs(pizza) do
 		if pizza[i].name == myPizza.name then
 		pizza[i] = nil
@@ -184,7 +184,6 @@ function deleteOnChoiceMenu(myPizza)
 		end
 	end
 		choices = choices - 1
-
 end
 
 function displayChoiceMenu()
@@ -213,6 +212,8 @@ function moveHighlightedInputField(key)
 			highlightPosY = lowerBoundary
 		end
 	end
+		updateScreen()
+
 end
 
 function onKey(key,state)
@@ -249,7 +250,7 @@ function onKey(key,state)
 	  		else
 	  			pizzaIsChoosen()
 	  		end
-	  		if isChosen then
+	  		if pizzaIsChoosen() then
 	  			pathName = "RegistrationReview.lua"
 	  			if checkTestMode() then
 			 		return pathName
@@ -282,9 +283,10 @@ function onKey(key,state)
 	  		else
 	  		insertOnChoiceMenu(choosenPizza)
 	  		end
+	  			updateScreen()
+
 	  	end
 	end
-	updateScreen()
 end
 
 -- Below are functions that is required for the testing of this file

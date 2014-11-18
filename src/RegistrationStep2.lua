@@ -155,14 +155,13 @@ function onKey(key,state)
 				return key
 			end
 	  		moveHighlightedInputField(key)
-	  		updateScreen()
+
 	  	elseif(key == 'down') then
 	  		--Down
 	  		if checkTestMode() then
 	 			return key
 	 		end
 	  	  	moveHighlightedInputField(key)
-	  	  	updateScreen()
 	  	elseif(key=='ok')then
 	  		pathName = "RegistrationStep3.lua"
 	  		if checkTestMode() then
@@ -186,6 +185,7 @@ function onKey(key,state)
 	  			dofile(pathName)
 	  		end
 	  	end
+	  	  	
  	end
 end
 

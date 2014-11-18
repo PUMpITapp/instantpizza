@@ -53,10 +53,8 @@ local inputFieldEnd = 0
 dofile("table.save.lua")
 
 function readUsers()
-  print("He")
   userTable = io.readUserData()
   if userTable == nil then
-    print("Hejeh")
   end
 end
 

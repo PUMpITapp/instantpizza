@@ -314,53 +314,54 @@ function moveHighlight(key)
    		setCoordinates(highlightPosX,highlightPosY)
 
   end
+      updateScreen()
 end
 
 function onKey(key,state)
 	if(state == 'up') then
-	  	if(key == 'red') then
-	  		--Choose account and go to next step
-        pathName = "OrderStep1.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          dofile(pathName)
-        end
-      elseif(key == 'green') then
-        --Go back to menu
-        pathName = "Menu.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          dofile(pathName)
-        end
-      elseif(key == 'blue') then
-        -- Go back to menu
-        pathName = "OrderStep3.lua"
-        if checkTestMode() then
-          return pathName
+	  if(key == 'red') then
+	  	--Choose account and go to next step
+      pathName = "OrderStep1.lua"
+      if checkTestMode() then
+        return pathName
+      else
+        dofile(pathName)
+      end
+    elseif(key == 'green') then
+      --Go back to menu
+      pathName = "Menu.lua"
+      if checkTestMode() then
+        return pathName
+      else
+        dofile(pathName)
+      end
+    elseif(key == 'blue') then
+      -- Go back to menu
+      pathName = "OrderStep3.lua"
+      if checkTestMode() then
+        return pathName
+      else
+        assert(loadfile(pathName))(newOrder)
+      end
+    elseif key == 'yellow' then
+      deleteOrder(column,row)
+          updateScreen()
 
-        else
-          assert(loadfile(pathName))(newOrder)
-        end
-        elseif key == 'yellow' then
-          deleteOrder(column,row)
-
-      elseif key == "up" then
-        moveHighlight(key)
-      elseif key == 'down' then
-        moveHighlight(key)
-      elseif key == 'left' then
-        moveHighlight(key)
-      elseif key == 'right' then
-        moveHighlight(key)
+    elseif key == "up" then
+      moveHighlight(key)
+    elseif key == 'down' then
+      moveHighlight(key)
+    elseif key == 'left' then
+      moveHighlight(key)
+    elseif key == 'right' then
+      moveHighlight(key)
 	  elseif key == 'ok' then
 	  	addToOrder(column,row)
-	  	
+          updateScreen()
+   	end
 
-	  	end
 	end
-  updateScreen()
+
 end
 
 --Main method

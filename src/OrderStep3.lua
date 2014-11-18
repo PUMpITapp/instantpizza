@@ -76,7 +76,7 @@ end
 function printOrder()
   i = 1
   for key,v in pairs(newOrder.pizzas)do
-    print(v.name,v.price,v.amount)
+    -- print(v.name,v.price,v.amount)
     amount = v.amount
     text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
     text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)

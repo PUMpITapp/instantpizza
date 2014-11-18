@@ -137,7 +137,6 @@ function moveHighlightedInputField(key)
     end
 end
 newForm.currentInputField = inputFieldTable[highlightPosY]
-updateScreen()
 end
 
 function updateScreen()
@@ -186,6 +185,7 @@ function onKey(key,state)
 	  		--More options for buttonpress?
 	  		--Test cases needs to be written if more options for onKey is added
 	  	end
+	  	updateScreen()
 	end
 end
 -- Below are functions that is required for the testing of this file

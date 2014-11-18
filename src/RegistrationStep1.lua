@@ -112,12 +112,12 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayFormData()
-	text.print(gfx.screen, arial, tostring(newForm.name),startPosXText,startPosYText, 500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
-	text.print(gfx.screen, arial, tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)
-	text.print(gfx.screen, arial, tostring(newForm.city),startPosXText,startPosYText+marginY*3,500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.phone),startPosXText,startPosYText+marginY*4,500, 500)
-	text.print(gfx.screen, arial, tostring(newForm.email),startPosXText,startPosYText+marginY*5,500, 500)
+	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
+	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
+	text.print(gfx.screen,"lato","black","medium", tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)
+	text.print(gfx.screen,"lato","black","medium", tostring(newForm.city),startPosXText,startPosYText+marginY*3,500, 500)
+	text.print(gfx.screen,"lato","black","medium", tostring(newForm.phone),startPosXText,startPosYText+marginY*4,500, 500)
+	text.print(gfx.screen,"lato","black","medium", tostring(newForm.email),startPosXText,startPosYText+marginY*5,500, 500)
 end
 
 --Moves the current inputField

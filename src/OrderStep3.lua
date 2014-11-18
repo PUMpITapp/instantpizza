@@ -46,7 +46,7 @@ local io = require "IOHandler"
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
-local startPosY = yUnit * 2.8
+local startPosY = yUnit * 2.6
 local startPosX = xUnit * 4
 local endPosY = yUnit*6.8
 local marginY = yUnit*0.3
@@ -109,7 +109,7 @@ function printOrder()
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
-  text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2.1,endPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
 end
 
 function onKey(key,state)
@@ -132,14 +132,14 @@ function onKey(key,state)
         end
       elseif(key == 'yellow') then
         --Go back to menu
-        pathName = "OrderStep4.lua"
+        pathName = "OrderFail.lua"
         if checkTestMode() then
           return pathName
         else
-          dofile(pathName)
+          assert(loadfile(pathName))(newOrder)
         end
         elseif(key == 'blue') then
-        	assert(loadfile("OrderFail.lua"))(newOrder)
+        	
 
 	  	end
 	end

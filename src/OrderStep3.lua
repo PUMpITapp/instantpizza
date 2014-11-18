@@ -137,6 +137,9 @@ function onKey(key,state)
         else
           dofile(pathName)
         end
+        elseif(key == 'blue') then
+        	assert(loadfile("OrderFail.lua"))(newOrder)
+
 	  	end
 	end
 end

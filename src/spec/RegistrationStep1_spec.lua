@@ -1,6 +1,6 @@
 require "RegistrationStep1"
 
-describe("Test newForm format", function()
+--[[describe("Test newForm format", function()
 	it("name", function()
 		local expected_value="name"
 		local got = inputFieldTable[0]
@@ -30,18 +30,18 @@ describe("Test newForm format", function()
 		local expected_value="email"
 		local got = inputFieldTable[5]
 		assert.are.same(expected_value,got)
-		end)
+		end
 	end)
-
+]]
 describe("Test UserRegistration1, onKey", function()
 	it("test Up", function()
-		local expected_value = "Up"
-		local got = onKey('Up','up')
+		local expected_value = "up"
+		local got = onKey('up','up')
 		assert.are.same(expected_value,got)
 		end)
 	it("test Down", function()
-		local expected_value = "Down"
-		local got = onKey('Down','up')
+		local expected_value = "down"
+		local got = onKey('down','up')
 		assert.are.same(expected_value,got)
 		end)
 	it("test blue", function()
@@ -51,12 +51,12 @@ describe("Test UserRegistration1, onKey", function()
 		end)
 	it("test Keyboard", function()
 		local expected_value = 'Keyboard.lua'
-		local got = onKey("Return",'up')
+		local got = onKey("ok",'up')
 		assert.are.same(expected_value,got)
 		end)
-	it("test Red", function()
+	it("test Green", function()
 		local expected_value = 'Menu.lua'
-		local got = onKey('red','up')
+		local got = onKey('green','up')
 		assert.are.same(expected_value,got)
 		end)	
 end)
@@ -85,28 +85,34 @@ end)
 describe("Test UserRegistration1, moveHighlightedInputField", function()
 
 	it("When not at the top, pressing up", function()
-		setValuesForTesting((returnValuesForTesting("inputFieldStart")+1))
-		moveHighlightedInputField('Up')
-		local got = returnValuesForTesting("inputFieldY")
-		local expected_value = (returnValuesForTesting("inputFieldStart")+1) - returnValuesForTesting("height")*(0.7/9)
+		setValuesForTesting((returnValuesForTesting("lowerBoundary")+1))
+		moveHighlightedInputField('up')
+		local got = returnValuesForTesting("highlightPosY")
+		local expected_value = returnValuesForTesting("lowerBoundary") 
 		assert.are.same(expected_value,got)
 	end)
 
-	-- No testcase or function written for when at the top and pressing up
-
-	it("When not at the bottom, pressing down", function()
-		setValuesForTesting((returnValuesForTesting("inputFieldEnd")-1))
-		moveHighlightedInputField('Down')
-		local got = returnValuesForTesting("inputFieldY")
-		local expected_value = (returnValuesForTesting("inputFieldEnd")-1) + returnValuesForTesting("height")*(0.7/9)
+	it("When at the top, pressing up", function()
+		setValuesForTesting((returnValuesForTesting("lowerBoundary")))
+		moveHighlightedInputField('up')
+		local got = returnValuesForTesting("highlightPosY")
+		local expected_value = returnValuesForTesting("upperBoundary") 
 		assert.are.same(expected_value,got)
 	end)
 
 	it("When at the bottom, pressing down", function()
-		setValuesForTesting((returnValuesForTesting("inputFieldEnd")))
-		moveHighlightedInputField('Down')
-		local got = returnValuesForTesting("inputFieldY")
-		local expected_value = returnValuesForTesting("inputFieldStart")
+		setValuesForTesting((returnValuesForTesting("upperBoundary")))
+		moveHighlightedInputField('down')
+		local got = returnValuesForTesting("highlightPosY")
+		local expected_value = returnValuesForTesting("lowerBoundary") 
+		assert.are.same(expected_value,got)
+	end)
+
+	it("When not at the bottom, pressing up", function()
+		setValuesForTesting((returnValuesForTesting("upperBoundary")-1))
+		moveHighlightedInputField('down')
+		local got = returnValuesForTesting("highlightPosY")
+		local expected_value = returnValuesForTesting("upperBoundary") 
 		assert.are.same(expected_value,got)
 	end)
 end)

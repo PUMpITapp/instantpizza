@@ -45,7 +45,7 @@ local yUnit = gfx.screen:get_height()/9
  --Start of inputFields. Needed for 
 local startPosY = yUnit*2.5
 local startPosX = 5*xUnit
-local startPosPicX = xUnit*3
+local startPosPicX = xUnit*2.8
 local marginY = yUnit*1.2
 local lowerBoundary = 1
 local upperBoundary = 0
@@ -100,7 +100,7 @@ function displayPizzerias()
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
 		gfx.screen:copyfrom(inputField,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
 		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=yUnit, w=xUnit*2})
-		text.print(gfx.screen, arial,pizzerias[index].name, startPosX*1.05, yCoord+marginY*0.2, xUnit*6, yUnit*4)
+		text.print(gfx.screen,"lato","black","medium",pizzerias[index].name, startPosX*1.05, yCoord+marginY*0.2, xUnit*6, yUnit*4)
 		upperBoundary = index
 		yCoord = yCoord+marginY
 		if(index == 4)then

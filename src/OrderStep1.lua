@@ -7,29 +7,30 @@ function checkTestMode()
   end
   return underGoingTest
 end
+
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
 end
+local text = chooseText()
+local gfx =  chooseGfx()
 local io = require "IOHandler"
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
 
 local background = gfx.loadpng("Images/OrderPics/chooseaccount.png") 
 local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
@@ -130,6 +131,24 @@ function onKey(key,state)
       end
   	end
 	end
+end
+
+-- This functions returns some of the values on local variables to be used when testing
+function returnValuesForTesting(value)
+
+  if value == "startPosY" then
+    return startPosY
+  elseif value == "highlightPosY" then 
+    return highlightPosY
+  elseif value == "upperBoundary" then
+    return upperBoundary
+  elseif value == "lowerBoundary" then
+    return lowerBoundary
+  end
+end
+-- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+function setValuesForTesting(value)
+  highlightPosY = value
 end
 
 --Main method

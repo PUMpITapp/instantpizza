@@ -121,8 +121,8 @@ function displayPizzas()
 		local ySpace = 0.5 * yUnit
 		for i,v in ipairs(currentPizzeria.pizzas) do
 			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * marginY, w=xUnit*7 , h=ySpace})
-			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * marginY, xUnit*5, ySpace)
-			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * marginY, 2 * xUnit, ySpace)
+			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[i].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (i-1) * marginY, xUnit*5, ySpace)
+			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (i-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
 			upperBoundary = i
 			if(i == showLimit)then 

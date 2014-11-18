@@ -170,23 +170,23 @@ function displayMenu()
 
   for i =1,#menu.pizzas do
   	    gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.pizzas[i].name..": "..menu.pizzas[i].price, startPosX, startPosY+ (i-1) * marginY, fieldWith, fieldHeight)
+    text.print(gfx.screen,"lato","black","small", menu.pizzas[i].name..": "..menu.pizzas[i].price, startPosX, startPosY+ (i-1) * marginY, fieldWith, fieldHeight)
  
   end
 
   for i =1,#menu.drinks do
     gfx.screen:copyfrom(tilePNG, nil, {x = startDrinksX, y= startDrinksY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.drinks[i].name..": "..menu.drinks[i].price, startDrinksX, startDrinksY+ (i-1) * marginY, fieldWith, fieldHeight)
+    text.print(gfx.screen,"lato","black","small", menu.drinks[i].name.." "..menu.drinks[i].price.."kr", startDrinksX, startDrinksY+ (i-1) * marginY, fieldWith, fieldHeight)
  
   end
   for i=1,#menu.sauces do
     gfx.screen:copyfrom(tilePNG, nil, {x = startSauceX, y= startSauceY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.sauces[i].name..": "..menu.sauces[i].price, startSauceX, startSauceY+ (i-1) * marginY, fieldWith * 2, fieldHeight)
+    text.print(gfx.screen,"lato","black","small", menu.sauces[i].name.." "..menu.sauces[i].price.."kr", startSauceX, startSauceY+ (i-1) * marginY, fieldWith * 2, fieldHeight)
   end
 
   for i=1,#menu.salads do
     gfx.screen:copyfrom(tilePNG, nil, {x = startSaladX, y= startSaladY+ (i-1)* marginY, w = fieldWith, h = fieldHeight})   
-    text.print(gfx.screen, arial, menu.salads[i].name..": "..menu.salads[i].price, startSaladX, startSaladY+ (i-1)* marginY, fieldWith* 2, fieldHeight)
+    text.print(gfx.screen,"lato","black","small", menu.salads[i].name.." "..menu.salads[i].price.."kr", startSaladX, startSaladY+ (i-1)* marginY, fieldWith* 2, fieldHeight)
   end
 
 end
@@ -225,11 +225,11 @@ function showCart()
 	-- print(#refToOrder)
 	for i=1,#refToOrder do
 		for k, v in pairs(refToOrder[i]) do
-			text.print(gfx.screen, arial, v.amount.." x "..v.name, 12.2 * xUnit, yUnit * 2.8 + 0.5*menuItems*yUnit, xUnit*3.8, yUnit)
+			text.print(gfx.screen,"lato","black","small", v.amount.." x "..v.name, 12.2 * xUnit, yUnit * 2.8 + 0.5*menuItems*yUnit, xUnit*3.8, yUnit)
 			menuItems = menuItems + 1
 		end
 	end
-	text.print(gfx.screen, arial, "tot:".." "..newOrder.totalPrice, 12.2 * xUnit, yUnit * 8, xUnit*3.8, yUnit)
+	text.print(gfx.screen,"lato","black","small", "Total sum:".." "..newOrder.totalPrice.."kr", 12.2 * xUnit, yUnit * 8, xUnit*3.8, yUnit)
 end
 
 function setCoordinates(x,y)

@@ -66,10 +66,10 @@ printOrder()
 end
 
 function printHeadLines()
-  text.print(gfx.screen, arial,"Product", startPosX, startPosY, 6* xUnit,200)
-  text.print(gfx.screen, arial,"Amount", startPosX+marginX*0.84, startPosY, 6* xUnit,200)
-  text.print(gfx.screen, arial,"Price", startPosX+marginX*1.6, startPosY, 6* xUnit,200)
-  text.print(gfx.screen, arial,"Total sum:", startPosX,endPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small","Product", startPosX, startPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small","Amount", startPosX+marginX*0.84, startPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small","Price", startPosX+marginX*1.6, startPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small","Total sum:", startPosX,endPosY, 6* xUnit,200)
 end
 
 function printOrder()
@@ -77,38 +77,38 @@ function printOrder()
   for key,v in pairs(newOrder.pizzas)do
     print(v.name,v.price,v.amount)
     amount = v.amount
-    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
     lastPizzaIndex = i
     i=i+1
   end
   i=1 
   for key,v in pairs(newOrder.drinks)do
     amount = v.amount
-    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
   for key,v in pairs(newOrder.sauces)do
     amount = v.amount
-    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
     for key,v in pairs(newOrder.salads)do
     amount = v.amount
-    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
-  text.print(gfx.screen, arial,tostring(newOrder.totalPrice), startPosX+marginX*1.6,endPosY, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small",tostring(newOrder.totalPrice), startPosX+marginX*1.6,endPosY, 6* xUnit,200)
 end
 
 function onKey(key,state)

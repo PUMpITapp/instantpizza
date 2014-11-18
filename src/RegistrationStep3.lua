@@ -55,6 +55,7 @@ local upperBoundary = 0
 local lowerBoundary = 1
 local cartPosX = 12.9 * xUnit
 local cartPosY = 4.3 * yUnit
+local isChosen = false
 
 local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
 local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
@@ -134,7 +135,6 @@ function displayPizzas()
 end
 
 function displayHighlightSurface()
-	isAlreadyPicked
 	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
 	gfx.screen:copyfrom(highligtherPNG, nil , pos)
 end
@@ -155,7 +155,8 @@ function isAlreadyPicked(myPizza)
 end
 
 function pizzaIsChoosen()
-	return #pizza~=0
+	local isChosen = (#pizza~=0)
+	return isChosen
 end
 
 function insertOnChoiceMenu(myPizza)
@@ -189,7 +190,7 @@ function displayChoiceMenu()
 end
 
 --Moves the current inputField
-function moveHighlight(key)
+function moveHighlightedInputField(key)
 
 	--Up
 	if(key == 'up')then
@@ -211,26 +212,54 @@ function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'up') then
 	  		--Up
-	  		moveHighlight(key)
+	  		if checkTestMode() then
+				return key
+			end
+	  		moveHighlightedInputField(key)
 	  		
 	  	elseif(key == 'down') then
 	  		--Down
-	  		moveHighlight(key)
-	  		--Left
+	  		if checkTestMode() then
+				return key
+			end
+	  		moveHighlightedInputField(key)
+	  		
 	  	elseif(key == 'left') then
-	  		--Right
+	  		--Left
 	  	elseif(key == 'right') then
-
+	  		--Right
 	  	elseif(key == 'red') then
-	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
+	  		pathName = "RegistrationStep2.lua"
+	  		if checkTestMode() then
+			 	return pathName
+			else
+	  			assert(loadfile("RegistrationStep2.lua"))(newForm)
+	  		end
 	  	elseif(key == 'blue') then
-	  		if pizzaIsChoosen() then
+	  		if checkTestMode() then
+	  			-- Nothing
+	  		else
+	  				pizzaIsChoosen()
+	  		end
+	  		if isChosen then
+	  			pathName = "RegistrationReview.lua"
+	  			if checkTestMode() then
+			 		return pathName
+				else
 	  			insertOnTable(pizza)
 	  			assert(loadfile("RegistrationReview.lua"))(newForm)
+	  			end
 	  		else
-	  			text.print(gfx.screen,"lato","black","medium", "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
+	  			if checkTestMode() then
+	  				return "Need to choose pizza"
+	  			else
+	  				text.print(gfx.screen,"lato","black","medium", "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
+	  			end
 	  		end
 	  	elseif(key == 'ok') then
+	  		if checkTestMode() then
+				return key
+			end
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
 	  		insertOnChoiceMenu(choosenPizza)
 	  	end
@@ -267,13 +296,14 @@ end
 
 -- This functions returns some of the values on local variables to be used when testing
 function returnValuesForTesting(value)
-
-	if value == "inputFieldStart" then
-		return inputFieldStart
-	elseif value == "inputFieldY" then 
-		return inputFieldY
-	elseif value == "inputFieldEnd" then
-		return inputFieldEnd
+	if value == "startPosY" then
+		return startPosY
+	elseif value == "highlightPosY" then 
+		return highlightPosY
+	elseif value == "upperBoundary" then
+		return upperBoundary
+	elseif value == "lowerBoundary" then
+		return lowerBoundary
 	elseif value == "height" then
 		return gfx.screen:get_height()
 	elseif value == "inputMovement" then
@@ -282,7 +312,7 @@ function returnValuesForTesting(value)
 end
 -- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
 function setValuesForTesting(value)
-	inputFieldY = value
+	highlightPosY = value
 end
 
 -- Function that returns the newForm variable so that it can be used in testing
@@ -296,8 +326,8 @@ function returnLastForm()
 end
 
 -- Function that sets the variable isChoosen to a boolean
-function setIsChoosen(value)
-	isChoosen = value
+function setIsChosen(value)
+	isChosen = value
 end
 
 --Main method

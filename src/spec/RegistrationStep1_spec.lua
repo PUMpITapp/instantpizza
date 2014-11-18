@@ -108,7 +108,7 @@ describe("Test UserRegistration1, moveHighlightedInputField", function()
 		assert.are.same(expected_value,got)
 	end)
 
-	it("When not at the bottom, pressing up", function()
+	it("When not at the bottom, pressing down", function()
 		setValuesForTesting((returnValuesForTesting("upperBoundary")-1))
 		moveHighlightedInputField('down')
 		local got = returnValuesForTesting("highlightPosY")

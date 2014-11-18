@@ -133,7 +133,7 @@ function moveHighlightedInputField(key)
   elseif(key == 'down')then
     highlightPosY = highlightPosY + 1
     if(highlightPosY > upperBoundary) then
-      highlightPosY = 1
+      highlightPosY = lowerBoundary
     end
 end
 newForm.currentInputField = inputFieldTable[highlightPosY]
@@ -147,7 +147,7 @@ end
 
 function onKey(key,state)
 	if(state == 'up') then
-		print(key)
+		--print(key)
 		if(key == 'up')then
 			if checkTestMode() then
 				return key
@@ -222,8 +222,10 @@ function returnValuesForTesting(value)
 		return startPosY
 	elseif value == "highlightPosY" then 
 		return highlightPosY
-	elseif value == "inputFieldEnd" then
-		return inputFieldEnd
+	elseif value == "upperBoundary" then
+		return upperBoundary
+	elseif value == "lowerBoundary" then
+		return lowerBoundary
 	elseif value == "height" then
 		return gfx.screen:get_height()
 	end

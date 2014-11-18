@@ -56,44 +56,45 @@ local lastPizzaIndex = 0
 local lastDrinkIndex = 0
 local background = gfx.loadpng("Images/OrderPics/orderstep3.png") 
 local user = {}
+local newOrder = ...
 
 --Calls methods that builds GUI
 function buildGUI()
-
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 printHeadLines()
+printOrder()
 end
 
 function printHeadLines()
-  getUser()
   text.print(gfx.screen, arial,"Product", startPosX, startPosY, 6* xUnit,200)
   text.print(gfx.screen, arial,"Amount", startPosX+marginX*0.84, startPosY, 6* xUnit,200)
-  text.print(gfx.screen, arial,"Price", startPosX+marginX*1.4, startPosY, 6* xUnit,200)
+  text.print(gfx.screen, arial,"Price", startPosX+marginX*1.6, startPosY, 6* xUnit,200)
+  text.print(gfx.screen, arial,"Total sum:", startPosX,endPosY, 6* xUnit,200)
+end
 
-  for i=1, #user.pizzeria.pizzas do
-    amount = 2
-    totalSum = totalSum+(amount*user.pizzeria.pizzas[i].price)
-    text.print(gfx.screen, arial,tostring(user.pizzeria.pizzas[i].name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
+function printOrder()
+  i = 1
+  for key,v in pairs(newOrder.pizzas)do
+    print(v.name,v.price,v.amount)
+    amount = v.amount
+    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
     text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount*user.pizzeria.pizzas[i].price), startPosX+marginX*1.4, startPosY+(marginY*i), 6* xUnit,200)
+    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
     lastPizzaIndex = i
+    i=i+1
   end
-  for i=1, #user.pizzeria.drink do
-    amount = 2
-    totalSum = totalSum+(amount*user.pizzeria.drink[i].price)
-    text.print(gfx.screen, arial,tostring(user.pizzeria.drink[i].name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+  i=1 
+  for key,v in pairs(newOrder.drinks)do
+    amount = v.amount
+    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(amount*user.pizzeria.drink[i].price), startPosX+marginX*1.4, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
     lastDrinkIndex = lastPizzaIndex+i
+    i= i+1
   end
-    text.print(gfx.screen, arial,"Total sum:", startPosX,endPosY, 6* xUnit,200)
-    text.print(gfx.screen, arial,tostring(totalSum), startPosX+marginX*1.4,endPosY, 6* xUnit,200)
-
-
+  text.print(gfx.screen, arial,tostring(newOrder.totalPrice), startPosX+marginX*1.6,endPosY, 6* xUnit,200)
 end
-function getUser()
-  user = io.addTestUser()
-end
+
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then

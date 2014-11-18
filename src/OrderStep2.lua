@@ -333,7 +333,6 @@ function onKey(key,state)
           return pathName
         else
           dofile(pathName)
-          -- assert(loadfile(pathName))
         end
       elseif(key == 'blue') then
         -- Go back to menu

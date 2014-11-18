@@ -264,6 +264,14 @@ function onKey(key,state)
 	  				text.print(gfx.screen,"lato","black","medium", "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
 	  			end
 	  		end
+	  		elseif key =='green' then
+	  			pathName = "Menu.lua"
+	  			if checkTestMode() then
+			 		return pathName
+				else
+	  				
+	  				dofile(pathName)
+	  			end
 	  	elseif(key == 'ok') then
 	  		if checkTestMode() then
 				return key

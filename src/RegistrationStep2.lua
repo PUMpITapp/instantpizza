@@ -177,6 +177,14 @@ function onKey(key,state)
 	  		else
 	  			assert(loadfile(pathName))(newForm)
 	  		end
+	  	elseif key =='green' then
+	  		pathName = "Menu.lua"
+	  		if checkTestMode() then
+		 		return pathName
+			else
+	  			
+	  			dofile(pathName)
+	  		end
 	  	end
  	end
 end

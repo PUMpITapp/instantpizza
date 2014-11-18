@@ -92,6 +92,22 @@ function printOrder()
     lastDrinkIndex = lastPizzaIndex+i
     i= i+1
   end
+  for key,v in pairs(newOrder.sauces)do
+    amount = v.amount
+    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    lastDrinkIndex = lastPizzaIndex+i
+    i= i+1
+  end
+    for key,v in pairs(newOrder.salads)do
+    amount = v.amount
+    text.print(gfx.screen, arial,tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen, arial,tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    text.print(gfx.screen, arial,tostring(amount*v.price), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+    lastDrinkIndex = lastPizzaIndex+i
+    i= i+1
+  end
   text.print(gfx.screen, arial,tostring(newOrder.totalPrice), startPosX+marginX*1.6,endPosY, 6* xUnit,200)
 end
 

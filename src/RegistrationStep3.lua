@@ -121,8 +121,8 @@ function displayPizzas()
 		local ySpace = 0.5 * yUnit
 		for i,v in ipairs(currentPizzeria.pizzas) do
 			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * marginY, w=xUnit*7 , h=ySpace})
-			text.print(gfx.screen, arial, currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * marginY, xUnit*5, ySpace)
-			text.print(gfx.screen, arial, tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * marginY, 2 * xUnit, ySpace)
+			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[i].name, pizzaPosX, pizzaPosY+ (i-1) * marginY, xUnit*5, ySpace)
+			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 6 * xUnit, pizzaPosY + (i-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
 			upperBoundary = i
 			if(i == showLimit)then 
@@ -180,7 +180,8 @@ function displayChoiceMenu()
 
 	local menuItems = 0
 	for k, v in pairs(pizza) do
-	text.print(gfx.screen, arial, v.name, cartPosX, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
+	text.print(gfx.screen, "lato","black","small", v.name, cartPosX, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
+	text.print(gfx.screen, "lato","black","small", v.price.."kr", cartPosX+xUnit*1.5, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
 	menuItems = menuItems + 1
 	end
 end
@@ -200,12 +201,6 @@ function moveHighlight(key)
 		if(highlightPosY > upperBoundary) then
 			highlightPosY = lowerBoundary
 		end
-	--Left
-	elseif(key == 'left')then
-		
-	--Right
-	elseif(key == 'right') then
-		
 	end
 end
 
@@ -221,10 +216,9 @@ function onKey(key,state)
 	  		moveHighlight(key)
 	  		--Left
 	  	elseif(key == 'left') then
-	  		moveHighlight(key)
 	  		--Right
 	  	elseif(key == 'right') then
-	  		moveHighlight(key)
+
 	  	elseif(key == 'red') then
 	  		assert(loadfile("RegistrationStep2.lua"))(newForm)
 	  	elseif(key == 'blue') then
@@ -232,7 +226,7 @@ function onKey(key,state)
 	  			insertOnTable(pizza)
 	  			assert(loadfile("RegistrationReview.lua"))(newForm)
 	  		else
-	  			text.print(gfx.screen, arial, "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
+	  			text.print(gfx.screen,"lato","black","medium", "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
 	  		end
 	  	elseif(key == 'ok') then
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)

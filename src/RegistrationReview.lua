@@ -97,18 +97,18 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-  text.print(gfx.screen, arial, "Name: "..tostring(lastForm.name), startPosX, yUnit * 2, 500, 500)
-  text.print(gfx.screen, arial, "Address: "..tostring(lastForm.address), startPosX, yUnit * 2.5,500,500)
-  text.print(gfx.screen, arial, "ZipCode: "..tostring(lastForm.zipCode), startPosX, yUnit * 3,500,500)
-  text.print(gfx.screen, arial, "City: "..tostring(lastForm.city), startPosX, yUnit * 3.5,500, 500)
-  text.print(gfx.screen, arial, "Phone: "..tostring(lastForm.phone), startPosX, yUnit * 4,500, 500)
-  text.print(gfx.screen, arial, "Email: "..tostring(lastForm.email), startPosX, yUnit * 4.5,500, 50)
-  text.print(gfx.screen, arial, "Pizzeria: "..tostring(lastForm.pizzeria.name), startPosX, yUnit * 5,500, 50)
+  text.print(gfx.screen,"lato","black","small", "Name: "..tostring(lastForm.name), startPosX, yUnit * 2, 500, 500)
+  text.print(gfx.screen,"lato","black","small", "Address: "..tostring(lastForm.address), startPosX, yUnit * 2.5,500,500)
+  text.print(gfx.screen,"lato","black","small", "ZipCode: "..tostring(lastForm.zipCode), startPosX, yUnit * 3,500,500)
+  text.print(gfx.screen,"lato","black","small", "City: "..tostring(lastForm.city), startPosX, yUnit * 3.5,500, 500)
+  text.print(gfx.screen,"lato","black","small", "Phone: "..tostring(lastForm.phone), startPosX, yUnit * 4,500, 500)
+  text.print(gfx.screen,"lato","black","small", "Email: "..tostring(lastForm.email), startPosX, yUnit * 4.5,500, 50)
+  text.print(gfx.screen,"lato","black","small", "Pizzeria: "..tostring(lastForm.pizzeria.name), startPosX, yUnit * 5,500, 50)
   local pizzaText = ""
   for i=1,#lastForm.pizzeria.pizza do
     pizzaText = pizzaText..lastForm.pizzeria.pizza[i].name..", "
   end
-  text.print(gfx.screen, arial, "Pizzas: "..tostring(pizzaText), startPosX, yUnit * 5.5,500, 50)
+  text.print(gfx.screen,"lato","black","small", "Pizzas: "..tostring(pizzaText), startPosX, yUnit * 5.5,500, 50)
 
 end
 

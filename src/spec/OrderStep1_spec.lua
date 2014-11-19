@@ -1,5 +1,15 @@
 require "OrderStep1"
 describe("Test OrderStep1, onKey", function()
+	it("test Up", function()
+		local expected_value = "up"
+		local got = onKey('up','up')
+		assert.are.same(expected_value,got)
+		end)
+	it("test Down", function()
+		local expected_value = "down"
+		local got = onKey('down','up')
+		assert.are.same(expected_value,got)
+		end)
 	it("test Confirmation", function()
 		local expected_value = 'OrderStep2.lua'
 		local got = onKey("ok",'up')

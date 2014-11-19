@@ -115,8 +115,14 @@ end
 function onKey(key,state)
 	if(state == 'up') then
     if(key == 'up')then
+      if checkTestMode() then
+        return key
+      end
       moveHighlightedInputField(key)
     elseif(key == 'down')then
+      if checkTestMode() then
+        return key
+      end
       moveHighlightedInputField(key)
 	  elseif(key == 'ok') then
       pathName = "OrderStep2.lua"

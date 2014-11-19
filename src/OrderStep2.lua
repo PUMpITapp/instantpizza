@@ -10,6 +10,13 @@
 --   - which would mean that the file is being tested.
 -- Returns false if it was not,
 --   - which wold mean that the file was being used.  
+
+-- These three functions below are required for running tests on this file
+--- Checks if the file was called from a test file.
+-- Returs true if it was, 
+--   - which would mean that the file is being tested.
+-- Returns false if it was not,
+--   - which wold mean that the file was being used.  
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -23,25 +30,25 @@ end
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
 end
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
+local text = chooseText()
+local gfx =  chooseGfx()
 
 --Start of inputFields.
 
@@ -116,30 +123,34 @@ function updateScreen()
 end
 
 function createMenu()
-  menu.pizzas = account.pizzeria.pizzas -- array with numbers
+  if checkTestMode() then
+  else
+    menu.pizzas = account.pizzeria.pizzas -- array with numbers
 
-  menu.drinks[1] = {name = "Sprite", price = "10"}
-  menu.drinks[2] = {name = "Coke", price = "10"}
-  menu.drinks[3] = {name = "Beer", price = "10"}
-  menu.drinks[4] = {name = "Fanta", price = "10"}
-  menu.drinks[5] = {name = "Loka", price = "10"}
+    menu.drinks[1] = {name = "Sprite", price = "10"}
+    menu.drinks[2] = {name = "Coke", price = "10"}
+    menu.drinks[3] = {name = "Beer", price = "10"}
+    menu.drinks[4] = {name = "Fanta", price = "10"}
+    menu.drinks[5] = {name = "Loka", price = "10"}
 
-  menu.sauces[1] = {name = "Mild sauce", price = "5"}
-  menu.sauces[2] = {name = "Mixed sauce", price = "5"}
-  menu.sauces[3] = {name = "Hot sauce", price = "5"}
+    menu.sauces[1] = {name = "Mild sauce", price = "5"}
+    menu.sauces[2] = {name = "Mixed sauce", price = "5"}
+    menu.sauces[3] = {name = "Hot sauce", price = "5"}
 
-  menu.salads[1] = {name = "Pizza salad", price = "10"}
+    menu.salads[1] = {name = "Pizza salad", price = "10"}
   --menu.salads[2] = {name = "pizzasalad", price = "10"}
 
-refToMenu[1] = menu.pizzas
-refToMenu[2] = menu.drinks
-refToMenu[3] = menu.sauces
-refToMenu[4] = menu.salads
 
-refToOrder[1] = newOrder.pizzas
-refToOrder[2] = newOrder.drinks
-refToOrder[3] = newOrder.sauces
-refToOrder[4] = newOrder.salads
+    refToMenu[1] = menu.pizzas
+    refToMenu[2] = menu.drinks
+    refToMenu[3] = menu.sauces
+    refToMenu[4] = menu.salads
+
+    refToOrder[1] = newOrder.pizzas
+    refToOrder[2] = newOrder.drinks
+    refToOrder[3] = newOrder.sauces
+    refToOrder[4] = newOrder.salads
+  end
 
 end
 
@@ -287,6 +298,7 @@ function moveHighlight(key)
       	elseif(highlightPosX==2) then
       		startHighlightY = startPosY + 1.2 *yUnit + (4-#menu.drinks) * marginY
       	end
+        
     else
 		setCoordinates(highlightPosX,highlightPosY)
 
@@ -295,8 +307,7 @@ function moveHighlight(key)
   elseif(key == 'left')then
     highlightPosX = highlightPosX -1
     if(highlightPosX < 1) then
-      highlightPosX = highlightPosX + 1
-
+      highlightPosX = highlightPosX + 2
     end
       setUpperBoundary(highlightPosX)
       highlightPosY = lowerBoundary
@@ -307,7 +318,7 @@ function moveHighlight(key)
   elseif(key == 'right') then
     highlightPosX = highlightPosX +1
     if(highlightPosX > 2) then
-    	highlightPosX = highlightPosX -1
+    	highlightPosX = highlightPosX -2
     end
 	    setUpperBoundary(highlightPosX)
 	    highlightPosY = lowerBoundary
@@ -344,24 +355,71 @@ function onKey(key,state)
         assert(loadfile(pathName))(newOrder)
       end
     elseif key == 'yellow' then
+      if checkTestMode() then
+        return key
+      end
       deleteOrder(column,row)
           updateScreen()
 
     elseif key == "up" then
+      if checkTestMode() then
+        return key
+      end
       moveHighlight(key)
     elseif key == 'down' then
+      if checkTestMode() then
+        return key
+      end
       moveHighlight(key)
     elseif key == 'left' then
+      if checkTestMode() then
+        return key
+      end
       moveHighlight(key)
     elseif key == 'right' then
+      if checkTestMode() then
+        return key
+      end
       moveHighlight(key)
 	  elseif key == 'ok' then
+      if checkTestMode() then
+        return key
+      end
 	  	addToOrder(column,row)
           updateScreen()
    	end
 
 	end
 
+end
+-- Below are functions that is required for the testing of this file
+
+-- This functions returns some of the values on local variables to be used when testing
+function returnValuesForTesting(value)
+
+  if value == "startPosY" then
+    return startPosY
+  elseif value == "highlightPosX" then
+    return highlightPosX
+  elseif value == "highlightPosY" then 
+    return highlightPosY
+  elseif value == "upperBoundary" then
+    return upperBoundary
+  elseif value == "lowerBoundary" then
+    return lowerBoundary
+  elseif value == "middleBoundary" then
+    return middleBoundary
+  elseif value == "column" then 
+    return column
+  end
+end
+-- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+function setYValuesForTesting(value)
+  highlightPosY = value
+end
+-- This function is used in testing when it is needed to set the value of highlightPosX to a certain number
+function setXValuesForTesting(value)
+  highlightPosX = value
 end
 
 --Main method

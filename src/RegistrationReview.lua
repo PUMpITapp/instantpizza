@@ -5,6 +5,8 @@
 --Create user from input
 --Buttons
 --Transparency not working
+
+-- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
 -- Returs true if it was, 
 --   - which would mean that the file is being tested.
@@ -23,25 +25,25 @@ end
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
 end
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
+local text = chooseText()
+local gfx =  chooseGfx()
 
 local io = require "IOHandler"
 
@@ -98,40 +100,46 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayHighlightSurface()
-  text.print(gfx.screen,"lato","black","small", "Name: "..tostring(lastForm.name), startPosX, startPosY, 500, 500)
-  text.print(gfx.screen,"lato","black","small", "Address: "..tostring(lastForm.address), startPosX,startPosY+(yUnit*0.5),500,500)
-  text.print(gfx.screen,"lato","black","small", "ZipCode: "..tostring(lastForm.zipCode), startPosX,startPosY+(yUnit*1),500,500)
-  text.print(gfx.screen,"lato","black","small", "City: "..tostring(lastForm.city), startPosX,startPosY+(yUnit*1.5),500, 500)
-  text.print(gfx.screen,"lato","black","small", "Phone: "..tostring(lastForm.phone), startPosX,startPosY+(yUnit*2) ,500, 500)
-  text.print(gfx.screen,"lato","black","small", "Email: "..tostring(lastForm.email), startPosX,startPosY+(yUnit*2.5),500, 50)
-  text.print(gfx.screen,"lato","black","small", "Pizzeria: "..tostring(lastForm.pizzeria.name), startPosX,startPosY+(yUnit*3),500, 50)
-  local pizzaText = ""
-  for i=1,#lastForm.pizzeria.pizza do
-    length = #lastForm.pizzeria.pizza
-    if(length == i)then
-      pizzaText = pizzaText.." "..lastForm.pizzeria.pizza[i].name
-    else
-    pizzaText = pizzaText..lastForm.pizzeria.pizza[i].name..", "
+  if checkTestMode() then
+  else
+    text.print(gfx.screen,"lato","black","small", "Name: "..tostring(lastForm.name), startPosX, startPosY, 500, 500)
+    text.print(gfx.screen,"lato","black","small", "Address: "..tostring(lastForm.address), startPosX,startPosY+(yUnit*0.5),500,500)
+    text.print(gfx.screen,"lato","black","small", "ZipCode: "..tostring(lastForm.zipCode), startPosX,startPosY+(yUnit*1),500,500)
+    text.print(gfx.screen,"lato","black","small", "City: "..tostring(lastForm.city), startPosX,startPosY+(yUnit*1.5),500, 500)
+    text.print(gfx.screen,"lato","black","small", "Phone: "..tostring(lastForm.phone), startPosX,startPosY+(yUnit*2) ,500, 500)
+    text.print(gfx.screen,"lato","black","small", "Email: "..tostring(lastForm.email), startPosX,startPosY+(yUnit*2.5),500, 50)
+    text.print(gfx.screen,"lato","black","small", "Pizzeria: "..tostring(lastForm.pizzeria.name), startPosX,startPosY+(yUnit*3),500, 50)
+    local pizzaText = ""
+    for i=1,#lastForm.pizzeria.pizza do
+      length = #lastForm.pizzeria.pizza
+      if(length == i)then
+        pizzaText = pizzaText.." "..lastForm.pizzeria.pizza[i].name
+      else
+      pizzaText = pizzaText..lastForm.pizzeria.pizza[i].name..", "
+      end
     end
-  end
 
-  text.print(gfx.screen,"lato","black","small", "Pizzas: "..tostring(pizzaText), startPosX,startPosY+(yUnit*3.5),500, 50)
+    text.print(gfx.screen,"lato","black","small", "Pizzas: "..tostring(pizzaText), startPosX,startPosY+(yUnit*3.5),500, 50)
+  end
 
 end
 
 function saveAccount()
-  account = lastForm
-  pizzas = {}
-  for i=1,#lastForm.pizzeria.pizza do
-    name = lastForm.pizzeria.pizza[i].name
-    price = lastForm.pizzeria.pizza[i].price
-    pizzas[i] = Pizza:new(name,price)
+  if checkTestMode then
+  else
+    account = lastForm
+    pizzas = {}
+    for i=1,#lastForm.pizzeria.pizza do
+      name = lastForm.pizzeria.pizza[i].name
+      price = lastForm.pizzeria.pizza[i].price
+      pizzas[i] = Pizza:new(name,price)
+    end
+    drinks = {}
+    drink = Drink:new("Coca cola","10")
+    drinks[1] = drink
+    pizzeria = Pizzeria:new(account.pizzeria.name,account.pizzeria.imgPath,account.pizzeria.rating,pizzas,drinks)
+    io.saveUserData(account.name,account.address,account.zipCode,account.city,account.phone,account.email,pizzeria)
   end
-  drinks = {}
-  drink = Drink:new("Coca cola","10")
-  drinks[1] = drink
-  pizzeria = Pizzeria:new(account.pizzeria.name,account.pizzeria.imgPath,account.pizzeria.rating,pizzas,drinks)
-  io.saveUserData(account.name,account.address,account.zipCode,account.city,account.phone,account.email,pizzeria)
 end
 
 function onKey(key,state)

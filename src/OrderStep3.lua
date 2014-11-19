@@ -5,6 +5,8 @@
 --Create user from input
 --Buttons
 --Transparency not working
+
+-- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
 -- Returs true if it was, 
 --   - which would mean that the file is being tested.
@@ -23,25 +25,26 @@ end
 --- Chooses either the actual or he dummy gfx.
 -- Returns dummy gfx if the file is being tested.
 -- Rerunes actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
 end
 
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
 end
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
+local text = chooseText()
+local gfx =  chooseGfx()
+
 local io = require "IOHandler"
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -75,47 +78,50 @@ end
 
 function printOrder()
   i = 1
-  for key,v in pairs(newOrder.pizzas)do
-    -- print(v.name,v.price,v.amount)
-    amount = v.amount
-    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
-    lastPizzaIndex = i
-    i=i+1
+  if checkTestMode() then
+  else
+    for key,v in pairs(newOrder.pizzas)do
+      -- print(v.name,v.price,v.amount)
+      amount = v.amount
+      text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
+      lastPizzaIndex = i
+      i=i+1
+    end
+    i=1 
+    for key,v in pairs(newOrder.drinks)do
+      amount = v.amount
+      text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      lastDrinkIndex = lastPizzaIndex+i
+      i= i+1
+    end
+    for key,v in pairs(newOrder.sauces)do
+      amount = v.amount
+      text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      lastDrinkIndex = lastPizzaIndex+i
+      i= i+1
+    end
+      for key,v in pairs(newOrder.salads)do
+      amount = v.amount
+      text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
+      lastDrinkIndex = lastPizzaIndex+i
+      i= i+1
+    end
+    text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
   end
-  i=1 
-  for key,v in pairs(newOrder.drinks)do
-    amount = v.amount
-    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    lastDrinkIndex = lastPizzaIndex+i
-    i= i+1
-  end
-  for key,v in pairs(newOrder.sauces)do
-    amount = v.amount
-    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    lastDrinkIndex = lastPizzaIndex+i
-    i= i+1
-  end
-    for key,v in pairs(newOrder.salads)do
-    amount = v.amount
-    text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*(lastPizzaIndex+i)), 6* xUnit,200)
-    lastDrinkIndex = lastPizzaIndex+i
-    i= i+1
-  end
-  text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
 end
 
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then
-	  		--Choose account and go to next step
+	  		--Go back to the previous step in the order process
         pathName = "OrderStep2.lua"
         if checkTestMode() then
           return pathName
@@ -131,7 +137,7 @@ function onKey(key,state)
           dofile(pathName)
         end
       elseif(key == 'yellow') then
-        --Go back to menu
+        --Continue to QR-code page
         pathName = "OrderFail.lua"
         if checkTestMode() then
           return pathName

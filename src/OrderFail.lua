@@ -1,6 +1,43 @@
-local gfx = require "gfx"
+-- These three functions below are required for running tests on this file
+--- Checks if the file was called from a test file.
+-- Returs true if it was, 
+--   - which would mean that the file is being tested.
+-- Returns false if it was not,
+--   - which wold mean that the file was being used.  
+function checkTestMode()
+  runFile = debug.getinfo(2, "S").source:sub(2,3)
+  if (runFile ~= './' ) then
+    underGoingTest = false
+  elseif (runFile == './') then
+    underGoingTest = true
+  end
+  return underGoingTest
+end
+
+--- Chooses either the actual or he dummy gfx.
+-- Returns dummy gfx if the file is being tested.
+-- Rerunes actual gfx if the file is being run.
+function chooseGfx()
+  if not checkTestMode() then
+    tempGfx = require "gfx"
+  elseif checkTestMode() then
+    tempGfx = require "gfx_stub"
+  end
+  return tempGfx
+end
+
+function chooseText()
+  if not checkTestMode() then
+    tempText = require "write_text"
+  elseif checkTestMode() then
+    tempText = require "write_text_stub"
+  end
+  return tempText
+end
+local text = chooseText()
+local gfx =  chooseGfx()
+
 local qrencode = dofile("qrencode.lua")
-local text = require "write_text"
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -29,20 +66,22 @@ displayText()
 end
 
 function generateOrder()
-  stringToQR = order.name.."\n"..order.address.."\n"..order.phone.."\n"..order.email.."\n"
-  for key, value in pairs(order.pizzas) do
-    stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+  if checkTestMode() then
+  else
+    stringToQR = order.name.."\n"..order.address.."\n"..order.phone.."\n"..order.email.."\n"
+    for key, value in pairs(order.pizzas) do
+      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+    end
+    for key, value in pairs(order.drinks) do
+      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+    end
+    for key, value in pairs(order.sauces) do
+      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+    end
+    for key, value in pairs(order.salads) do
+      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+    end
   end
-  for key, value in pairs(order.drinks) do
-    stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
-  end
-  for key, value in pairs(order.sauces) do
-    stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
-  end
-  for key, value in pairs(order.salads) do
-    stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
-  end
-
 end
 
 function generateQR()
@@ -79,12 +118,14 @@ for k,v in pairs(qrCode) do
 end
 end
 function displayText()
-  text.print(gfx.screen, "lato","black","small", "There seems to be a problem with your internet connection.",textPosX,textPosY,9 *xUnit, 1 *yUnit)
-  text.print(gfx.screen, "lato","black","small", "Do not worry, your order is saved as a QR-code on the left.",textPosX,textPosY + 0.5 *yUnit,9 *xUnit, 1 *yUnit)
-  text.print(gfx.screen, "lato","black","small", "Please scan the QR-code and send it to:",textPosX,textPosY + yUnit,9 *xUnit, 1 *yUnit)
-  text.print(gfx.screen, "lato","black","medium", order.pizzeria.name..":",textPosX,textPosY + 2 *yUnit,9 *xUnit, 1 *yUnit)
-  text.print(gfx.screen, "lato","black","medium", "0705834633",textPosX,textPosY + 2.5 *yUnit,9 *xUnit, 1 *yUnit)
-
+  if checkTestMode() then
+  else
+    text.print(gfx.screen, "lato","black","small", "There seems to be a problem with your internet connection.",textPosX,textPosY,9 *xUnit, 1 *yUnit)
+    text.print(gfx.screen, "lato","black","small", "Do not worry, your order is saved as a QR-code on the left.",textPosX,textPosY + 0.5 *yUnit,9 *xUnit, 1 *yUnit)
+    text.print(gfx.screen, "lato","black","small", "Please scan the QR-code and send it to:",textPosX,textPosY + yUnit,9 *xUnit, 1 *yUnit)
+    text.print(gfx.screen, "lato","black","medium", order.pizzeria.name..":",textPosX,textPosY + 2 *yUnit,9 *xUnit, 1 *yUnit)
+    text.print(gfx.screen, "lato","black","medium", "0705834633",textPosX,textPosY + 2.5 *yUnit,9 *xUnit, 1 *yUnit)
+  end
 end
 
 function onKey(key,state)

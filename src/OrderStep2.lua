@@ -4,12 +4,7 @@
 --Inputs from user, read and write
 --Create user from input
 --Buttons
---Transparency not working
---- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+--Transparency not working  
 
 -- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.

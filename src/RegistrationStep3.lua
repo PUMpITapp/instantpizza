@@ -1,3 +1,4 @@
+-- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
 -- Returs true if it was, 
 --   - which would mean that the file is being tested.
@@ -33,9 +34,9 @@ function chooseText()
   end
   return tempText
 end
+local text = chooseText()
+local gfx =  chooseGfx()
 
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
 local io = require "IOHandler"
 
 
@@ -145,7 +146,10 @@ function displayHighlightSurface()
 end
 
 function getPizzaOnCoordinate(posY)
-	return currentPizzeria.pizzas[posY]
+	if checkTestMode() then
+	else
+		return currentPizzeria.pizzas[posY]
+	end
 end
 
 function isAlreadyPicked(myPizza)

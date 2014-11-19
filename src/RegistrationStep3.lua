@@ -167,9 +167,11 @@ function insertOnChoiceMenu(myPizza)
 
 	local isPicked = isAlreadyPicked(myPizza)
 	if not isPicked then
+		print(myPizza.name)
 		choices = choices + 1
 		pizza[choices] = myPizza
 	end
+
 end
 
 function insertOnTable(pizzaTable)
@@ -177,21 +179,20 @@ function insertOnTable(pizzaTable)
 end
 
 function deleteOnChoiceMenu(myPizza)
-		for i,v in pairs(pizza) do
+	for i,v in pairs(pizza) do
 		if pizza[i].name == myPizza.name then
-		pizza[i] = nil
-
+			table.remove(pizza,i)
 		end
 	end
-		choices = choices - 1
+	choices = choices - 1
 end
 
 function displayChoiceMenu()
 
 	local menuItems = 0
-	for k, v in pairs(pizza) do
-	text.print(gfx.screen, "lato","black","small", v.name, cartPosX, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
-	text.print(gfx.screen, "lato","black","small", v.price.."kr", cartPosX+xUnit*1.5, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
+	for i, v in pairs(pizza) do
+	text.print(gfx.screen, "lato","black","small", pizza[i].name, cartPosX, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
+	text.print(gfx.screen, "lato","black","small", pizza[i].price.."kr", cartPosX+xUnit*1.5, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
 	menuItems = menuItems + 1
 	end
 end

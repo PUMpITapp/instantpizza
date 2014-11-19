@@ -107,8 +107,14 @@ function displayHighlightSurface()
   text.print(gfx.screen,"lato","black","small", "Pizzeria: "..tostring(lastForm.pizzeria.name), startPosX,startPosY+(yUnit*3),500, 50)
   local pizzaText = ""
   for i=1,#lastForm.pizzeria.pizza do
+    length = #lastForm.pizzeria.pizza
+    if(length == i)then
+      pizzaText = pizzaText.." "..lastForm.pizzeria.pizza[i].name
+    else
     pizzaText = pizzaText..lastForm.pizzeria.pizza[i].name..", "
+    end
   end
+
   text.print(gfx.screen,"lato","black","small", "Pizzas: "..tostring(pizzaText), startPosX,startPosY+(yUnit*3.5),500, 50)
 
 end

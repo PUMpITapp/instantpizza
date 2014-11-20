@@ -42,17 +42,16 @@ function chooseText(underGoingTest)
 end
 local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
-
---Start of inputFields.
-inputFieldStart = gfx.screen:get_height()*(2.5/9)
-inputFieldY = gfx.screen:get_height()*(2.5/9)
-inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
-index = 0
+local order = ...
+local background = gfx.loadpng("Images/OrderPics/OrderStep4.png") 
+local time = 0
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
 
 --Calls methods that builds GUI
 function buildGUI()
-local background = gfx.loadpng("Images/OrderPics/activeorderpage.png") 
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+text.print(gfx.screen,"lato","black","large",tostring(time).." min", xUnit*6.5, yUnit*3.5, 6* xUnit,200)
 gfx.update()
 end
 
@@ -69,10 +68,24 @@ function onKey(key,state)
 	  	end
 	end
 end
+function randomTime()
+  math.randomseed(os.time())
+  time = math.random(30,60)
+  print(time)
+end
 
+function displayOrderInfo()
+  text.print(gfx.screen,"lato","black","medium","Orderinformation", xUnit*3.9, yUnit*5.5, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small",tostring(order.pizzeria.name).." ".."010-31231231", xUnit*4, yUnit*6, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","small","Total cost: "..tostring(order.totalPrice).."kr", xUnit*4, yUnit*6.3, 6* xUnit,200)
+
+end
 --Main method
 function main()
+  randomTime()
 	buildGUI()
+  --displayOrderInfo()
+  sleep()
 end
 main()
 

@@ -67,15 +67,7 @@ function checkForm()
 
 	else
 		if lastForm then
-			if lastForm.laststate == newForm.laststate then
 				newForm = lastForm
-			else
-				for k,v in pairs(lastForm) do
-					if not newForm[k] then
-						newForm[k] = v
-					end
-				end
-			end
 		end
 	end
 end
@@ -123,7 +115,7 @@ function addPizzeria()
 end
 --Adds pizzeria to form
 function addToForm(chosenPizzeria)
-	newForm["pizzeria"] = chosenPizzeria
+	newForm.pizzeria = chosenPizzeria
 end
 
 function displayHighlighter()

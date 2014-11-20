@@ -74,7 +74,7 @@ function displayUsers()
     end
   end
   if(foundUsers==false)then
-    text.print(gfx.screen,"lato","black","medium","No users registered!", startPosX*1.3, yCoord+marginY*0.2, xUnit*7, yUnit)
+    text.print(gfx.screen,"lato","black","medium","No users registered!", startPosX*1.9, yCoord+marginY*0.2, xUnit*7, yUnit)
   end
 end
 

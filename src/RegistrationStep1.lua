@@ -46,6 +46,7 @@ end
 local text = chooseText()
 local gfx =  chooseGfx()
 local lastForm = ...
+--local account = ...
 
 --Position variables
 local xUnit = gfx.screen:get_width()/16
@@ -81,16 +82,20 @@ local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
 function checkForm()
+
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
 		--Nothing
 	else
 		if lastForm then			
 			if lastForm.laststate == newForm.laststate then
+				print("Kommer hit")
 				newForm = lastForm
 			else
 				for key,value in pairs(lastForm) do
+					print(value)
 					if not newForm[key] then
+
 						newForm[key] = value
 					end
 				end
@@ -112,6 +117,7 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayFormData()
+	print("Test"..newForm.name)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)

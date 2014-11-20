@@ -125,7 +125,7 @@ function displayHighlightSurface()
 end
 
 function saveAccount()
-  if checkTestMode then
+  if checkTestMode() then
   else
     account = lastForm
     pizzas = {}

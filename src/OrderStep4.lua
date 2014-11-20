@@ -84,7 +84,7 @@ end
 function main()
   randomTime()
 	buildGUI()
-  --displayOrderInfo()
+  displayOrderInfo()
   sleep()
 end
 main()

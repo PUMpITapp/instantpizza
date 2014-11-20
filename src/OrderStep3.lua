@@ -126,7 +126,7 @@ function onKey(key,state)
         if checkTestMode() then
           return pathName
         else
-          dofile(pathName)
+          assert(loadfile(pathName))(newOrder)
         end
       elseif(key == 'green') then
         --Go back to menu

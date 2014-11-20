@@ -81,8 +81,11 @@ function checkForm()
 end
 --Reads pizzerias from file. Returns a table containing pizzeria objects. 
 function readPizzeriaFromFile()
-	pizzerias = io.readPizzerias()
-
+	if checkTestMode() then
+		pizzerias = io.readPizzerias_test()
+	else
+		pizzerias = io.readPizzerias()
+	end
 end
 --Builds GUI
 function buildGUI()
@@ -111,8 +114,12 @@ function displayPizzerias()
 end
 --Find the selected pizzeria and send i to addToForm()
 function addPizzeria()
-	chosenPizzeria = pizzerias[highlightPosY]
-	addToForm(chosenPizzeria)
+	if checkTestMode() then
+		return pizzerias
+	else
+		chosenPizzeria = pizzerias[highlightPosY]
+		addToForm(chosenPizzeria)
+	end
 end
 --Adds pizzeria to form
 function addToForm(chosenPizzeria)

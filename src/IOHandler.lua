@@ -62,6 +62,13 @@ function ioHandler.readPizzerias()
   pizzeriaTable = table.load("PizzeriaData.lua")
   return pizzeriaTable
 end
+-- Test function that reads "pizzerias"
+function ioHandler.readPizzerias_test()
+  local pizzeriaTable = {}
+  pizzeriaTable = table.load("PizzeriaData_testing.lua")
+  return pizzeriaTable
+end
+
 function ioHandler.addTestPizzerias()
   drinks ={}
   drinks2 = {}

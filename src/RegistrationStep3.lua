@@ -147,6 +147,8 @@ end
 
 function getPizzaOnCoordinate(posY)
 	if checkTestMode() then
+		currentPizzeria = { ["Testing"] = "Works" }
+		return currentPizzeria
 	else
 		return currentPizzeria.pizzas[posY]
 	end
@@ -169,6 +171,9 @@ end
 
 function insertOnChoiceMenu(myPizza)
 
+	if checkTestMode() then
+		return myPizza
+	end
 	local isPicked = isAlreadyPicked(myPizza)
 	if not isPicked then
 		print(myPizza.name)
@@ -255,7 +260,7 @@ function onKey(key,state)
 	  		else
 	  			pizzaIsChoosen()
 	  		end
-	  		if pizzaIsChoosen() then
+	  		if isChosen then
 	  			pathName = "RegistrationReview.lua"
 	  			if checkTestMode() then
 			 		return pathName

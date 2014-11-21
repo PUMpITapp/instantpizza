@@ -60,6 +60,7 @@ local lastDrinkIndex = 0
 local background = gfx.loadpng("Images/OrderPics/orderstep3.png") 
 local user = {}
 local newOrder = ...
+local network = true
 
 --Calls methods that builds GUI
 function buildGUI()
@@ -126,7 +127,7 @@ function onKey(key,state)
         if checkTestMode() then
           return pathName
         else
-          dofile(pathName)
+          assert(loadfile(pathName))(newOrder)
         end
       elseif(key == 'green') then
         --Go back to menu
@@ -138,11 +139,16 @@ function onKey(key,state)
         end
       elseif(key == 'yellow') then
         --Continue to QR-code page
-        pathName = "OrderFail.lua"
+        if(network)then
+          pathName = "OrderStep4.lua"
+        else
+          pathName = "OrderFail.lua"
+        end
         if checkTestMode() then
           return pathName
         else
           assert(loadfile(pathName))(newOrder)
+          gfx.screen:destroy()
         end
         elseif(key == 'blue') then
         	

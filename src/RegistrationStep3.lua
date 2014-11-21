@@ -77,15 +77,8 @@ function checkForm()
 
 	else
 		if lastForm then
-			if lastForm.laststate == newForm.laststate then
-				newForm = lastForm
-			else
-				for k,v in pairs(lastForm) do
-					if not newForm[k] then
-						newForm[k] = v
-					end
-				end
-			end
+			newForm = lastForm
+
 		end
 	end
 end
@@ -112,7 +105,6 @@ end
 function getPizzas()
 	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
 		currentPizzeria = newForm.pizzeria
-		--currentPizzeria.pizzas = io.readPizzas(currentPizzeria.id)
 	end
 end
 
@@ -139,14 +131,16 @@ function displayHighlightSurface()
 	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
 	
 	if isAlreadyPicked(getPizzaOnCoordinate(highlightPosY)) then
-	gfx.screen:copyfrom(deletePNG, nil , pos)
+		gfx.screen:copyfrom(deletePNG, nil , pos)
 	else
-	gfx.screen:copyfrom(highligtherPNG, nil , pos)
+		gfx.screen:copyfrom(highligtherPNG, nil , pos)
 	end
 end
 
 function getPizzaOnCoordinate(posY)
 	if checkTestMode() then
+		currentPizzeria = { ["Testing"] = "Works" }
+		return currentPizzeria
 	else
 		return currentPizzeria.pizzas[posY]
 	end
@@ -169,9 +163,11 @@ end
 
 function insertOnChoiceMenu(myPizza)
 
+	if checkTestMode() then
+		return myPizza
+	end
 	local isPicked = isAlreadyPicked(myPizza)
 	if not isPicked then
-		print(myPizza.name)
 		choices = choices + 1
 		pizza[choices] = myPizza
 	end
@@ -179,7 +175,7 @@ function insertOnChoiceMenu(myPizza)
 end
 
 function insertOnTable(pizzaTable)
-	newForm.pizzeria["pizza"] = pizzaTable
+	newForm.pizzeria.pizzas = pizzaTable
 end
 
 function deleteOnChoiceMenu(myPizza)
@@ -255,7 +251,7 @@ function onKey(key,state)
 	  		else
 	  			pizzaIsChoosen()
 	  		end
-	  		if pizzaIsChoosen() then
+	  		if isChosen then
 	  			pathName = "RegistrationReview.lua"
 	  			if checkTestMode() then
 			 		return pathName

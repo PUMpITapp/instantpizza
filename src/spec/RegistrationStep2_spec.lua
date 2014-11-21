@@ -120,3 +120,13 @@ describe("Test UserRegistration2, moveHighlightedInputField", function()
 		assert.are.same(expected_value,got)
 	end)
 end)
+
+describe("Test UserRegistration2", function()
+
+	it("Adding pizzerias to cart", function()
+		readPizzeriaFromFile()
+		local got = addPizzeria().Testing
+		local expected_value = "Works"
+		assert.are.same(expected_value,got)
+	end)
+end)

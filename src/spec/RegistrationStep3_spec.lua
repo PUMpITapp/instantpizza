@@ -132,3 +132,13 @@ describe("Test UserRegistration3, onKey", function()
 		assert.are.same(expected_value,got)
 		end)	
 end)
+
+describe("Test UserRegistration3", function()
+
+	it("Adding pizza as favourites", function()
+		
+		local got = insertOnChoiceMenu(getPizzaOnCoordinate(0)).Testing
+		local expected_value = "Works"
+		assert.are.same(expected_value,got)
+	end)
+end)

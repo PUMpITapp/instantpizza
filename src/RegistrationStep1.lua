@@ -46,6 +46,7 @@ end
 local text = chooseText()
 local gfx =  chooseGfx()
 local lastForm = ...
+--local account = ...
 
 --Position variables
 local xUnit = gfx.screen:get_width()/16
@@ -74,27 +75,21 @@ local newForm = {
 	zipCode ="",
 	city = "",
 	phone="",
-	email = ""
+	email = "",
+	pizzeria = {}
 	}
 
 local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
 function checkForm()
+
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
 		--Nothing
 	else
 		if lastForm then			
-			if lastForm.laststate == newForm.laststate then
 				newForm = lastForm
-			else
-				for key,value in pairs(lastForm) do
-					if not newForm[key] then
-						newForm[key] = value
-					end
-				end
-			end
 		end
 	end
 end

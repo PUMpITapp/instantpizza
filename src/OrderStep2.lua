@@ -149,28 +149,6 @@ function createMenu()
 
 end
 
--- function createMenuSurface()
---   -- menuSurface:clear()
---   -- menuSurface:fill({r = 255, g = 255, b = 255, a= 100})
---   -- for i=1,4 do
---   --   menuSurface:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
---   -- end
-
---   -- for i=1,4 do
---   --   menuSurface:copyfrom(tilePNG, nil, {x = startPosX + marginX, y= startPosY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
---   -- end
-
---   -- for i=1,#menu.sauces do
---   --   menuSurface:copyfrom(tilePNG, nil, {x = startPosX+ marginX * 2, y= startPosY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
---   --   text.print(menuSurface, arial, menu.sauces[i].name, startPosX+ marginX * 2, startPosY+ (i-1) * marginY, fieldWith, fieldHeight)
---   -- end
-
---   -- for i=1,#menu.salads do
---   --   menuSurface:copyfrom(tilePNG, nil, {x = startPosX+ marginX *3, y= startPosY+ (i-1)* marginY, w = fieldWith, h = fieldHeight})   
---   --   text.print(menuSurface, arial, menu.salads[i].name, startPosX+ marginX *3, startPosY+ (i-1)* marginY, fieldWith, fieldHeight)
---   -- end
--- end
-
 function displayMenu()
 
   -- gfx.screen:copyfrom(menuSurface)

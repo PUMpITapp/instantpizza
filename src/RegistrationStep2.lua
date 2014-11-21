@@ -67,22 +67,17 @@ function checkForm()
 
 	else
 		if lastForm then
-			if lastForm.laststate == newForm.laststate then
 				newForm = lastForm
-			else
-				for k,v in pairs(lastForm) do
-					if not newForm[k] then
-						newForm[k] = v
-					end
-				end
-			end
 		end
 	end
 end
 --Reads pizzerias from file. Returns a table containing pizzeria objects. 
 function readPizzeriaFromFile()
-	pizzerias = io.readPizzerias()
-
+	if checkTestMode() then
+		pizzerias = io.readPizzerias_test()
+	else
+		pizzerias = io.readPizzerias()
+	end
 end
 --Builds GUI
 function buildGUI()
@@ -111,12 +106,16 @@ function displayPizzerias()
 end
 --Find the selected pizzeria and send i to addToForm()
 function addPizzeria()
-	chosenPizzeria = pizzerias[highlightPosY]
-	addToForm(chosenPizzeria)
+	if checkTestMode() then
+		return pizzerias
+	else
+		chosenPizzeria = pizzerias[highlightPosY]
+		addToForm(chosenPizzeria)
+	end
 end
 --Adds pizzeria to form
 function addToForm(chosenPizzeria)
-	newForm["pizzeria"] = chosenPizzeria
+	newForm.pizzeria = chosenPizzeria
 end
 
 function displayHighlighter()

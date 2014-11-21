@@ -82,6 +82,7 @@ local upperBoundary = 1
 local menuSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
 
 local account = ...
+local editOrder = ...
 
 local newOrder = {
 	name = account.name,
@@ -89,13 +90,14 @@ local newOrder = {
 	phone = account.phone,
 	email = account.email,
   pizzeria = account.pizzeria,
-	pizzas = {},
-	drinks = {},
-	sauces = {},
-	salads = {},
 	totalPrice = 0
 }
-
+local order = {
+  pizzas = {},
+  sauces = {},
+  drinks = {},
+  salads = {}
+}
 local menu = {
   pizzas = {},
   drinks = {},
@@ -106,7 +108,7 @@ local menu = {
 local refToMenu = {}
 local refToOrder = {}
 local cart = {}
-
+local io = require "IOHandler"
 -- 
 --Calls methods that builds GUI
 function updateScreen()
@@ -117,6 +119,18 @@ function updateScreen()
   gfx.update()
 end
 
+function createOrder()
+  newOrder["order"] = refToOrder
+end
+function checkExistingOrder()
+  if not (editOrder.order == nil)then
+    refToOrder[1] = editOrder.order[1]
+    refToOrder[2] = editOrder.order[2]
+    refToOrder[3] = editOrder.order[3]
+    refToOrder[4] = editOrder.order[4]
+    newOrder.totalPrice = editOrder.totalPrice
+  end
+end
 function createMenu()
   if checkTestMode() then
   else
@@ -141,10 +155,10 @@ function createMenu()
     refToMenu[3] = menu.sauces
     refToMenu[4] = menu.salads
 
-    refToOrder[1] = newOrder.pizzas
-    refToOrder[2] = newOrder.drinks
-    refToOrder[3] = newOrder.sauces
-    refToOrder[4] = newOrder.salads
+    refToOrder[1] = order.pizzas
+    refToOrder[2] = order.drinks
+    refToOrder[3] = order.sauces
+    refToOrder[4] = order.salads
   end
 
 end
@@ -201,8 +215,6 @@ end
 
 function addToOrder(posX,posY)
 	local item = refToMenu[posX][posY]
-	cart[#cart+1] = item
-
 	if refToOrder[posX][item.name] == nil then
 		refToOrder[posX][item.name]=item
 		refToOrder[posX][item.name].amount=1
@@ -230,7 +242,6 @@ function showCart()
 	for i=1,#refToOrder do
 		for k, v in pairs(refToOrder[i]) do
 			text.print(gfx.screen,"lato","black","small", v.amount.." x "..v.name, 12.3 * xUnit, yUnit * 2.8 + 0.25*menuItems*yUnit, xUnit*3.8, yUnit)
-
 			menuItems = menuItems + 1
 		end
 	end
@@ -325,6 +336,7 @@ function onKey(key,state)
       if checkTestMode() then
         return pathName
       else
+        createOrder()
         assert(loadfile(pathName))(newOrder)
       end
     elseif key == 'yellow' then
@@ -398,8 +410,8 @@ end
 --Main method
 function main()
   createMenu()
+    checkExistingOrder()
   setUpperBoundary(highlightPosX)
-
   -- createMenuSurface()
 	updateScreen()
 end

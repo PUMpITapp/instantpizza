@@ -60,7 +60,7 @@ local lastDrinkIndex = 0
 local background = gfx.loadpng("Images/OrderPics/orderstep3.png") 
 local user = {}
 local newOrder = ...
-local network = true
+local network = false
 
 --Calls methods that builds GUI
 function buildGUI()

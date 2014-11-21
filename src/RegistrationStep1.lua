@@ -175,6 +175,10 @@ function onKey(key,state)
 	  		end
 	  	elseif(key == 'blue') then
 	  		-- Next Step
+	  		formValidation(newForm)
+	  		--if formValidation() return false then
+			--	print("fel")
+			--end
 	  		pathName = "RegistrationStep2.lua"
 	  		if checkTestMode() then
 	  			return pathName
@@ -187,6 +191,43 @@ function onKey(key,state)
 	  	end
 	  	updateScreen()
 	end
+end
+
+function formValidation(form)
+	emptyTextFields = {}
+	--Checks if a textfield is empty
+	for k,v in pairs(form) do
+		if string.len(form[k]) == 0 then
+			print("The " .. k .. " field is empty, please try again")
+			local textLength = false
+			table.insert(emptyTextFields, k)
+			--for k,v in pairs(emptyTextFields) do print(k,v) end
+		else
+			local textLength = true
+		end
+	end
+	--Checks if zipcode is 5 digits (Swedish standard)
+	if not string.match(form.zipCode, '%d%d%d%d%d') then
+		print("Incorrect zip-code, write five digits(no spaces)")
+		local zipCode = false
+	else
+		local zipCode = true
+	end
+	--Checks if phone number is 10 digits (Swedish standard)
+	if not string.match(form.phone, '%d%d%d%d%d%d%d%d%d%d') then
+		print("Incorrect phone number, write ten digits(no spaces)")
+		local phone = false
+	else
+		local phone = true
+	end
+	--Checks if the input email is valid
+	if not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') then
+		print("Incorrect email, use valid characters")
+		local email = false
+	else
+		local email = true
+	end
+
 end
 -- Below are functions that is required for the testing of this file
 

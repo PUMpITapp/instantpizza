@@ -5,7 +5,7 @@
 --Create user from input
 --Buttons
 --Transparency not working
-
+local onBox = false
 
 --- Checks if the file was called from a test file.
 -- @return #boolean true if called from a test file, indicating the file is being tested, else false
@@ -31,28 +31,42 @@ function chooseGfx()
   return tempGfx
 end
 
-function chooseText()
-  if not checkTestMode() then
-    tempText = require "write_text"
-  elseif checkTestMode() then
-    tempText = require "write_text_stub"
-  end
-  return tempText
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/MenuPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
 end
-local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
+
+-- function chooseText()
+--   if not checkTestMode() then
+--     tempText = require "write_text"
+--   elseif checkTestMode() then
+--     tempText = require "write_text_stub"
+--   end
+--   return tempText
+-- end
+
+-- local text = chooseText(checkTestMode())
 
 --Start of inputFields.
 inputFieldStart = gfx.screen:get_height()*(2.5/9)
 inputFieldY = gfx.screen:get_height()*(2.5/9)
 inputFieldEnd = inputFieldStart + gfx.screen:get_height()*(0.7/9)*5
 index = 0
-local background = gfx.loadpng("Images/MenuPics/menu.png")
 
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-gfx.update()
+  local backgroundPNG = gfx.loadpng("Images/MenuPics/menu.png")
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
+  gfx.update()
 end
 
 
@@ -61,7 +75,7 @@ function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then
 	  		--Go to Create Account
-        pathName = "RegistrationStep1.lua"
+        pathName = dir .. "RegistrationStep1.lua"
         if checkTestMode() then
           return pathName
         else
@@ -69,7 +83,7 @@ function onKey(key,state)
         end
       elseif(key == 'yellow') then
         --Go to About
-        pathName = "Tutorial.lua"
+        pathName = dir .. "Tutorial.lua"
         if checkTestMode() then
           return pathName
         else
@@ -77,7 +91,7 @@ function onKey(key,state)
         end
         elseif(key == 'blue') then
         --Go to About
-        pathName = "OrderStep1.lua"
+        pathName = dir .. "OrderStep1.lua"
           if checkTestMode() then
             return pathName
           else
@@ -88,10 +102,10 @@ function onKey(key,state)
 end
 
 --Main method
-function main()
+function onStart()
 	buildGUI()
 end
-main()
+onStart()
 
 
 

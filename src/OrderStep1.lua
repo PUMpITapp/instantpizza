@@ -1,3 +1,6 @@
+local onBox = true
+
+
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -20,6 +23,19 @@ function chooseGfx()
   return tempGfx
 end
 
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
+
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -28,13 +44,10 @@ function chooseText()
   end
   return tempText
 end
+
 local text = chooseText()
-local gfx =  chooseGfx()
 local io = require "IOHandler"
 
-local background = gfx.loadpng("Images/OrderPics/chooseaccount.png") 
-local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
-local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -50,7 +63,7 @@ local lowerBoundary = 1
 local upperBoundary = 0
 local inputFieldEnd = 0
 
-dofile("table.save.lua")
+dofile(dir .. "table.save.lua")
 
 function readUsers()
   userTable = io.readUserData()
@@ -59,7 +72,10 @@ function readUsers()
 end
 
 function displayUsers()
-  yCoord = startPosY
+  local yCoord = startPosY
+  local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
+  accountTile:premultiply()
+
   if not (userTable == nil) then
     for index,v in ipairs(userTable)do
       gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
@@ -70,6 +86,7 @@ function displayUsers()
   else
     text.print(gfx.screen,"lato","black","medium","No users registered!", startPosX*1.3, yCoord+marginY*0.2, xUnit*7, yUnit)
   end
+  accountTile:destroy()
 end
 
 function getUser()
@@ -79,14 +96,24 @@ end
 
 function displayHighlighter()
   if(upperBoundary >0)then
-    gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
+    local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
+    highlightTile:premultiply()
+    gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit},true)
+    highlightTile:destroy()
   end
 end
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-displayUsers()
-displayHighlighter()
+  displayBackground()
+  displayUsers()
+  displayHighlighter()
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/chooseaccount.png")  
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
 end
 
 function moveHighlightedInputField(key)
@@ -125,7 +152,7 @@ function onKey(key,state)
       end
       moveHighlightedInputField(key)
 	  elseif(key == 'ok') then
-      pathName = "OrderStep2.lua"
+      pathName = dir.. "OrderStep2.lua"
       if checkTestMode() then
         return pathName
       else
@@ -134,7 +161,7 @@ function onKey(key,state)
       end
     elseif(key == 'green') then
       --Go back to menu
-      pathName = "Menu.lua"
+      pathName = dir .. "Menu.lua"
       if checkTestMode() then
         return pathName
       else
@@ -163,11 +190,11 @@ function setValuesForTesting(value)
 end
 
 --Main method
-function main()
+function onStart()
   readUsers()
 	updateScreen()
 end
-main()
+onStart()
 
 
 

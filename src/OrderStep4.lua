@@ -10,6 +10,8 @@
 --   - which would mean that the file is being tested.
 -- Returns false if it was not,
 --   - which wold mean that the file was being used.  
+local onBox =true
+
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -32,6 +34,17 @@ function chooseGfx(underGoingTest)
   return tempGfx
 end
 
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 function chooseText(underGoingTest)
   if not underGoingTest then
     tempText = require "write_text"
@@ -40,25 +53,31 @@ function chooseText(underGoingTest)
   end
   return tempText
 end
+
 local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
 local newOrder = ...
-local background = gfx.loadpng("Images/OrderPics/OrderStep4.png") 
 local time = 0
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-text.print(gfx.screen,"lato","black","large",tostring(time).." min", xUnit*6.5, yUnit*3.5, 6* xUnit,200)
+  displayBackground()
+  text.print(gfx.screen,"lato","black","large",tostring(time).." min", xUnit*6.5, yUnit*3.5, 6* xUnit,200)
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/OrderStep4.png") 
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
 end
 
 function onKey(key,state)
 	if(state == 'up') then
       if(key == 'green') then
         --Go back to menu
-        pathName = "Menu.lua"
+        pathName = dir .. "Menu.lua"
         if checkTestMode() then
           return pathName
         else
@@ -67,6 +86,7 @@ function onKey(key,state)
 	  	end
 	end
 end
+
 function randomTime()
   math.randomseed(os.time())
   time = math.random(30,60)
@@ -80,13 +100,13 @@ function displayOrderInfo()
 
 end
 --Main method
-function main()
+function onStart()
   randomTime()
 	buildGUI()
   displayOrderInfo()
   gfx.update()
 end
-main()
+onStart()
 
 
 

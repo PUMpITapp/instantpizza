@@ -4,6 +4,8 @@
 --   - which would mean that the file is being tested.
 -- Returns false if it was not,
 --   - which wold mean that the file was being used.  
+local onBox = true
+
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -26,6 +28,17 @@ function chooseGfx()
   return tempGfx
 end
 
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -35,15 +48,11 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
-local gfx =  chooseGfx()
 
 --Start of inputFields.
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
-local tilePNG = gfx.loadpng("Images/OrderPics/ordertile.png")
-local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
-local background = gfx.loadpng("Images/OrderPics/orderstep2.png") 
 
 local highlightPosX = 1
 local highlightPosY = 1
@@ -104,11 +113,18 @@ local io = require "IOHandler"
 -- 
 --Calls methods that builds GUI
 function updateScreen()
-  gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=16*xUnit, h=9*yUnit})
+  displayBackground()
   displayMenu()
   displayHighlighter()
   showCart()
   gfx.update()
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/orderstep2.png") 
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=16*xUnit, h=9*yUnit})
+  backgroundPNG:destroy()
 end
 
 function createOrder()
@@ -158,6 +174,9 @@ end
 function displayMenu()
 
   -- gfx.screen:copyfrom(menuSurface)
+  local tilePNG = gfx.loadpng("Images/OrderPics/ordertile.png")
+  tilePNG:premultiply()
+
 
   for i =1,#menu.pizzas do
   	gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
@@ -185,6 +204,7 @@ function displayMenu()
     text.print(gfx.screen,"lato","black","small", menu.salads[i].price.."kr", startSaladX+(xUnit*2.94), startSaladY+(yUnit*0.1)+ (i-1)* marginY, fieldWith* 2, fieldHeight)
 
   end
+  tilePNG:destroy()
 
 end
 
@@ -201,7 +221,10 @@ function setUpperBoundary(column)
 end
 
 function displayHighlighter()
+  local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
+  highlighterPNG:premultiply()
   gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5})
+  highlighterPNG:destroy()
 end
 
 
@@ -308,7 +331,7 @@ function onKey(key,state)
 	if(state == 'up') then
 	  if(key == 'red') then
 	  	--Choose account and go to next step
-      pathName = "OrderStep1.lua"
+      pathName = dir .. "OrderStep1.lua"
       if checkTestMode() then
         return pathName
       else
@@ -316,7 +339,7 @@ function onKey(key,state)
       end
     elseif(key == 'green') then
       --Go back to menu
-      pathName = "Menu.lua"
+      pathName = dir .. "Menu.lua"
       if checkTestMode() then
         return pathName
       else
@@ -324,7 +347,7 @@ function onKey(key,state)
       end
     elseif(key == 'blue') then
       -- Go back to menu
-      pathName = "OrderStep3.lua"
+      pathName = dir ..  "OrderStep3.lua"
       if checkTestMode() then
         return pathName
       else
@@ -400,14 +423,13 @@ function setXValuesForTesting(value)
 end
 
 --Main method
-function main()
+function onStart()
   createMenu()
     checkExistingOrder()
   setUpperBoundary(highlightPosX)
-  -- createMenuSurface()
 	updateScreen()
 end
-main()
+onStart()
 
 
 

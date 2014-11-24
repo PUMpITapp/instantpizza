@@ -10,8 +10,19 @@ local text = {}
 -- @param w Width of textbox
 -- @param h Height of textbox
 
+local onBox = true
 local gfx = require "gfx"
 
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'fonts/spritesheets/?.png'
+  package.path = package.path .. ';' .. sys.root_path() .. 'fonts/lookups/?.lua'
+  dir = sys.root_path()
+else
+  gfx = require "gfx"
+    sys = {}
+    sys.root_path = function () return '' end
+    dir = ""
+end
 function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
   fontFace = string.lower(fontFace)
   fontColor = string.lower(fontColor)

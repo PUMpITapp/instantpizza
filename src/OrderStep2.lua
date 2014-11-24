@@ -79,8 +79,8 @@ local fieldHeight = 0.5 * yUnit
 local lowerBoundary = 1
 local middleBoundary = 1
 local upperBoundary = 1
-
-local menuSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
+local tempCopy = nil
+local tempCoord = {}
 
 local account = ...
 local editOrder = ...
@@ -113,7 +113,7 @@ local io = require "IOHandler"
 -- 
 --Calls methods that builds GUI
 function updateScreen()
-  displayBackground()
+      displayBackground()
   displayMenu()
   displayHighlighter()
   showCart()
@@ -223,8 +223,20 @@ end
 function displayHighlighter()
   local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
   highlighterPNG:premultiply()
-  gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5},true)
-  highlighterPNG:destroy()
+  local coord = {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5}
+  
+  if tempCopy == nil then
+    tempCopy = gfx.new_surface(coord.w, coord.h)
+    tempCopy:copyfrom(gfx.screen,coord,coord)
+    tempCoord = coord
+  else
+    gfx.screen:copyfrom(tempCopy,tempCoord,tempCoord,true)
+    tempCopy:copyfrom(gfx.screen,coord,coord)
+    tempCoord = coord
+  end
+    gfx.screen:copyfrom(highlighterPNG, nil, coord,true)
+    highlighterPNG:destroy()
+    gfx.update()
 end
 
 
@@ -250,7 +262,7 @@ function deleteOrder(posX,posY)
   end
 
 end
-
+--could be optimized
 function showCart()
 	local menuItems = 0
 	-- print(#refToOrder)
@@ -324,7 +336,7 @@ function moveHighlight(key)
    		setCoordinates(highlightPosX,highlightPosY)
 
   end
-      updateScreen()
+      displayHighlighter()
 end
 
 function onKey(key,state)
@@ -335,6 +347,7 @@ function onKey(key,state)
       if checkTestMode() then
         return pathName
       else
+        tempCopy:destroy()
         dofile(pathName)
       end
     elseif(key == 'green') then
@@ -352,6 +365,7 @@ function onKey(key,state)
         return pathName
       else
         createOrder()
+        tempCopy:destroy()
         assert(loadfile(pathName))(newOrder)
       end
     elseif key == 'yellow' then
@@ -423,6 +437,7 @@ function onStart()
   createMenu()
     checkExistingOrder()
   setUpperBoundary(highlightPosX)
+
 	updateScreen()
 end
 onStart()

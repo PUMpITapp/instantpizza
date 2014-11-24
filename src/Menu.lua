@@ -9,8 +9,7 @@
 --Create user from input
 --Buttons
 --Transparency not working
-local onBox = true
-progress = "inMenu"
+local onBox = false
 
 --- Checks if the file was called from a test file.
 -- @return #boolean true if called from a test file, indicating the file is being tested, else false

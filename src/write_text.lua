@@ -40,7 +40,8 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
 
   local font = require ("fonts/lookups/" .. fontFace .. "_" .. fontSize)
   local font_spritesheet = gfx.loadpng("fonts/spritesheets/" .. fontFace .. "_" .. fontSize .. "_" .. fontColor .. ".png")
-
+  font_spritesheet:premultiply()
+  
   local sx = x -- Start x position on the surface
   local surface_w = surface:get_width()
   local surface_h = surface:get_height()
@@ -79,6 +80,7 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
       end
 
   end
+  font_spritesheet:destroy()
 end
 
 --- Returns the width of the string in pixels

@@ -66,6 +66,9 @@ local lowerBoundary = 1
 local upperBoundary = 0
 local inputFieldEnd = 0
 
+local tempCopy = nil
+local tempCoord = {}
+
 dofile(dir .. "table.save.lua")
 
 function readUsers()
@@ -107,9 +110,22 @@ function displayHighlighter()
   if(upperBoundary >0)then
     local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
     highlightTile:premultiply()
-    gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit},true)
-    highlightTile:destroy()
+    local coord = {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit}
+    
+    if tempCopy == nil then
+      tempCopy = gfx.new_surface(coord.w, coord.h)
+      tempCopy:copyfrom(gfx.screen,coord,coord)
+      tempCoord = coord
+    else
+      gfx.screen:copyfrom(tempCopy,tempCoord,tempCoord,true)
+      tempCopy:copyfrom(gfx.screen,coord,coord)
+      tempCoord = coord
+    end
+    
+      gfx.screen:copyfrom(highlightTile, nil, coord ,true)
+      highlightTile:destroy()
   end
+  gfx.update()
   progress = "displayHighlighter:DONE"
 end
 --Calls methods that builds GUI
@@ -143,7 +159,6 @@ function moveHighlightedInputField(key)
       highlightPosY = 1
     end
 end
-updateScreen()
 end
 
 function updateScreen()
@@ -168,6 +183,7 @@ function onKey(key,state)
       if checkTestMode() then
         return pathName
       else
+
         account = getUser()
         assert(loadfile(pathName))(account)
       end

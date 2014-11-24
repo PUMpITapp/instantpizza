@@ -5,11 +5,10 @@
 --Create user from input
 --Buttons
 --Transparency not working
+
+
 --- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then

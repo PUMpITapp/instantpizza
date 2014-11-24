@@ -56,7 +56,7 @@ local qrCode = nil
 
 local qrSurface = gfx.new_surface(xUnit, yUnit)
 local background = gfx.loadpng("Images/OrderPics/orderNoNetwork.png") 
-local order = ...
+local newOrder = ...
 
 --Calls methods that builds GUI
 function buildGUI()
@@ -68,23 +68,19 @@ end
 function generateOrder()
   if checkTestMode() then
   else
-    stringToQR = order.name.."\n"..order.address.."\n"..order.phone.."\n"..order.email.."\n"
-    for key, value in pairs(order.pizzas) do
-      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
-    end
-    for key, value in pairs(order.drinks) do
-      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
-    end
-    for key, value in pairs(order.sauces) do
-      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
-    end
-    for key, value in pairs(order.salads) do
-      stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+
+    stringToQR = newOrder.name.."\n"..newOrder.address.."\n"..newOrder.phone.."\n"..newOrder.email.."\n"
+    for i = 1, #newOrder.order do
+      for key,value in pairs(newOrder.order[i])do
+        print(value)
+        stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
+      end
     end
   end
 end
 
 function generateQR()
+  print(stringToQR)
   local ok, qrCode = qrencode.qrcode(stringToQR)
   if not ok then
       print(qrCode)
@@ -123,7 +119,7 @@ function displayText()
     text.print(gfx.screen, "lato","black","small", "There seems to be a problem with your internet connection.",textPosX,textPosY,9 *xUnit, 1 *yUnit)
     text.print(gfx.screen, "lato","black","small", "Do not worry, your order is saved as a QR-code on the left.",textPosX,textPosY + 0.5 *yUnit,9 *xUnit, 1 *yUnit)
     text.print(gfx.screen, "lato","black","small", "Please scan the QR-code and send it to:",textPosX,textPosY + yUnit,9 *xUnit, 1 *yUnit)
-    text.print(gfx.screen, "lato","black","medium", order.pizzeria.name..":",textPosX,textPosY + 2 *yUnit,9 *xUnit, 1 *yUnit)
+    text.print(gfx.screen, "lato","black","medium", newOrder.pizzeria.name..":",textPosX,textPosY + 2 *yUnit,9 *xUnit, 1 *yUnit)
     text.print(gfx.screen, "lato","black","medium", "0705834633",textPosX,textPosY + 2.5 *yUnit,9 *xUnit, 1 *yUnit)
   end
 end

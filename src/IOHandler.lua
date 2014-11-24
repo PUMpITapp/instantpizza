@@ -139,7 +139,8 @@ function ioHandler.saveUserTable(userTable)
 end
 function ioHandler.updateUser(userForm)
   users = table.load("UserData.lua")
-  table.remove(users, userTable.editIndex)
-  ioHandler.saveUserTable(userForm)
+  table.remove(users,userTable.editIndex)
+  ioHandler.saveUserTable(users)
+  ioHandler.saveUserData(userForm)
 end
 return ioHandler

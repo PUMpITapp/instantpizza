@@ -59,7 +59,6 @@ local highlightPosY = 1
 local marginY = yUnit*0.7
 local upperBoundary = 6
 local lowerBoundary = 1
-
 local inputFieldTable = {}
 inputFieldTable[1] = "name"
 inputFieldTable[2] = "address"
@@ -83,17 +82,20 @@ local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
 function checkForm()
-
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
-		--Nothing
 	else
-		if lastForm then			
+		if lastForm then
 				newForm = lastForm
 		end
 	end
 end
 
+function checkEditMode()
+	if(newForm.editMode == "true")then
+		newForm.laststate = "RegistrationStep1.lua"
+	end
+end
 --Calls methods that builds GUI
 function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
@@ -158,6 +160,7 @@ function onKey(key,state)
 			if checkTestMode() then
 			 	return pathName
 			else
+					print(newForm.laststate)
 				assert(loadfile(pathName))(newForm)
 			end
 	  	elseif(key == 'green') then
@@ -291,6 +294,7 @@ end
 --Main method
 function main()
 	checkForm()
+	checkEditMode()
 	updateScreen()
 	newForm.currentInputField = "name"
 end

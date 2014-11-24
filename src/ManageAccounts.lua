@@ -66,6 +66,10 @@ function readUsers()
   end
 end
 
+function getNoOfPages()
+  noOfPages = math.ceil(#userTable/4)
+end
+
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -108,14 +112,20 @@ function displayUsers()
 end
 
 function getUser()
-  user = userTable[highlightPosY]
+  userIndex = (4*(currentPage-1)+highlightPosY)
+  user = userTable[userIndex]
+  user["editMode"] = "true"
+  user["editIndex"] = userIndex
   return user
 end
+
 function displayArrows()
-
-  gfx.screen:copyfrom(leftArrow, nil, {x = xUnit, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*10 , h =yUnit})
-  gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*7, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*10 , h =yUnit})
-
+  if(noOfPages > 1 and currentPage < noOfPages)then
+      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+  end
+  if(currentPage > 1)then
+      gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+  end
 end
 
 function displayHighlighter()
@@ -126,6 +136,7 @@ end
 --Calls methods that builds GUI
 function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+getNoOfPages()
 displayUsers()
 displayHighlighter()
 displayArrows()
@@ -154,10 +165,11 @@ function updateScreen()
   gfx.update()
 end
 function deleteUser()
-  --print(user.email)
-  table.remove(userTable,highlightPosY)
+  removeIndex = (4*(currentPage-1)+highlightPosY)
+  table.remove(userTable,removeIndex)
   io.saveUserTable(userTable)
-  highlightPosY = 1
+  currentPage = 1
+  startingIndex = 1
   updateScreen()
 
 end
@@ -183,14 +195,6 @@ function onKey(key,state)
         return key
       end
       changeCurrentPage(key)
-	  elseif(key == 'ok') then
-      pathName = "OrderStep2.lua"
-      if checkTestMode() then
-        return pathName
-      else
-        account = getUser()
-        assert(loadfile(pathName))(account)
-      end
     elseif(key == 'green') then
       --Go back to menu
       pathName = "Menu.lua"
@@ -200,7 +204,6 @@ function onKey(key,state)
         dofile(pathName)
       end
     elseif(key == 'yellow') then
-      --Go back to menu
       pathName = "RegistrationStep1.lua"
       if checkTestMode() then
         return pathName

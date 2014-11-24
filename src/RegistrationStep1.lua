@@ -171,9 +171,7 @@ function onKey(key,state)
 	  	elseif(key == 'blue') then
 	  		-- Next Step
 	  		formValidation(newForm)
-	  		--if formValidation() return false then
-			--	print("fel")
-			--end
+	  		
 	  		pathName = "RegistrationStep2.lua"
 	  		if checkTestMode() then
 	  			return pathName
@@ -190,21 +188,26 @@ end
 
 function formValidation(form)
 	emptyTextFields = {}
+	invalidFields = {}
 	--Checks if a textfield is empty
 	for k,v in pairs(form) do
-		if string.len(form[k]) == 0 then
-			print("The " .. k .. " field is empty, please try again")
-			local textLength = false
-			table.insert(emptyTextFields, k)
-			--for k,v in pairs(emptyTextFields) do print(k,v) end
+		if k == "pizzeria" then
 		else
-			local textLength = true
+			if string.len(form[k]) == 0 then
+				local textLength = false
+				table.insert(emptyTextFields, k)
+			else
+				local textLength = true
+			end
 		end
 	end
+
+	for k,v in pairs(emptyTextFields) do print(k,v) end
 	--Checks if zipcode is 5 digits (Swedish standard)
 	if not string.match(form.zipCode, '%d%d%d%d%d') then
 		print("Incorrect zip-code, write five digits(no spaces)")
 		local zipCode = false
+		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 	else
 		local zipCode = true
 	end
@@ -212,6 +215,7 @@ function formValidation(form)
 	if not string.match(form.phone, '%d%d%d%d%d%d%d%d%d%d') then
 		print("Incorrect phone number, write ten digits(no spaces)")
 		local phone = false
+		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
 	else
 		local phone = true
 	end
@@ -219,9 +223,12 @@ function formValidation(form)
 	if not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') then
 		print("Incorrect email, use valid characters")
 		local email = false
+		invalidFields["email"] = "Incorrect email, use valid characters"
+		
 	else
 		local email = true
 	end
+	--for k,v in pairs(invalidFields) do print(k,v) end
 
 end
 -- Below are functions that is required for the testing of this file

@@ -1,5 +1,5 @@
 local onBox = true
-
+progress = "OrdeSte"
 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
@@ -25,6 +25,7 @@ end
 
 
 if onBox == true then
+  progress = "loadingPackages..."
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
   dir = sys.root_path()
 
@@ -44,9 +45,11 @@ function chooseText()
   end
   return tempText
 end
-
+progress = "loadText..."
 local text = chooseText()
+progress = "loadIOHANDLER..."
 local io = require "IOHandler"
+progress = "loadIOHandler:DONE"
 
 
 local xUnit = gfx.screen:get_width()/16
@@ -66,19 +69,22 @@ local inputFieldEnd = 0
 dofile(dir .. "table.save.lua")
 
 function readUsers()
+  progress = "readUsers..."
   userTable = io.readUserData()
   if userTable == nil then
   end
+  progress = "readUsers:DONE"
 end
 
 function displayUsers()
+  progress = "displayUsers..."
   local yCoord = startPosY
   local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
   accountTile:premultiply()
 
   if not (userTable == nil) then
     for index,v in ipairs(userTable)do
-      gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
+      gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)
       text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
       upperBoundary = index
       yCoord = yCoord+marginY
@@ -87,26 +93,32 @@ function displayUsers()
     text.print(gfx.screen,"lato","black","medium","No users registered!", startPosX*1.3, yCoord+marginY*0.2, xUnit*7, yUnit)
   end
   accountTile:destroy()
+  progress = "displayUsers:DONE"
 end
 
 function getUser()
+  progress = "getUser..."
   account = userTable[highlightPosY]
   return account
 end
 
 function displayHighlighter()
+  progress = "displayHighlighter..."
   if(upperBoundary >0)then
     local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
     highlightTile:premultiply()
     gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit},true)
     highlightTile:destroy()
   end
+  progress = "displayHighlighter:DONE"
 end
 --Calls methods that builds GUI
 function buildGUI()
+  progress = "buildGUI..."
   displayBackground()
   displayUsers()
   displayHighlighter()
+  progress = "buildGUI:DONE"
 end
 
 function displayBackground()
@@ -191,7 +203,9 @@ end
 
 --Main method
 function onStart()
+  progress = "readUsers..."
   readUsers()
+  progress = "updateScreen..."
 	updateScreen()
 end
 onStart()

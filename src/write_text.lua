@@ -11,12 +11,13 @@ local text = {}
 -- @param h Height of textbox
 
 local onBox = true
-local gfx = require "gfx"
+progress = "write_text"
 
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'fonts/spritesheets/?.png'
   package.path = package.path .. ';' .. sys.root_path() .. 'fonts/lookups/?.lua'
   dir = sys.root_path()
+  print "hello"
 else
   gfx = require "gfx"
     sys = {}
@@ -54,7 +55,9 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
 
   for i = 1, #text do -- For each character in the text
       local c = text:sub(i,i) -- Get the character
- 
+      if c == ' ' then
+        x = math.floor(x + font.chars[1].width)
+      else
       for j = 1, #font.chars do -- For each character in the font
           local fc = font.chars[j] -- Get the character information
           if fc.char == c then
@@ -72,6 +75,7 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
 
               break
           end
+      end
       end
 
   end

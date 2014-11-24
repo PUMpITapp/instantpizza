@@ -1,6 +1,15 @@
 local ioHandler = {}
+local onBox = true
+progress = "IOhandler"
+if onBox == true then
+  dir = sys.root_path()
+else
+    sys = {}
+    sys.root_path = function () return '' end
+    dir = ""
+end
 
-dofile("table.save.lua")
+dofile(dir .. "table.save.lua")
 --Create new user
 User = {}
 function User:new(name,address,zipCode,city,phone,email,pizzeria)
@@ -53,19 +62,19 @@ end
 --Function to read users. Users are stored in a table containing user "objects"
 function ioHandler.readUserData()
   local usersTable = {}
-  usersTable = table.load("UserData.lua")
+  usersTable = table.load(dir .. "UserData.lua")
   return usersTable
 end
 -- Function to read pizzerias. Are stored in a table, every pizzeria has a table of pizzas. 
 function ioHandler.readPizzerias()
   local pizzeriaTable = {}
-  pizzeriaTable = table.load("PizzeriaData.lua")
+  pizzeriaTable = table.load(dir .. "PizzeriaData.lua")
   return pizzeriaTable
 end
 -- Test function that reads "pizzerias"
 function ioHandler.readPizzerias_test()
   local pizzeriaTable = {}
-  pizzeriaTable = table.load("PizzeriaData_testing.lua")
+  pizzeriaTable = table.load(dir .. "PizzeriaData_testing.lua")
   return pizzeriaTable
 end
 
@@ -107,7 +116,7 @@ function ioHandler.addTestPizzerias()
   Pizzeria2 = Pizzeria:new("Pizzeria Baguetten","pizza2.png","5.0",pizzas2,drinks2)
   pizzeriasTable[1] = Pizzeria1
   pizzeriasTable[2] = Pizzeria2
-  table.save(pizzeriasTable,"PizzeriaData.lua")
+  table.save(pizzeriasTable,dir .. "PizzeriaData.lua")
 end
 
 function ioHandler.saveUserData(userForm)
@@ -123,10 +132,10 @@ function ioHandler.saveUserData(userForm)
     end
   end
   usersTable[j]=user
-  table.save(usersTable,"UserData.lua")
+  table.save(usersTable,dir .. "UserData.lua")
 end
 function ioHandler.saveUserTable(userTable)
-  table.save(userTable,"UserData.lua")
+  table.save(userTable,dir .. "UserData.lua")
 end
 function ioHandler.updateUser(userForm)
   users = table.load("UserData.lua")

@@ -179,27 +179,27 @@ function displayMenu()
 
 
   for i =1,#menu.pizzas do
-  	gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+  	gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.pizzas[i].name,startPosX+(xUnit*0.1), startPosY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.pizzas[i].price.."kr", startPosX+(xUnit*2.94), startPosY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
 
   end
 
   for i =1,#menu.drinks do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startDrinksX, y= startDrinksY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
+    gfx.screen:copyfrom(tilePNG, nil, {x = startDrinksX, y= startDrinksY+ (i-1)* marginY , w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.drinks[i].name, startDrinksX+(xUnit*0.1), startDrinksY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.drinks[i].price.."kr", startDrinksX+(xUnit*2.94), startDrinksY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
 
   end
   for i=1,#menu.sauces do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startSauceX, y= startSauceY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
+    gfx.screen:copyfrom(tilePNG, nil, {x = startSauceX, y= startSauceY+ (i-1) * marginY, w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.sauces[i].name, startSauceX+(xUnit*0.1), startSauceY+(yUnit*0.1)+ (i-1) * marginY, fieldWith * 2, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.sauces[i].price.."kr", startSauceX+(xUnit*2.94), startSauceY+(yUnit*0.1)+ (i-1) * marginY, fieldWith * 2, fieldHeight)
 
   end
 
   for i=1,#menu.salads do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startSaladX, y= startSaladY+ (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+    gfx.screen:copyfrom(tilePNG, nil, {x = startSaladX, y= startSaladY+ (i-1)* marginY, w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.salads[i].name, startSaladX+(xUnit*0.1), startSaladY+(yUnit*0.1)+ (i-1)* marginY, fieldWith* 2, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.salads[i].price.."kr", startSaladX+(xUnit*2.94), startSaladY+(yUnit*0.1)+ (i-1)* marginY, fieldWith* 2, fieldHeight)
 
@@ -223,7 +223,7 @@ end
 function displayHighlighter()
   local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
   highlighterPNG:premultiply()
-  gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5})
+  gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5},true)
   highlighterPNG:destroy()
 end
 
@@ -338,13 +338,13 @@ function onKey(key,state)
         dofile(pathName)
       end
     elseif(key == 'green') then
-      --Go back to menu
-      pathName = dir .. "Menu.lua"
+
       if checkTestMode() then
-        return pathName
-      else
-        dofile(pathName)
+        return key
       end
+      addToOrder(column,row)
+      updateScreen()
+
     elseif(key == 'blue') then
       -- Go back to menu
       pathName = dir ..  "OrderStep3.lua"
@@ -382,11 +382,7 @@ function onKey(key,state)
       end
       moveHighlight(key)
 	  elseif key == 'ok' then
-      if checkTestMode() then
-        return key
-      end
-	  	addToOrder(column,row)
-          updateScreen()
+
    	end
 
 	end

@@ -115,11 +115,11 @@ for k,v in pairs(qrCode) do
   for key, value in pairs(v)do
     -- print(key,value)
     if(value >0) then
-      qrSurface:fill({0,0,0,0})
+      qrSurface:fill({0,0,0,255})
       gfx.screen:copyfrom(qrSurface,nil,{x =startPosX+ i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
 
     elseif(value<0) then
-      qrSurface:fill({255,255,255,0})
+      qrSurface:fill({255,255,255,255})
       gfx.screen:copyfrom(qrSurface,nil,{x =startPosX +i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
 
     end

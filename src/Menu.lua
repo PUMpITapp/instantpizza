@@ -1,6 +1,16 @@
 
+
 --- Tells if the program shall be run on the box or not
-local onBox = false
+
+--TODO:
+--Another background and text font/color
+--Real graphic components
+--Inputs from user, read and write
+--Create user from input
+--Buttons
+--Transparency not working
+local onBox = true
+progress = "inMenu"
 
 --- Checks if the file was called from a test file.
 -- @return #boolean true if called from a test file, indicating the file is being tested, else false
@@ -58,6 +68,7 @@ function onKey(key,state)
         if checkTestMode() then
           return pathName
         else
+          print(pathName)
           dofile(pathName)
         end
       elseif(key == 'yellow') then
@@ -74,6 +85,7 @@ function onKey(key,state)
           if checkTestMode() then
             return pathName
           else
+            
             dofile(pathName)
         end
 	  	end

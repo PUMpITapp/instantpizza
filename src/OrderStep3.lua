@@ -141,14 +141,6 @@ function onKey(key,state)
           editOrder = newOrder
           assert(loadfile(pathName))(editOrder)
         end
-      elseif(key == 'green') then
-        --Go back to menu
-        pathName = dir .. "Menu.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          dofile(pathName)
-        end
       elseif(key == 'yellow') then
         --Continue to QR-code page
 	network=internet("OMG")

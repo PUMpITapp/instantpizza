@@ -44,6 +44,7 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
+print("inReg")
 local gfx =  chooseGfx()
 local lastForm = ...
 --local account = ...
@@ -109,6 +110,7 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayFormData()
+	print("print")
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)

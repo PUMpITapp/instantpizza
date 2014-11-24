@@ -23,6 +23,7 @@ else
     sys.root_path = function () return '' end
     dir = ""
 end
+
 function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
   fontFace = string.lower(fontFace)
   fontColor = string.lower(fontColor)
@@ -53,6 +54,7 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
 
   for i = 1, #text do -- For each character in the text
       local c = text:sub(i,i) -- Get the character
+ 
       for j = 1, #font.chars do -- For each character in the font
           local fc = font.chars[j] -- Get the character information
           if fc.char == c then
@@ -71,6 +73,7 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
               break
           end
       end
+
   end
 end
 

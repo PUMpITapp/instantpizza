@@ -55,7 +55,7 @@ function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then
 	  		--Go to Create Account
-        pathName = dir .. "RegistrationStep1.lua"
+        pathName = dir .. "ManageAccounts.lua"
         if checkTestMode() then
           return pathName
         else

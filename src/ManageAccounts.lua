@@ -203,6 +203,13 @@ function onKey(key,state)
       else
         dofile(pathName)
       end
+      elseif(key == 'blue') then
+      pathName = "RegistrationStep1.lua"
+      if checkTestMode() then
+        return pathName
+      else
+        dofile(pathName)
+      end
     elseif(key == 'yellow') then
       pathName = "RegistrationStep1.lua"
       if checkTestMode() then

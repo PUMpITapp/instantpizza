@@ -1,8 +1,5 @@
 --- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -13,9 +10,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -25,6 +21,7 @@ function chooseGfx()
   return tempGfx
 end
 
+--- Chooses the text
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -71,7 +68,8 @@ function checkForm()
 		end
 	end
 end
---Reads pizzerias from file. Returns a table containing pizzeria objects. 
+
+--- Reads pizzerias from file and puts them in the pizzeria table.
 function readPizzeriaFromFile()
 	if checkTestMode() then
 		pizzerias = io.readPizzerias_test()
@@ -79,6 +77,7 @@ function readPizzeriaFromFile()
 		pizzerias = io.readPizzerias()
 	end
 end
+
 --Builds GUI
 function buildGUI()
 	gfx.screen:fill({241,248,233})
@@ -87,7 +86,7 @@ function buildGUI()
 	displayPizzerias()
 end
 
---Display pizzerias. TODO: Add functionality to display more than four pizzerias. And display only in zip code area
+--- Display pizzerias. TODO: Add functionality to display more than four pizzerias. And display only in zip code area
 function displayPizzerias()
 	yCoord = startPosY
 	for index,value in ipairs(pizzerias) do
@@ -104,7 +103,9 @@ function displayPizzerias()
 
 	end
 end
---Find the selected pizzeria and send i to addToForm()
+
+--Finds the selected pizzeria and sends i to addToForm()
+-- @return pizzerias Returns the pizzerias table
 function addPizzeria()
 	if checkTestMode() then
 		return pizzerias
@@ -113,15 +114,20 @@ function addPizzeria()
 		addToForm(chosenPizzeria)
 	end
 end
---Adds pizzeria to form
+
+--- Adds a pizzeria to form
+-- @param chosenPizzeria The pizzeria chosen by the user
 function addToForm(chosenPizzeria)
 	newForm.pizzeria = chosenPizzeria
 end
 
+--- Displays the highlighter that highlights different choices
 function displayHighlighter()
   gfx.screen:copyfrom(highlight, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
 end
---Moves the current inputField
+
+--- Moves the current inputField
+-- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
   if(key == 'up')then
@@ -140,11 +146,16 @@ end
 updateScreen()
 end
 
+--- Updates the screen.
 function updateScreen()
 	buildGUI()
 	gfx.update()
 end
 
+--- Gets input from user and re-directs according to input
+-- @param #string key The key that has been pressed
+-- @param #string state The state of the key-press
+-- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
 	--TODO”
 	if(state == 'up') then

@@ -28,38 +28,13 @@ describe("Test UserRegistration2, checkForm()", function()
 		lastForm = returnLastForm()
 		assert.are.same(newForm,lastForm)
 	end)
-	it("Forms not equal, states not equal", function()
-		createFormsForTest("Not equal, State not equal")
-		checkForm()
-		newForm = returnNewForm()
-		lastForm = returnLastForm()
-		for key,value in pairs(lastForm) do
-			if key == "laststate" then
-				assert.are_not.equal(lastForm[key],newForm[key])
-			else
-				assert.are.same(lastForm[key],newForm[key])
-			end
-		end
-	end)
+
 	it("Forms equal, states equal", function()
 		createFormsForTest("Equal, State equal")
 		checkForm()
 		newForm = returnNewForm()
 		lastForm = returnLastForm()
 		assert.are.same(newForm,lastForm)
-	end)
-	it("Forms equal, states not equal", function()
-		createFormsForTest("Equal, State not equal")
-		checkForm()
-		newForm = returnNewForm()
-		lastForm = returnLastForm()
-		for key,value in pairs(lastForm) do
-			if key == "laststate" then
-				assert.are_not.equal(lastForm[key],newForm[key])
-			else
-				assert.are.same(lastForm[key],newForm[key])
-			end
-		end
 	end)
 end)
 

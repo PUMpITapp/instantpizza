@@ -59,7 +59,10 @@ local highlightPosY = 1
 local marginY = yUnit*0.7
 local upperBoundary = 6
 local lowerBoundary = 1
+local errorCounter = 0
 
+local emptyTextFields = {}
+local invalidFields = {}
 local inputFieldTable = {}
 inputFieldTable[1] = "name"
 inputFieldTable[2] = "address"
@@ -99,7 +102,25 @@ function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 displayFormData()
 displayHighlighter()
+displayErrorData()
 end
+
+function displayErrorData()
+	local counter = 0
+	if (#emptyTextFields) == 0 then
+		--Nothing
+	else
+		if (errorCounter == 0) then
+			text.print(gfx.screen,"lato","black","small", "Please fill out all fields",startPosXText,startPosYText+marginY*6,500, 500)
+		end
+	end
+
+	for k,v in pairs(invalidFields) do
+		text.print(gfx.screen,"lato","black","small", v,startPosXText,startPosYText+marginY*(6+(counter*0.4)),500, 500)
+		counter = counter + 1
+	end
+end
+
 
 function displayHighlighter()
   gfx.screen:copyfrom(highlight, nil, {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 7, h =yUnit*0.5})
@@ -170,13 +191,17 @@ function onKey(key,state)
 	  		end
 	  	elseif(key == 'blue') then
 	  		-- Next Step
-	  		formValidation(newForm)
-	  		
-	  		pathName = "RegistrationStep2.lua"
-	  		if checkTestMode() then
-	  			return pathName
+	  		emptyFormValidation(newForm)
+	  		--invalidFormValidation(newForm)
+	  		if ((#emptyTextFields) == 0) and (errorCounter == 0) then
+	  			pathName = "RegistrationStep2.lua"
+	  			if checkTestMode() then
+	  				return pathName
+	  			else
+	  				assert(loadfile(pathName))(newForm)
+	  			end
 	  		else
-	  			assert(loadfile(pathName))(newForm)
+	  			--Nothing
 	  		end
 	  	else
 	  		--More options for buttonpress?
@@ -186,47 +211,54 @@ function onKey(key,state)
 	end
 end
 
-function formValidation(form)
+function emptyFormValidation(form)
 	emptyTextFields = {}
-	invalidFields = {}
+
 	--Checks if a textfield is empty
 	for k,v in pairs(form) do
 		if k == "pizzeria" then
 		else
 			if string.len(form[k]) == 0 then
-				local textLength = false
 				table.insert(emptyTextFields, k)
 			else
-				local textLength = true
+				-- Nothing
 			end
 		end
-	end
 
-	for k,v in pairs(emptyTextFields) do print(k,v) end
+	end
+end
+
+function invalidFormValidation(form)
+	invalidFields = {}
+	errorCounter = 0
+	--for k,v in pairs(emptyTextFields) do print(k,v) end
 	--Checks if zipcode is 5 digits (Swedish standard)
-	if not string.match(form.zipCode, '%d%d%d%d%d') then
+	if (not string.match(form.zipCode, '%d%d%d%d%d') and string.len(form.zipCode) ~= 0) then
 		print("Incorrect zip-code, write five digits(no spaces)")
-		local zipCode = false
+		
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
+		errorCounter = errorCounter + 1
 	else
-		local zipCode = true
+		
 	end
 	--Checks if phone number is 10 digits (Swedish standard)
-	if not string.match(form.phone, '%d%d%d%d%d%d%d%d%d%d') then
+	if (not string.match(form.phone, '%d%d%d%d%d%d%d%d%d%d') and  string.len(form.phone) ~= 0) then
 		print("Incorrect phone number, write ten digits(no spaces)")
-		local phone = false
+		
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
+		errorCounter = errorCounter + 1
 	else
-		local phone = true
+		
 	end
 	--Checks if the input email is valid
-	if not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') then
+	if (not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') and  string.len(form.email) ~= 0) then
 		print("Incorrect email, use valid characters")
-		local email = false
+		
 		invalidFields["email"] = "Incorrect email, use valid characters"
+		errorCounter = errorCounter + 1
 		
 	else
-		local email = true
+		
 	end
 	--for k,v in pairs(invalidFields) do print(k,v) end
 
@@ -293,6 +325,7 @@ function main()
 	checkForm()
 	updateScreen()
 	newForm.currentInputField = "name"
+	invalidFormValidation(newForm)
 end
 main()
 

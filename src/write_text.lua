@@ -10,7 +10,20 @@ local text = {}
 -- @param w Width of textbox
 -- @param h Height of textbox
 
-local gfx = require "gfx"
+local onBox = true
+progress = "write_text"
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'fonts/spritesheets/?.png'
+  package.path = package.path .. ';' .. sys.root_path() .. 'fonts/lookups/?.lua'
+  dir = sys.root_path()
+  print "hello"
+else
+  gfx = require "gfx"
+    sys = {}
+    sys.root_path = function () return '' end
+    dir = ""
+end
 
 function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
   fontFace = string.lower(fontFace)
@@ -27,7 +40,8 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
 
   local font = require ("fonts/lookups/" .. fontFace .. "_" .. fontSize)
   local font_spritesheet = gfx.loadpng("fonts/spritesheets/" .. fontFace .. "_" .. fontSize .. "_" .. fontColor .. ".png")
-
+  font_spritesheet:premultiply()
+  
   local sx = x -- Start x position on the surface
   local surface_w = surface:get_width()
   local surface_h = surface:get_height()
@@ -42,6 +56,9 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
 
   for i = 1, #text do -- For each character in the text
       local c = text:sub(i,i) -- Get the character
+      if c == ' ' then
+        x = math.floor(x + font.chars[1].width)
+      else
       for j = 1, #font.chars do -- For each character in the font
           local fc = font.chars[j] -- Get the character information
           if fc.char == c then
@@ -60,7 +77,10 @@ function text.print(surface, fontFace, fontColor, fontSize, text, x, y, w, h)
               break
           end
       end
+      end
+
   end
+  font_spritesheet:destroy()
 end
 
 --- Returns the width of the string in pixels

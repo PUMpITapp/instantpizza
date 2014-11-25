@@ -4,6 +4,8 @@
 --   - which would mean that the file is being tested.
 -- Returns false if it was not,
 --   - which wold mean that the file was being used.  
+local onBox = true
+
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -26,6 +28,17 @@ function chooseGfx()
   return tempGfx
 end
 
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -35,15 +48,11 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
-local gfx =  chooseGfx()
 
 --Start of inputFields.
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
-local tilePNG = gfx.loadpng("Images/OrderPics/ordertile.png")
-local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
-local background = gfx.loadpng("Images/OrderPics/orderstep2.png") 
 
 local highlightPosX = 1
 local highlightPosY = 1
@@ -70,8 +79,10 @@ local fieldHeight = 0.5 * yUnit
 local lowerBoundary = 1
 local middleBoundary = 1
 local upperBoundary = 1
+local tempCopy = nil
+local tempCoord = {}
 
-local menuSurface = gfx.new_surface(10 * xUnit, 4 * yUnit)
+
 
 local account = ...
 local editOrder = ...
@@ -104,11 +115,18 @@ local io = require "IOHandler"
 -- 
 --Calls methods that builds GUI
 function updateScreen()
-  gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=16*xUnit, h=9*yUnit})
+  displayBackground()
   displayMenu()
   displayHighlighter()
-  showCart()
+  displayCart()
   gfx.update()
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/orderstep2.png") 
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=16*xUnit, h=9*yUnit})
+  backgroundPNG:destroy()
 end
 
 function createOrder()
@@ -158,33 +176,37 @@ end
 function displayMenu()
 
   -- gfx.screen:copyfrom(menuSurface)
+  local tilePNG = gfx.loadpng("Images/OrderPics/ordertile.png")
+  tilePNG:premultiply()
+
 
   for i =1,#menu.pizzas do
-  	gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+  	gfx.screen:copyfrom(tilePNG, nil, {x = startPosX, y= startPosY+  (i-1)* marginY, w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.pizzas[i].name,startPosX+(xUnit*0.1), startPosY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.pizzas[i].price.."kr", startPosX+(xUnit*2.94), startPosY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
 
   end
 
   for i =1,#menu.drinks do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startDrinksX, y= startDrinksY+ (i-1)* marginY , w = fieldWith, h = fieldHeight})   
+    gfx.screen:copyfrom(tilePNG, nil, {x = startDrinksX, y= startDrinksY+ (i-1)* marginY , w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.drinks[i].name, startDrinksX+(xUnit*0.1), startDrinksY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.drinks[i].price.."kr", startDrinksX+(xUnit*2.94), startDrinksY+(yUnit*0.1)+ (i-1) * marginY, fieldWith, fieldHeight)
 
   end
   for i=1,#menu.sauces do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startSauceX, y= startSauceY+ (i-1) * marginY, w = fieldWith, h = fieldHeight})   
+    gfx.screen:copyfrom(tilePNG, nil, {x = startSauceX, y= startSauceY+ (i-1) * marginY, w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.sauces[i].name, startSauceX+(xUnit*0.1), startSauceY+(yUnit*0.1)+ (i-1) * marginY, fieldWith * 2, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.sauces[i].price.."kr", startSauceX+(xUnit*2.94), startSauceY+(yUnit*0.1)+ (i-1) * marginY, fieldWith * 2, fieldHeight)
 
   end
 
   for i=1,#menu.salads do
-    gfx.screen:copyfrom(tilePNG, nil, {x = startSaladX, y= startSaladY+ (i-1)* marginY, w = fieldWith, h = fieldHeight})   
+    gfx.screen:copyfrom(tilePNG, nil, {x = startSaladX, y= startSaladY+ (i-1)* marginY, w = fieldWith, h = fieldHeight},true)   
     text.print(gfx.screen,"lato","black","small", menu.salads[i].name, startSaladX+(xUnit*0.1), startSaladY+(yUnit*0.1)+ (i-1)* marginY, fieldWith* 2, fieldHeight)
     text.print(gfx.screen,"lato","black","small", menu.salads[i].price.."kr", startSaladX+(xUnit*2.94), startSaladY+(yUnit*0.1)+ (i-1)* marginY, fieldWith* 2, fieldHeight)
 
   end
+  tilePNG:destroy()
 
 end
 
@@ -201,7 +223,22 @@ function setUpperBoundary(column)
 end
 
 function displayHighlighter()
-  gfx.screen:copyfrom(highlighterPNG, nil, {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5})
+  local highlighterPNG = gfx.loadpng("Images/OrderPics/ordertilepressed.png")
+  highlighterPNG:premultiply()
+  local coord = {x = startPosX + (highlightPosX-1) * marginX,  y= startHighlightY + (highlightPosY - 1) * marginY, w = xUnit*5, h =yUnit*0.5}
+  
+  if tempCopy == nil then
+    tempCopy = gfx.new_surface(coord.w, coord.h)
+    tempCopy:copyfrom(gfx.screen,coord,coord)
+    tempCoord = coord
+  else
+    gfx.screen:copyfrom(tempCopy,tempCoord,tempCoord,true)
+    tempCopy:copyfrom(gfx.screen,coord,coord)
+    tempCoord = coord
+  end
+    gfx.screen:copyfrom(highlighterPNG, nil, coord,true)
+    highlighterPNG:destroy()
+    
 end
 
 
@@ -228,9 +265,18 @@ function deleteOrder(posX,posY)
 
 end
 
-function showCart()
-	local menuItems = 0
-	-- print(#refToOrder)
+
+--could be optimized
+local tempCartCopy = nil
+function displayCart()
+  local menuItems = 0
+  if tempCartCopy == nil then
+    tempCartCopy = gfx.new_surface(3.8 * xUnit, 5.4*yUnit)
+    tempCartCopy:copyfrom(gfx.screen,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit})
+  else
+    gfx.screen:copyfrom(tempCartCopy,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},true)
+	end
+  -- print(#refToOrder)
 	for i=1,#refToOrder do
 		for k, v in pairs(refToOrder[i]) do
 			text.print(gfx.screen,"lato","black","small", v.amount.." x "..v.name, 12.3 * xUnit, yUnit * 2.8 + 0.25*menuItems*yUnit, xUnit*3.8, yUnit)
@@ -245,6 +291,10 @@ function setCoordinates(x,y)
 	row = y
 end
 
+function destroyTempSurfaces()
+  tempCartCopy:destroy()
+  tempCopy:destroy()
+end
 function moveHighlight(key)
 --Moves the current inputField
   --Up
@@ -301,34 +351,39 @@ function moveHighlight(key)
    		setCoordinates(highlightPosX,highlightPosY)
 
   end
-      updateScreen()
+      displayHighlighter()
+      gfx.update()
 end
 
 function onKey(key,state)
 	if(state == 'up') then
 	  if(key == 'red') then
 	  	--Choose account and go to next step
-      pathName = "OrderStep1.lua"
+      pathName = dir .. "OrderStep1.lua"
       if checkTestMode() then
         return pathName
       else
+        destroyTempSurfaces()
         dofile(pathName)
       end
     elseif(key == 'green') then
-      --Go back to menu
-      pathName = "Menu.lua"
+
       if checkTestMode() then
-        return pathName
-      else
-        dofile(pathName)
+        return key
       end
+      addToOrder(column,row)
+      displayCart()
+      gfx.update()
+      -- updateScreen()
+
     elseif(key == 'blue') then
       -- Go back to menu
-      pathName = "OrderStep3.lua"
+      pathName = dir ..  "OrderStep3.lua"
       if checkTestMode() then
         return pathName
       else
         createOrder()
+        destroyTempSurfaces()
         assert(loadfile(pathName))(newOrder)
       end
     elseif key == 'yellow' then
@@ -336,8 +391,9 @@ function onKey(key,state)
         return key
       end
       deleteOrder(column,row)
-          updateScreen()
-
+      displayCart()
+      gfx.update()
+      -- updateScreen()
     elseif key == "up" then
       if checkTestMode() then
         return key
@@ -359,11 +415,7 @@ function onKey(key,state)
       end
       moveHighlight(key)
 	  elseif key == 'ok' then
-      if checkTestMode() then
-        return key
-      end
-	  	addToOrder(column,row)
-          updateScreen()
+
    	end
 
 	end
@@ -400,14 +452,15 @@ function setXValuesForTesting(value)
 end
 
 --Main method
-function main()
+function onStart()
   createMenu()
-    checkExistingOrder()
+  checkExistingOrder()
   setUpperBoundary(highlightPosX)
-  -- createMenuSurface()
+
 	updateScreen()
+    -- displayHighlighter()
 end
-main()
+onStart()
 
 
 

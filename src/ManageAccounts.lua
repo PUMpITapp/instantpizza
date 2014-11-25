@@ -35,6 +35,8 @@ local io = require "IOHandler"
 local background = gfx.loadpng("Images/UserPage/manageaccount.png") 
 local highlightTile = gfx.loadpng("Images/UserPage/userpressed.png")
 local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
+local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
+local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
 
 
 local xUnit = gfx.screen:get_width()/16
@@ -50,26 +52,57 @@ local highlightPosY = 1
 local lowerBoundary = 1
 local upperBoundary = 0
 local inputFieldEnd = 0
+local noOfPages = 0
+local currentPage = 1
+local startingIndex = 1
+
 
 dofile("table.save.lua")
 
 function readUsers()
   userTable = io.readUserData()
+  noOfPages = math.ceil(#userTable/4)
   if userTable == nil then
   end
 end
 
+function getNoOfPages()
+  noOfPages = math.ceil(#userTable/4)
+end
+
+function changeCurrentPage(key)
+  if(key == 'left')then
+    if(currentPage > 1)then
+      currentPage = currentPage -1
+      startingIndex = startingIndex-4
+      displayUsers()
+    end
+  elseif (key == 'right')then
+    if(currentPage < noOfPages)then
+      currentPage=currentPage+1
+      startingIndex = startingIndex+4  
+      displayUsers()
+    end
+  end
+  highlightPosY = 1
+  updateScreen()
+end
 function displayUsers()
   foundUsers = false
   yCoord = startPosY
+  upperBoundary = 0
+  text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.94, yCoord*2.85, xUnit*7, yUnit)
   if not (userTable == nil)then
     if not (#userTable == 0) then
-      for index,v in ipairs(userTable)do
+      for index = startingIndex, #userTable do
         gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
         text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
-        upperBoundary = index
         yCoord = yCoord+marginY
+        upperBoundary = upperBoundary+1
         foundUsers = true
+        if(index == startingIndex+3)then
+          break
+        end
       end
     end
   end
@@ -79,8 +112,20 @@ function displayUsers()
 end
 
 function getUser()
-  user = userTable[highlightPosY]
+  userIndex = (4*(currentPage-1)+highlightPosY)
+  user = userTable[userIndex]
+  user["editMode"] = "true"
+  user["editIndex"] = userIndex
   return user
+end
+
+function displayArrows()
+  if(noOfPages > 1 and currentPage < noOfPages)then
+      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+  end
+  if(currentPage > 1)then
+      gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+  end
 end
 
 function displayHighlighter()
@@ -91,8 +136,10 @@ end
 --Calls methods that builds GUI
 function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+getNoOfPages()
 displayUsers()
 displayHighlighter()
+displayArrows()
 end
 
 function moveHighlightedInputField(key)
@@ -118,10 +165,11 @@ function updateScreen()
   gfx.update()
 end
 function deleteUser()
-  --print(user.email)
-  table.remove(userTable,highlightPosY)
+  removeIndex = (4*(currentPage-1)+highlightPosY)
+  table.remove(userTable,removeIndex)
   io.saveUserTable(userTable)
-  highlightPosY = 1
+  currentPage = 1
+  startingIndex = 1
   updateScreen()
 
 end
@@ -137,14 +185,16 @@ function onKey(key,state)
         return key
       end
       moveHighlightedInputField(key)
-	  elseif(key == 'ok') then
-      pathName = "OrderStep2.lua"
+    elseif(key == 'left')then
       if checkTestMode() then
-        return pathName
-      else
-        account = getUser()
-        assert(loadfile(pathName))(account)
+        return key
       end
+      changeCurrentPage(key)
+      elseif(key == 'right')then
+      if checkTestMode() then
+        return key
+      end
+      changeCurrentPage(key)
     elseif(key == 'green') then
       --Go back to menu
       pathName = "Menu.lua"
@@ -154,7 +204,6 @@ function onKey(key,state)
         dofile(pathName)
       end
     elseif(key == 'yellow') then
-      --Go back to menu
       pathName = "RegistrationStep1.lua"
       if checkTestMode() then
         return pathName

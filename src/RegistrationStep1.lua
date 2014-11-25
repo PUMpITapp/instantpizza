@@ -44,6 +44,7 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
+print("inReg")
 local gfx =  chooseGfx()
 local lastForm = ...
 --local account = ...
@@ -59,10 +60,13 @@ local highlightPosY = 1
 local marginY = yUnit*0.7
 local upperBoundary = 6
 local lowerBoundary = 1
+<<<<<<< HEAD
 local errorCounter = 0
 
 local emptyTextFields = {}
 local invalidFields = {}
+=======
+>>>>>>> 0efb728c6155bd144d916f6d1cf25d30b79067c7
 local inputFieldTable = {}
 inputFieldTable[1] = "name"
 inputFieldTable[2] = "address"
@@ -86,17 +90,20 @@ local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
 function checkForm()
-
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
-		--Nothing
 	else
-		if lastForm then			
+		if lastForm then
 				newForm = lastForm
 		end
 	end
 end
 
+function checkEditMode()
+	if(newForm.editMode == "true")then
+		newForm.laststate = "RegistrationStep1.lua"
+	end
+end
 --Calls methods that builds GUI
 function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
@@ -128,6 +135,7 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayFormData()
+	print("print")
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)
@@ -179,6 +187,7 @@ function onKey(key,state)
 			if checkTestMode() then
 			 	return pathName
 			else
+					print(newForm.laststate)
 				assert(loadfile(pathName))(newForm)
 			end
 	  	elseif(key == 'green') then
@@ -323,6 +332,7 @@ end
 --Main method
 function main()
 	checkForm()
+	checkEditMode()
 	updateScreen()
 	newForm.currentInputField = "name"
 	invalidFormValidation(newForm)

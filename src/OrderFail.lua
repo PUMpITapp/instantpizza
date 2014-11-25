@@ -4,6 +4,7 @@
 --   - which would mean that the file is being tested.
 -- Returns false if it was not,
 --   - which wold mean that the file was being used.  
+local onBox = true
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -26,6 +27,18 @@ function chooseGfx()
   return tempGfx
 end
 
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -34,10 +47,10 @@ function chooseText()
   end
   return tempText
 end
-local text = chooseText()
-local gfx =  chooseGfx()
 
-local qrencode = dofile("qrencode.lua")
+local text = chooseText()
+
+local qrencode = dofile(dir .. "qrencode.lua")
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -54,17 +67,21 @@ local marginX = xUnit * 4
 local stringToQR ="Huy Tran\nvallavägen 6.210\nbella\n+kebabsås\n+loka"
 local qrCode = nil
 
-local qrSurface = gfx.new_surface(xUnit, yUnit)
-local background = gfx.loadpng("Images/OrderPics/orderNoNetwork.png") 
 local newOrder = ...
 
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-displayQR()
-displayText()
+  displayBackground()
+  displayQR()
+  displayText()
 end
 
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/orderNoNetwork.png") 
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
+end
 function generateOrder()
   if checkTestMode() then
   else
@@ -72,7 +89,6 @@ function generateOrder()
     stringToQR = newOrder.name.."\n"..newOrder.address.."\n"..newOrder.phone.."\n"..newOrder.email.."\n"
     for i = 1, #newOrder.order do
       for key,value in pairs(newOrder.order[i])do
-        print(value)
         stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
       end
     end
@@ -80,7 +96,6 @@ function generateOrder()
 end
 
 function generateQR()
-  print(stringToQR)
   local ok, qrCode = qrencode.qrcode(stringToQR)
   if not ok then
       print(qrCode)
@@ -93,25 +108,27 @@ function displayQR()
   local j = 1
   local bitSizeX = math.floor(4 * xUnit / #qrCode)
   local bitSizeY = math.floor(4 * yUnit / #qrCode)
+  local qrSurface = gfx.new_surface(bitSizeX, bitSizeY)
 
-for k,v in pairs(qrCode) do
+  for k,v in pairs(qrCode) do
 
-  for key, value in pairs(v)do
-    -- print(key,value)
-    if(value >0) then
-      qrSurface:fill({0,0,0,0})
-      gfx.screen:copyfrom(qrSurface,nil,{x =startPosX+ i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
+    for key, value in pairs(v)do
+      -- print(key,value)
+      if(value >0) then
+        qrSurface:fill({0,0,0,255})
+        gfx.screen:copyfrom(qrSurface,nil,{x =startPosX+ i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
 
-    elseif(value<0) then
-      qrSurface:fill({255,255,255,0})
-      gfx.screen:copyfrom(qrSurface,nil,{x =startPosX +i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
+      elseif(value<0) then
+        qrSurface:fill({255,255,255,255})
+        gfx.screen:copyfrom(qrSurface,nil,{x =startPosX +i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
 
+      end
+      i = i + 1
     end
-    i = i + 1
+    i =1
+    j = j + 1
   end
-  i =1
-  j = j + 1
-end
+  qrSurface:destroy()
 end
 function displayText()
   if checkTestMode() then
@@ -129,7 +146,7 @@ function onKey(key,state)
 
       if(key == 'green') then
         --Go back to menu
-        pathName = "Menu.lua"
+        pathName =dir.. "Menu.lua"
         if checkTestMode() then
           return pathName
         else
@@ -143,11 +160,11 @@ function updateScreen()
   gfx.update()
 end
 --Main method
-function main()
+function onStart()
   generateOrder()
   qrCode = generateQR()
 	updateScreen()
 end
-main()
+onStart()
 
 

@@ -60,13 +60,10 @@ local highlightPosY = 1
 local marginY = yUnit*0.7
 local upperBoundary = 6
 local lowerBoundary = 1
-<<<<<<< HEAD
 local errorCounter = 0
 
 local emptyTextFields = {}
 local invalidFields = {}
-=======
->>>>>>> 0efb728c6155bd144d916f6d1cf25d30b79067c7
 local inputFieldTable = {}
 inputFieldTable[1] = "name"
 inputFieldTable[2] = "address"
@@ -130,7 +127,7 @@ end
 
 
 function displayHighlighter()
-  gfx.screen:copyfrom(highlight, nil, {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 7, h =yUnit*0.5})
+  gfx.screen:copyfrom(highlight, nil, {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 8, h =yUnit*0.5})
 end
 
 --Creates inputsurface and displays "highlighted" input

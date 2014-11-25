@@ -58,6 +58,9 @@ local newForm = {}
 local pizzerias = {}
 local chosenPizzeria = {}
 
+local noOfPages = 0
+local currentPage = 1
+local startingIndex = 1
 
 function checkForm()
 	if type(lastForm) == "string" then
@@ -71,6 +74,7 @@ end
 
 --- Reads pizzerias from file and puts them in the pizzeria table.
 function readPizzeriaFromFile()
+	io.addTestPizzerias()
 	if checkTestMode() then
 		pizzerias = io.readPizzerias_test()
 	else
@@ -78,29 +82,70 @@ function readPizzeriaFromFile()
 	end
 end
 
+function getNoOfPages()
+  noOfPages = math.ceil(#pizzerias/4)
+end
+
+function changeCurrentPage(key)
+  if(key == 'left')then
+    if(currentPage > 1)then
+      currentPage = currentPage -1
+      startingIndex = startingIndex-4
+      displayPizzerias()
+    end
+  elseif (key == 'right')then
+    if(currentPage < noOfPages)then
+      currentPage=currentPage+1
+      startingIndex = startingIndex+4  
+      displayPizzerias()
+    end
+  end
+  highlightPosY = 1
+  updateScreen()
+end
+
+function displayArrows()
+  if(noOfPages > 1 and currentPage < noOfPages)then
+  	local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
+  	rightArrow:premultiply()
+    gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    rightArrow:destroy()
+  end
+  if(currentPage > 1)then
+  	local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
+  	leftArrow:premultiply()
+    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    leftArrow:destroy()
+  end
+end
+
 --Builds GUI
 function buildGUI()
 	gfx.screen:fill({241,248,233})
 	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 	displayHighlighter()
+	getNoOfPages()
 	displayPizzerias()
+	displayArrows()
+
 end
 
 --- Display pizzerias. TODO: Add functionality to display more than four pizzerias. And display only in zip code area
 function displayPizzerias()
+	upperBoundary = 0
 	yCoord = startPosY
-	for index,value in ipairs(pizzerias) do
+	text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*2.52, yCoord*2.85, xUnit*7, yUnit)
+	for index=startingIndex, #pizzerias do
 		pngPath = pizzerias[index].imgPath
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
 		gfx.screen:copyfrom(inputField,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
 		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=yUnit, w=xUnit*2})
 		text.print(gfx.screen,"lato","black","medium",pizzerias[index].name, startPosX*1.05, yCoord+marginY*0.2, xUnit*6, yUnit*4)
-		upperBoundary = index
+		upperBoundary = upperBoundary + 1
 		yCoord = yCoord+marginY
-		if(index == 4)then
+		if(index == startingIndex+3)then
 			break
 		end
-
 	end
 end
 
@@ -110,7 +155,8 @@ function addPizzeria()
 	if checkTestMode() then
 		return pizzerias
 	else
-		chosenPizzeria = pizzerias[highlightPosY]
+		pizzeriaIndex = (4*(currentPage-1)+highlightPosY)
+		chosenPizzeria = pizzerias[pizzeriaIndex]
 		addToForm(chosenPizzeria)
 	end
 end
@@ -167,11 +213,20 @@ function onKey(key,state)
 	  		moveHighlightedInputField(key)
 
 	  	elseif(key == 'down') then
-	  		--Down
 	  		if checkTestMode() then
 	 			return key
 	 		end
 	  	  	moveHighlightedInputField(key)
+	  	elseif(key == 'left') then
+	  		if checkTestMode() then
+	 			return key
+	 		end
+	  	  	changeCurrentPage(key)
+	  	elseif(key == 'right') then
+	  		if checkTestMode() then
+	 			return key
+	 		end
+	  	  	changeCurrentPage(key)
 	  	elseif(key=='ok')then
 	  		pathName = "RegistrationStep3.lua"
 	  		if checkTestMode() then

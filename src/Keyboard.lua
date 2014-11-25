@@ -228,7 +228,7 @@ function displayKeyboardSurface()
 	progress = "createBlankKeyboardSurface..."
 	local keyboardPNG = gfx.loadpng("Images/KeyboardPics/keyboardblank.png")
 	keyboardPNG:premultiply()
-	gfx.screen:copyfrom(keyboardPNG,nil, {x=3 * xUnit, y= 3 * yUnit, w=keyboardWidth, h=keyboardHeight},true)
+	gfx.screen:copyfrom(keyboardPNG,nil, {x=0 , y= 0 , w=16*xUnit, h=9*yUnit},true)
 	keyboardPNG:destroy()
 
 	local textAreaPNG = gfx.loadpng("Images/KeyboardPics/textArea.png")
@@ -396,12 +396,16 @@ function onKey(key, state)
 			movehighlightKey(key)
 		elseif(key == 'right') then
 			movehighlightKey(key)
-		elseif(key == 'ok') then
+			elseif(key == 'green') then
+			sendFormBackToState(dir..lastForm.laststate, lastForm)
+			elseif(key == 'yellow') then
+			inputText = removeLastChar(inputText)
+				updateScreen()
+			elseif(key == 'ok') then
 			local letterToDisplay = getKeyboardChar(highlightPosX,highlightPosY)
 			if (letterToDisplay == "ENTER") then
 				sendFormBackToState(dir..lastForm.laststate, lastForm)
 			elseif(letterToDisplay == "DELETE") then
-
 				inputText = removeLastChar(inputText)
 				updateScreen()
 			elseif letterToDisplay == "shift" then

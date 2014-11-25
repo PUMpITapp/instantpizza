@@ -49,7 +49,6 @@ local startPosX = xUnit * 3
 
 local highlightPosY = 1
 
-local showLimit = 8
 local maxChoices = 4
 local choices = 0
 local upperBoundary = 0
@@ -57,6 +56,10 @@ local lowerBoundary = 1
 local cartPosX = 12.9 * xUnit
 local cartPosY = 4.3 * yUnit
 local isChosen = false
+
+local noOfPages = 0
+local currentPage = 1
+local startingIndex = 1
 
 local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
 local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
@@ -84,9 +87,11 @@ function checkForm()
 end
 --Calls methods that builds GUI
 function buildGUI()
+getNoOfPages()
 displayBackground()
 displayHighlightSurface()
 displayPizzas()
+displayArrows()
 displayChoiceMenu()
 end
 
@@ -108,23 +113,66 @@ function getPizzas()
 	end
 end
 
+function getNoOfPages()
+  noOfPages = math.ceil(#currentPizzeria.pizzas/8)
+
+end
+
+function changeCurrentPage(key)
+  if(key == 'left')then
+    if(currentPage > 1)then
+      currentPage = currentPage -1
+      startingIndex = startingIndex-8
+      displayPizzas()
+    end
+  elseif (key == 'right')then
+    if(currentPage < noOfPages)then
+      currentPage=currentPage+1
+      startingIndex = startingIndex+8  
+      displayPizzas()
+    end
+  end
+  highlightPosY = 1
+  updateScreen()
+end
+
 --Creates new surface and display pizzas
 function displayPizzas()
 	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
 		local pizzaPosX = startPosX
 		local pizzaPosY = startPosY
 		local ySpace = 0.5 * yUnit
-		for i,v in ipairs(currentPizzeria.pizzas) do
-			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (i-1) * marginY, w=xUnit*7 , h=ySpace})
-			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[i].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (i-1) * marginY, xUnit*5, ySpace)
-			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[i].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (i-1) * marginY, 2 * xUnit, ySpace)
+		local pos = 1
+		upperBoundary = 0
+		text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.3, yUnit*7.1, xUnit*7, yUnit)
+		for index = startingIndex, #currentPizzeria.pizzas do
+			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (pos-1) * marginY, w=xUnit*7 , h=ySpace})
+			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[index].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (pos-1) * marginY, xUnit*5, ySpace)
+			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[index].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (pos-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
-			upperBoundary = i
-			if(i == showLimit)then 
+			upperBoundary = upperBoundary+1
+			pos = pos +1
+			if(index == startingIndex+7)then 
 				break
 			end
 		end
 	end
+end
+
+function displayArrows()
+  --Bilder
+  if(noOfPages > 1 and currentPage < noOfPages)then
+      local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
+      rightArrow:premultiply()
+      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*11, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+      rightArrow:destroy()
+  end
+  if(currentPage > 1)then
+    local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
+    leftArrow:premultiply()
+    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*1.5, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    leftArrow:destroy()
+  end
 end
 
 function displayHighlightSurface()
@@ -142,7 +190,8 @@ function getPizzaOnCoordinate(posY)
 		currentPizzeria = { ["Testing"] = "Works" }
 		return currentPizzeria
 	else
-		return currentPizzeria.pizzas[posY]
+		pizzaIndex = (8*(currentPage-1)+highlightPosY)
+		return currentPizzeria.pizzas[pizzaIndex]
 	end
 end
 
@@ -168,8 +217,10 @@ function insertOnChoiceMenu(myPizza)
 	end
 	local isPicked = isAlreadyPicked(myPizza)
 	if not isPicked then
+		if not (choices >=4)then
 		choices = choices + 1
 		pizza[choices] = myPizza
+		end
 	end
 
 end
@@ -225,19 +276,19 @@ function onKey(key,state)
 	  		if checkTestMode() then
 				return key
 			end
-	  		moveHighlightedInputField(key)
-	  		
+	  		moveHighlightedInputField(key)	  		
 	  	elseif(key == 'down') then
 	  		--Down
 	  		if checkTestMode() then
 				return key
 			end
 	  		moveHighlightedInputField(key)
-	  		
 	  	elseif(key == 'left') then
 	  		--Left
+	  		changeCurrentPage(key)
 	  	elseif(key == 'right') then
 	  		--Right
+	  		changeCurrentPage(key)
 	  	elseif(key == 'red') then
 	  		pathName = "RegistrationStep2.lua"
 	  		if checkTestMode() then

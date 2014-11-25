@@ -1,14 +1,6 @@
 
 
 --- Tells if the program shall be run on the box or not
-
---TODO:
---Another background and text font/color
---Real graphic components
---Inputs from user, read and write
---Create user from input
---Buttons
---Transparency not working
 local onBox = true
 
 --- Checks if the file was called from a test file.

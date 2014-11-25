@@ -82,6 +82,8 @@ local upperBoundary = 1
 local tempCopy = nil
 local tempCoord = {}
 
+
+
 local account = ...
 local editOrder = ...
 
@@ -113,10 +115,10 @@ local io = require "IOHandler"
 -- 
 --Calls methods that builds GUI
 function updateScreen()
-      displayBackground()
+  displayBackground()
   displayMenu()
   displayHighlighter()
-  showCart()
+  displayCart()
   gfx.update()
 end
 
@@ -236,7 +238,7 @@ function displayHighlighter()
   end
     gfx.screen:copyfrom(highlighterPNG, nil, coord,true)
     highlighterPNG:destroy()
-    gfx.update()
+    
 end
 
 
@@ -262,10 +264,19 @@ function deleteOrder(posX,posY)
   end
 
 end
+
+
 --could be optimized
-function showCart()
-	local menuItems = 0
-	-- print(#refToOrder)
+local tempCartCopy = nil
+function displayCart()
+  local menuItems = 0
+  if tempCartCopy == nil then
+    tempCartCopy = gfx.new_surface(3.8 * xUnit, 5.4*yUnit)
+    tempCartCopy:copyfrom(gfx.screen,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit})
+  else
+    gfx.screen:copyfrom(tempCartCopy,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},true)
+	end
+  -- print(#refToOrder)
 	for i=1,#refToOrder do
 		for k, v in pairs(refToOrder[i]) do
 			text.print(gfx.screen,"lato","black","small", v.amount.." x "..v.name, 12.3 * xUnit, yUnit * 2.8 + 0.25*menuItems*yUnit, xUnit*3.8, yUnit)
@@ -280,6 +291,10 @@ function setCoordinates(x,y)
 	row = y
 end
 
+function destroyTempSurfaces()
+  tempCartCopy:destroy()
+  tempCopy:destroy()
+end
 function moveHighlight(key)
 --Moves the current inputField
   --Up
@@ -337,6 +352,7 @@ function moveHighlight(key)
 
   end
       displayHighlighter()
+      gfx.update()
 end
 
 function onKey(key,state)
@@ -347,7 +363,7 @@ function onKey(key,state)
       if checkTestMode() then
         return pathName
       else
-        tempCopy:destroy()
+        destroyTempSurfaces()
         dofile(pathName)
       end
     elseif(key == 'green') then
@@ -356,7 +372,9 @@ function onKey(key,state)
         return key
       end
       addToOrder(column,row)
-      updateScreen()
+      displayCart()
+      gfx.update()
+      -- updateScreen()
 
     elseif(key == 'blue') then
       -- Go back to menu
@@ -365,7 +383,7 @@ function onKey(key,state)
         return pathName
       else
         createOrder()
-        tempCopy:destroy()
+        destroyTempSurfaces()
         assert(loadfile(pathName))(newOrder)
       end
     elseif key == 'yellow' then
@@ -373,8 +391,9 @@ function onKey(key,state)
         return key
       end
       deleteOrder(column,row)
-          updateScreen()
-
+      displayCart()
+      gfx.update()
+      -- updateScreen()
     elseif key == "up" then
       if checkTestMode() then
         return key
@@ -435,10 +454,11 @@ end
 --Main method
 function onStart()
   createMenu()
-    checkExistingOrder()
+  checkExistingOrder()
   setUpperBoundary(highlightPosX)
 
 	updateScreen()
+    -- displayHighlighter()
 end
 onStart()
 

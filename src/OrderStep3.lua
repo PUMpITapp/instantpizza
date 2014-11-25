@@ -154,7 +154,6 @@ function onKey(key,state)
           return pathName
         else
           assert(loadfile(pathName))(newOrder)
-          gfx.screen:destroy()
         end
         elseif(key == 'blue') then
         	

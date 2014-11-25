@@ -67,7 +67,6 @@ local marginX = xUnit * 4
 local stringToQR ="Huy Tran\nvallavägen 6.210\nbella\n+kebabsås\n+loka"
 local qrCode = nil
 
-local qrSurface = gfx.new_surface(xUnit, yUnit)
 local newOrder = ...
 
 --Calls methods that builds GUI
@@ -109,25 +108,27 @@ function displayQR()
   local j = 1
   local bitSizeX = math.floor(4 * xUnit / #qrCode)
   local bitSizeY = math.floor(4 * yUnit / #qrCode)
+  local qrSurface = gfx.new_surface(bitSizeX, bitSizeY)
 
-for k,v in pairs(qrCode) do
+  for k,v in pairs(qrCode) do
 
-  for key, value in pairs(v)do
-    -- print(key,value)
-    if(value >0) then
-      qrSurface:fill({0,0,0,255})
-      gfx.screen:copyfrom(qrSurface,nil,{x =startPosX+ i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
+    for key, value in pairs(v)do
+      -- print(key,value)
+      if(value >0) then
+        qrSurface:fill({0,0,0,255})
+        gfx.screen:copyfrom(qrSurface,nil,{x =startPosX+ i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
 
-    elseif(value<0) then
-      qrSurface:fill({255,255,255,255})
-      gfx.screen:copyfrom(qrSurface,nil,{x =startPosX +i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
+      elseif(value<0) then
+        qrSurface:fill({255,255,255,255})
+        gfx.screen:copyfrom(qrSurface,nil,{x =startPosX +i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
 
+      end
+      i = i + 1
     end
-    i = i + 1
+    i =1
+    j = j + 1
   end
-  i =1
-  j = j + 1
-end
+  qrSurface:destroy()
 end
 function displayText()
   if checkTestMode() then

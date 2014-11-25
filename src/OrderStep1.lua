@@ -110,6 +110,7 @@ function displayHighlighter()
   if(upperBoundary >0)then
     local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
     highlightTile:premultiply()
+    
     local coord = {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit}
     
     if tempCopy == nil then
@@ -125,7 +126,6 @@ function displayHighlighter()
       gfx.screen:copyfrom(highlightTile, nil, coord ,true)
       highlightTile:destroy()
   end
-  gfx.update()
   progress = "displayHighlighter:DONE"
 end
 --Calls methods that builds GUI
@@ -144,6 +144,9 @@ function displayBackground()
   backgroundPNG:destroy()
 end
 
+function destroyTempSurfaces()
+  tempCopy:destroy()
+end
 function moveHighlightedInputField(key)
   --Starting coordinates for current inputField
   if(key == 'up')then
@@ -159,6 +162,8 @@ function moveHighlightedInputField(key)
       highlightPosY = 1
     end
 end
+  displayHighlighter()
+ gfx.update()
 end
 
 function updateScreen()
@@ -185,6 +190,7 @@ function onKey(key,state)
       else
 
         account = getUser()
+        destroyTempSurfaces()
         assert(loadfile(pathName))(account)
       end
     elseif(key == 'green') then
@@ -193,6 +199,7 @@ function onKey(key,state)
       if checkTestMode() then
         return pathName
       else
+        destroyTempSurfaces()
         dofile(pathName)
       end
   	end

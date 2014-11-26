@@ -242,6 +242,9 @@ end
 -- displays the highlight
 -- TODO
 -- needs to change position of copyfrom. (0,0) now writes over keyboard 
+local tempCopy = nil
+local tempCoord = {}
+
 function displayHighlightSurface()
 	progress = "displayHighlightSurface..."
 	local coordinates = getCoordinates(highlightPosX,highlightPosY)
@@ -273,13 +276,25 @@ function displayHighlightSurface()
 	end
 
 	highlighter:premultiply()
-	gfx.screen:copyfrom(highlighter, nil ,{x= coordinates.x - keyboardXUnit, y=coordinates.y - keyboardYUnit, w=width, h=height},true)
-	highlighter:destroy()
-	progress = "displayHighlightSurface:DONE"
+	local coord = {x= coordinates.x - keyboardXUnit, y=coordinates.y - keyboardYUnit, w=width, h=height}
+
+	-- if tempCopy == nil then
+	--     tempCopy = gfx.new_surface(coord.w, coord.h)
+	--     tempCopy:copyfrom(gfx.screen,coord,nil)
+	--     tempCoord = coord
+ --  	else
+	--     gfx.screen:copyfrom(tempCopy,nil,tempCoord,true)
+	--     tempCopy:copyfrom(gfx.screen,coord,nil)
+	--     tempCoord = coord
+ --  	end
+		gfx.screen:copyfrom(highlighter, nil, coord,true)
+		highlighter:destroy()
+		progress = "displayHighlightSurface:DONE"
 end
 
 function displayKeyboardLetters(state)
 	progress = "displayKeyboardLetters..."
+	print(state)
 	local letters = nil
 	if state == "shift" then
 		letters = gfx.loadpng("Images/KeyboardPics/upperCase.png")
@@ -382,7 +397,9 @@ function movehighlightKey(key)
 			highlightPosX = highlightPosX - 1
 		end
 	end
-	updateScreen()
+		-- displayHighlightSurface()
+		-- gfx.update()
+		updateScreen()
 end
 
 -- calls functions on keys
@@ -396,12 +413,24 @@ function onKey(key, state)
 			movehighlightKey(key)
 		elseif(key == 'right') then
 			movehighlightKey(key)
-			elseif(key == 'green') then
+		elseif(key == 'green') then
 			sendFormBackToState(dir..lastForm.laststate, lastForm)
-			elseif(key == 'yellow') then
+		elseif(key == 'yellow') then
 			inputText = removeLastChar(inputText)
-				updateScreen()
-			elseif(key == 'ok') then
+			updateScreen()
+		elseif(key == 'red') then
+
+		elseif(key == 'blue') then
+			keyboardState = map.p13.letter
+			print(map.p13.letter)
+			if keyboardState == "shift" then
+				setKeyboardToUpperCase()
+			else
+				setKeyboardToLowerCase()
+			end
+			-- updateScreen()
+		elseif(key == 'ok') then
+
 			local letterToDisplay = getKeyboardChar(highlightPosX,highlightPosY)
 			if (letterToDisplay == "ENTER") then
 				sendFormBackToState(dir..lastForm.laststate, lastForm)

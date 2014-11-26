@@ -1,7 +1,7 @@
 
 
 --- Tells if the program shall be run on the box or not
-local onBox = true
+local onBox = false
 
 --- Checks if the file was called from a test file.
 -- @return #boolean true if called from a test file, indicating the file is being tested, else false

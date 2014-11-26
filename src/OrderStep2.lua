@@ -229,15 +229,16 @@ function displayHighlighter()
   
   if tempCopy == nil then
     tempCopy = gfx.new_surface(coord.w, coord.h)
-    tempCopy:copyfrom(gfx.screen,coord,coord)
+    tempCopy:copyfrom(gfx.screen,coord,nil)
     tempCoord = coord
   else
-    gfx.screen:copyfrom(tempCopy,tempCoord,tempCoord,true)
-    tempCopy:copyfrom(gfx.screen,coord,coord)
+    gfx.screen:copyfrom(tempCopy,nil,tempCoord,true)
+    tempCopy:copyfrom(gfx.screen,coord,nil)
     tempCoord = coord
   end
-    gfx.screen:copyfrom(highlighterPNG, nil, coord,true)
-    highlighterPNG:destroy()
+  
+  gfx.screen:copyfrom(highlighterPNG, nil, coord,true)
+  highlighterPNG:destroy()
     
 end
 

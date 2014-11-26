@@ -212,8 +212,7 @@ function moveHighlightedInputField(key)
       highlightPosY = 1
     end
 end
-  displayHighlighter()
- gfx.update()
+  updateScreen()
 end
 
 function updateScreen()

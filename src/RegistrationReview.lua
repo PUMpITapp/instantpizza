@@ -95,9 +95,6 @@ end
 function saveAccount()
   if not(newForm.editMode == nil)then
     io.updateUser(newForm)
-  end
-
-  if checkTestMode() then
   else
     io.saveUserData(newForm)
   end

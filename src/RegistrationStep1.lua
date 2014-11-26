@@ -1,18 +1,5 @@
---TODO:
---Another background and text font/color
---Real graphic components
---Inputs from user, read and write
---Create user from input
---Buttons
---Transparency not working
-
-
--- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+-- @return #boolean underGoingTest True if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -23,9 +10,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -35,6 +21,8 @@ function chooseGfx()
   return tempGfx
 end
 
+--- Chooses the text
+-- @return tempText The tmepText file
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -44,10 +32,8 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
---print("inReg")
 local gfx =  chooseGfx()
 local lastForm = ...
---local account = ...
 
 --Position variables
 local xUnit = gfx.screen:get_width()/16
@@ -86,6 +72,7 @@ local newForm = {
 local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
 local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
+--- Checks the form
 function checkForm()
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
@@ -96,12 +83,13 @@ function checkForm()
 	end
 end
 
+--- Checks if the form is in editmode
 function checkEditMode()
 	if(newForm.editMode == "true")then
 		newForm.laststate = "RegistrationStep1.lua"
 	end
 end
---Calls methods that builds GUI
+--- Calls methods that builds GUI
 function buildGUI()
 gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
 displayFormData()
@@ -109,6 +97,7 @@ displayHighlighter()
 displayErrorData()
 end
 
+--- Displays error messages if the user puts in wrong information
 function displayErrorData()
 	local counter = 0
 	if (#emptyTextFields) == 0 then
@@ -125,12 +114,12 @@ function displayErrorData()
 	end
 end
 
-
+--- Displays the highlighter that highlights different choices
 function displayHighlighter()
   gfx.screen:copyfrom(highlight, nil, {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 8, h =yUnit*0.5})
 end
 
---Creates inputsurface and displays "highlighted" input
+--- Creates inputsurface and displays "highlighted" input
 function displayFormData()
 	--print("print")
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
@@ -141,7 +130,8 @@ function displayFormData()
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.email),startPosXText,startPosYText+marginY*5,500, 500)
 end
 
---Moves the current inputField
+--- Moves the current inputField
+-- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
   if(key == 'up')then
@@ -160,11 +150,16 @@ end
 newForm.currentInputField = inputFieldTable[highlightPosY]
 end
 
+--- Updates the screen.
 function updateScreen()
 	buildGUI()
 	gfx.update()
 end
 
+--- Gets input from user and re-directs according to input
+-- @param #string key The key that has been pressed
+-- @param #string state The state of the key-press
+-- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 		--print(key)
@@ -215,10 +210,10 @@ function onKey(key,state)
 	end
 end
 
+--- Checks if a textfield is empty
+-- @param #table form Represents the texfield
 function emptyFormValidation(form)
 	emptyTextFields = {}
-
-	--Checks if a textfield is empty
 	for k,v in pairs(form) do
 		if k == "pizzeria" then
 		else

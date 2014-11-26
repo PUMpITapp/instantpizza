@@ -63,6 +63,7 @@ local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
 
+--- Checks the form
 function checkForm()
 	if type(lastForm) == "string" then
 

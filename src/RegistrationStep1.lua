@@ -44,7 +44,7 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
-print("inReg")
+--print("inReg")
 local gfx =  chooseGfx()
 local lastForm = ...
 --local account = ...
@@ -132,7 +132,7 @@ end
 
 --Creates inputsurface and displays "highlighted" input
 function displayFormData()
-	print("print")
+	--print("print")
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)
@@ -184,7 +184,7 @@ function onKey(key,state)
 			if checkTestMode() then
 			 	return pathName
 			else
-					print(newForm.laststate)
+				--print(newForm.laststate)
 				assert(loadfile(pathName))(newForm)
 			end
 	  	elseif(key == 'green') then
@@ -196,16 +196,14 @@ function onKey(key,state)
 	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif(key == 'blue') then
+	  		pathName = "RegistrationStep2.lua"
+	  		if checkTestMode() then
+	  			return pathName
+	  		end
 	  		-- Next Step
 	  		emptyFormValidation(newForm)
-	  		--invalidFormValidation(newForm)
 	  		if ((#emptyTextFields) == 0) and (errorCounter == 0) then
-	  			pathName = "RegistrationStep2.lua"
-	  			if checkTestMode() then
-	  				return pathName
-	  			else
-	  				assert(loadfile(pathName))(newForm)
-	  			end
+	  			assert(loadfile(pathName))(newForm)
 	  		else
 	  			--Nothing
 	  		end
@@ -240,8 +238,7 @@ function invalidFormValidation(form)
 	--for k,v in pairs(emptyTextFields) do print(k,v) end
 	--Checks if zipcode is 5 digits (Swedish standard)
 	if (not string.match(form.zipCode, '%d%d%d%d%d') and string.len(form.zipCode) ~= 0) then
-		print("Incorrect zip-code, write five digits(no spaces)")
-		
+		--print("Incorrect zip-code, write five digits(no spaces)")
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
@@ -249,8 +246,7 @@ function invalidFormValidation(form)
 	end
 	--Checks if phone number is 10 digits (Swedish standard)
 	if (not string.match(form.phone, '%d%d%d%d%d%d%d%d%d%d') and  string.len(form.phone) ~= 0) then
-		print("Incorrect phone number, write ten digits(no spaces)")
-		
+		--print("Incorrect phone number, write ten digits(no spaces)")
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
@@ -258,8 +254,7 @@ function invalidFormValidation(form)
 	end
 	--Checks if the input email is valid
 	if (not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') and  string.len(form.email) ~= 0) then
-		print("Incorrect email, use valid characters")
-		
+		--print("Incorrect email, use valid characters")
 		invalidFields["email"] = "Incorrect email, use valid characters"
 		errorCounter = errorCounter + 1
 		
@@ -325,6 +320,16 @@ end
 function returnLastForm()
 	return lastForm
 end
+
+-- Function that returns the errorforms so that they can be used in testing
+function returnForms(String)
+	if String == "invalidFields" then
+		return invalidFields
+	elseif String == "emptyTextFields" then
+		return emptyTextFields
+	end
+end
+
 
 --Main method
 function main()

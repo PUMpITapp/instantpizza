@@ -101,3 +101,124 @@ describe("Test UserRegistration1, checkForm()", function()
 	end)
 end)
 
+describe("Test UserRegistration1, Empty Form", function()
+	it("Every field left blank", function()
+		local testForm = {
+			zipCode ="",
+			phone="",
+			email = "",
+		}
+		emptyFormValidation(testForm)
+		local got = returnForms("emptyTextFields")
+		local expected_value = {
+			"zipCode",
+			"phone",
+			"email",
+		}
+		assert.are.same(got,expected_value)
+	end)
+	it("Correct Zipcode entered", function()
+		local testForm = {
+			zipCode ="58439",
+			phone="",
+			email = "",
+		}
+		emptyFormValidation(testForm)
+		local got = returnForms("emptyTextFields")
+		local expected_value = {
+			"phone",
+			"email",
+		}
+		assert.are.same(got,expected_value)
+	end)
+	it("Correct Zipcode and phone entered", function()
+		local testForm = {
+			zipCode ="58439",
+			phone="0736176314",
+			email = "",
+		}
+		emptyFormValidation(testForm)
+		local got = returnForms("emptyTextFields")
+		local expected_value = {
+			"email",
+		}
+		assert.are.same(got,expected_value)
+	end)
+	it("Correct Zipcode, phone and email entered", function()
+		local testForm = {
+			zipCode ="58439",
+			phone="0736176314",
+			email = "mikael.lietha@gmail.com",
+		}
+		emptyFormValidation(testForm)
+		local got = returnForms("emptyTextFields")
+		local expected_value = {
+		}
+		assert.are.same(got,expected_value)
+	end)
+	it("Wrong Zipcode, phone and email entered", function()
+		local testForm = {
+			zipCode ="Hejsan",
+			phone="Mobilen eller?",
+			email = "Rydsvägen 156a",
+		}
+		emptyFormValidation(testForm)
+		local got = returnForms("emptyTextFields")
+		local expected_value = {
+		}
+		assert.are.same(got,expected_value)
+	end)
+end)
+
+describe("Test UserRegistration1, Invalid Form", function()
+	it("Every field left blank", function()
+		local testForm = {
+			zipCode ="",
+			phone="",
+			email = "",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		assert.are.same(got,expected_value)
+	end)
+	it("Incorrect ZipCode", function()
+		local testForm = {
+			zipCode ="blah",
+			phone="",
+			email = "",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		expected_value["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
+		assert.are.same(got,expected_value)
+	end)
+	it("Incorrect zipCode and Phone number", function()
+		local testForm = {
+			zipCode = "blah",	
+			phone="Noll-åtta-femhundra-tretti-fem",
+			email = "",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		expected_value["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
+		expected_value["phone"] = "Incorrect phone number, write ten digits(no spaces)"
+		assert.are.same(got,expected_value)
+	end)
+	it("Incorrect zipCode, Phone number and email", function()
+		local testForm = {
+			zipCode = "Postnummer: blah",
+			phone="Noll-åtta-femhundra-tretti-fem",
+			email = "Bossen91@gmail.5",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		expected_value["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
+		expected_value["phone"] = "Incorrect phone number, write ten digits(no spaces)"
+		expected_value["email"] = "Incorrect email, use valid characters"
+		assert.are.same(got,expected_value)
+	end)
+end)

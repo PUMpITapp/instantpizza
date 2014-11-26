@@ -237,14 +237,14 @@ function invalidFormValidation(form)
 	errorCounter = 0
 	--for k,v in pairs(emptyTextFields) do print(k,v) end
 	--Checks if zipcode is 5 digits (Swedish standard)
-	if (not string.match(form.zipCode, '^%d%d%d%d%d^') and string.len(form.zipCode) ~= 0) then
+	if (not string.match(form.zipCode, '^%d%d%d%d%d$') and string.len(form.zipCode) ~= 0) then
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
 		
 	end
 	--Checks if phone number is 10 digits (Swedish standard)
-	if (not string.match(form.phone, '^%d%d%d%d%d%d%d%d%d%d^') and  string.len(form.phone) ~= 0) then
+	if (not string.match(form.phone, '^%d%d%d%d%d%d%d%d%d%d$') and  string.len(form.phone) ~= 0) then
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else

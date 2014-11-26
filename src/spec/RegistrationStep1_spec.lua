@@ -182,6 +182,28 @@ describe("Test UserRegistration1, Invalid Form", function()
 		local expected_value = {}
 		assert.are.same(got,expected_value)
 	end)
+	it("Correct ZipCode", function()
+		local testForm = {
+			zipCode ="58215",
+			phone="",
+			email = "",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		assert.are.same(got,expected_value)
+	end)
+	it("Correct phone", function()
+		local testForm = {
+			zipCode ="",
+			phone="0701234567",
+			email = "",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		assert.are.same(got,expected_value)
+	end)
 	it("Incorrect ZipCode", function()
 		local testForm = {
 			zipCode ="1a2a3a4a5a",

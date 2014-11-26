@@ -6,24 +6,24 @@ return {
 },
 -- Table: {2}
 {
-   ["phoneNr"]="010-1111111",
    ["pizzas"]={4},
-   ["name"]="Pizzeria Mona Lisa",
-   ["city"]="Linköping",
+   ["drinks"]={5},
    ["zipCode"]="58434",
    ["rating"]="5.0",
-   ["drinks"]={5},
+   ["phoneNr"]="010-1111111",
+   ["city"]="Linköping",
+   ["name"]="Pizzeria Mona Lisa",
    ["imgPath"]="pizza1.png",
 },
 -- Table: {3}
 {
-   ["phoneNr"]="010-1111112",
    ["pizzas"]={6},
-   ["name"]="Pizzeria Baguetten",
-   ["city"]="Linköping",
+   ["drinks"]={7},
    ["zipCode"]="58436",
    ["rating"]="5.0",
-   ["drinks"]={7},
+   ["phoneNr"]="010-1111112",
+   ["city"]="Linköping",
+   ["name"]="Pizzeria Baguetten",
    ["imgPath"]="pizza2.png",
 },
 -- Table: {4}

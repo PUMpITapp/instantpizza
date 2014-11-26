@@ -1,5 +1,5 @@
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false 
+-- @return #boolean underGoingTest True if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -22,6 +22,7 @@ function chooseGfx()
 end
 
 --- Chooses the text
+-- @return tempText The tmepText file
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -34,7 +35,7 @@ local io = require "IOHandler"
 local text = chooseText(checkTestMode())
 local gfx =  chooseGfx(checkTestMode())
 
---Declare units i variables
+--Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
@@ -82,10 +83,13 @@ function readPizzeriaFromFile()
 	end
 end
 
+--- Gets the number of pages needed to display pizzerias
 function getNoOfPages()
   noOfPages = math.ceil(#pizzerias/4)
 end
 
+--- Changes the page of pizzerias shown
+-- @param #string key The key that has been pressed
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -104,6 +108,7 @@ function changeCurrentPage(key)
   updateScreen()
 end
 
+--- Displays the arrows that are used to change the page of pizzerias shown
 function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
   	local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
@@ -256,7 +261,8 @@ end
 
 -- Below are functions that is required for the testing of this file
 
--- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+--- Creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+-- @param #string String Represents one of the four cases in the if-statement in the function
 function createFormsForTest(String)
 	if String == "Not equal, State equal" then
 		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
@@ -281,9 +287,15 @@ function createFormsForTest(String)
 	end
 end
 
--- This functions returns some of the values on local variables to be used when testing
+--- Returns some of the values on local variables to be used when testing
+-- @param #string value Tells whose position to look at.
+-- @return #integer startPosY Returns the start y-position.
+-- @return #integer highlightPosY Returns the highlighter's y-position.
+-- @return #integer upperBoundary Returns the upper boundary value.
+-- @return #integer lowerBoundary Returns the the lower boundary value.
+-- @return #integer gfx.screen:get_height() Returns the height of the screen.
+-- @return #integer marginY Returns the y-margin.
 function returnValuesForTesting(value)
-
 	if value == "startPosY" then
 		return startPosY
 	elseif value == "highlightPosY" then 
@@ -299,17 +311,20 @@ function returnValuesForTesting(value)
 	end
 end
 
--- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+--- Used in testing when it is needed to set the value of highlightPosY to a certain number
+-- @param #integer value The value of the highlighter's y-position
 function setValuesForTesting(value)
 	highlightPosY = value
 end
 
--- Function that returns the newForm variable so that it can be used in testing
+--- Returns the newForm variable so that it can be used in testing
+-- @return #table newForm A new form
 function returnNewForm()
 	return newForm
 end
 
--- Function that returns the lastForm variable so that it can be used in testing
+--- Returns the lastForm variable so that it can be used in testing
+-- @return #table lastForm The last form
 function returnLastForm()
 	return lastForm
 end

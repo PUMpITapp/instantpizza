@@ -114,8 +114,11 @@ function getPizzas()
 end
 
 function getNoOfPages()
-  noOfPages = math.ceil(#currentPizzeria.pizzas/8)
-
+	if checkTestMode() then
+		--Nothing
+	else
+  	noOfPages = math.ceil(#currentPizzeria.pizzas/8)
+  	end
 end
 
 function changeCurrentPage(key)

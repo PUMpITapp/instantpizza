@@ -1,4 +1,4 @@
-local onBox = true
+local onBox = false
 progress = "OrdeSte"
 
 function checkTestMode()

@@ -6,19 +6,25 @@ return {
 },
 -- Table: {2}
 {
-   ["rating"]="5.0",
+   ["phoneNr"]="010-1111111",
    ["pizzas"]={4},
-   ["name"]="Pizzeria Baguetten",
+   ["name"]="Pizzeria Mona Lisa",
+   ["city"]="Linköping",
+   ["zipCode"]="58434",
+   ["rating"]="5.0",
+   ["drinks"]={5},
    ["imgPath"]="pizza1.png",
-   ["drink"]={5},
 },
 -- Table: {3}
 {
-   ["rating"]="5.0",
+   ["phoneNr"]="010-1111112",
    ["pizzas"]={6},
-   ["name"]="Pizzeria Mona Lisa",
+   ["name"]="Pizzeria Baguetten",
+   ["city"]="Linköping",
+   ["zipCode"]="58436",
+   ["rating"]="5.0",
+   ["drinks"]={7},
    ["imgPath"]="pizza2.png",
-   ["drink"]={7},
 },
 -- Table: {4}
 {
@@ -48,60 +54,108 @@ return {
 {
    ["price"]="70",
    ["name"]="Vesuvio",
+   ["ingredients"]={20},
 },
 -- Table: {9}
 {
    ["price"]="75",
    ["name"]="Kebab",
+   ["ingredients"]={21},
 },
 -- Table: {10}
 {
    ["price"]="70",
    ["name"]="Mexicana",
+   ["ingredients"]={22},
 },
 -- Table: {11}
 {
    ["price"]="65",
    ["name"]="Azteka",
+   ["ingredients"]={23},
 },
 -- Table: {12}
 {
-   ["price"]="10",
    ["name"]="Coca cola",
+   ["price"]="10",
 },
 -- Table: {13}
 {
-   ["price"]="10",
    ["name"]="Fanta",
+   ["price"]="10",
 },
 -- Table: {14}
 {
    ["price"]="70",
    ["name"]="Kebab Special",
+   ["ingredients"]={24},
 },
 -- Table: {15}
 {
    ["price"]="65",
    ["name"]="Kebabtallrik",
+   ["ingredients"]={25},
 },
 -- Table: {16}
 {
    ["price"]="70",
    ["name"]="Kebabrulle",
+   ["ingredients"]={26},
 },
 -- Table: {17}
 {
    ["price"]="60",
    ["name"]="Hawaii",
+   ["ingredients"]={27},
 },
 -- Table: {18}
 {
-   ["price"]="10",
    ["name"]="Ramlösa",
+   ["price"]="10",
 },
 -- Table: {19}
 {
-   ["price"]="10",
    ["name"]="Julmust",
+   ["price"]="10",
+},
+-- Table: {20}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {21}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {22}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {23}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {24}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {25}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {26}
+{
+   "Skinka",
+   "Ost",
+},
+-- Table: {27}
+{
+   "Skinka",
+   "Ost",
 },
 }

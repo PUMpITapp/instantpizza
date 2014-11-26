@@ -1,6 +1,6 @@
-require "OrderStep3"
+require "OrderStep4"
 
-describe("Test OrderStep3, checkTestMode", function()
+describe("Test OrderStep4, checkTestMode", function()
 
 	it("test checkTestMode",function()
 		local got = checkTestMode()
@@ -20,15 +20,10 @@ describe("Test OrderStep3, checkTestMode", function()
 		end)
 end)
 
-describe("Test OrderStep3, onKey", function()
-	it("test Red", function()
-		local expected_value = 'OrderStep2.lua'
-		local got = onKey('red','up')
+describe("Test OrderStep4, onKey", function()
+	it("test Green", function()
+		local expected_value = 'Menu.lua'
+		local got = onKey('green','up')
 		assert.are.same(expected_value,got)
-	end)
-	--[[it("test Yellow", function()
-		local expected_value = 'OrderFail.lua'
-		local got = onKey('yellow','up')
-		assert.are.same(expected_value,got)
-	end)]]--		
+	end)		
 end)

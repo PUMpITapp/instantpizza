@@ -46,16 +46,6 @@ describe("Test OrderStep2, onKey", function()
 		local got = onKey('blue','up')
 		assert.are.same(expected_value,got)
 		end)
-	it("test Enter", function()
-		local expected_value = 'ok'
-		local got = onKey("ok",'up')
-		assert.are.same(expected_value,got)
-		end)
-	it("test Green", function()
-		local expected_value = 'Menu.lua'
-		local got = onKey('green','up')
-		assert.are.same(expected_value,got)
-		end)
 	it("test Red", function()
 		local expected_value = 'OrderStep1.lua'
 		local got = onKey('red','up')

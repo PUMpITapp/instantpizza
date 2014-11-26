@@ -27,7 +27,7 @@ describe("Test Menu, onKey", function()
 		assert.are.same(expected_value,got)
 		end)
 	it("test Red", function()
-		local expected_value = "RegistrationStep1.lua"
+		local expected_value = "ManageAccounts.lua"
 		local got = onKey('red','up')
 		assert.are.same(expected_value,got)
 		end)

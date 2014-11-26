@@ -4,7 +4,7 @@
 --   - which would mean that the file is being tested.
 -- Returns false if it was not,
 --   - which wold mean that the file was being used.  
-local onBox = true
+local onBox = false
 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)

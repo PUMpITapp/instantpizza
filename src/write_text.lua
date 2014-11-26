@@ -10,7 +10,7 @@ local text = {}
 -- @param w Width of textbox
 -- @param h Height of textbox
 
-local onBox = true
+local onBox = false
 progress = "write_text"
 
 if onBox == true then

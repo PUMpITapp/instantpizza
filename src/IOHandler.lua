@@ -27,10 +27,12 @@ function User:new(name,address,zipCode,city,phone,email,pizzeria)
 end
 --Create new pizzeria. Each pizzeria object has one table of pizzas. 
 Pizzeria = {}
-function Pizzeria:new(name,imgPath,rating,pizzas,drinks)
+function Pizzeria:new(name,city,zipCode,phoneNr,imgPath,rating,pizzas,drinks)
   newObj = {
-  id = id,
   name = name,
+  city = city,
+  zipCode = zipCode,
+  phoneNr = phoneNr,
   imgPath = imgPath,
   rating = rating,
   pizzas = pizzas,
@@ -41,10 +43,11 @@ function Pizzeria:new(name,imgPath,rating,pizzas,drinks)
 end
 --Create pizza
 Pizza = {}
-function Pizza:new(name,price)
+function Pizza:new(name,price,ingredients)
   newObj = {
   name = name,
-  price = price
+  price = price,
+  ingredients = ingredients
   }
   self.__index = self
   return setmetatable(newObj, self)
@@ -85,37 +88,44 @@ function ioHandler.addTestPizzerias()
   pizzas2 = {}
   pizzeriasTable = {}
 
+  --Create drinks
   Drink1 = Drink:new("Coca cola","10")
   Drink2 = Drink:new("Fanta","10")
   Drink3 = Drink:new("Ramlösa","10")
   Drink4 = Drink:new("Julmust","10")
 
-  Pizza1 = Pizza:new("Vesuvio","70")
-  Pizza2 = Pizza:new("Kebab","75")
-  Pizza3 = Pizza:new("Mexicana","70")
-  Pizza4 = Pizza:new("Azteka","65")
-  Pizza5 = Pizza:new("Kebab Special","70")
-  Pizza6 = Pizza:new("Kebabtallrik","65")
-  Pizza7 = Pizza:new("Kebabrulle","70")
-  Pizza8 = Pizza:new("Hawaii","60")
-
+  --Creates pizzas. {name,price,{ingredients}}
+  Pizza1 = Pizza:new("Vesuvio","70",{"Skinka","Ost"})
+  Pizza2 = Pizza:new("Kebab","75",{"Skinka","Ost"})
+  Pizza3 = Pizza:new("Mexicana","70",{"Skinka","Ost"})
+  Pizza4 = Pizza:new("Azteka","65",{"Skinka","Ost"})
+  Pizza5 = Pizza:new("Kebab Special","70",{"Skinka","Ost"})
+  Pizza6 = Pizza:new("Kebabtallrik","65",{"Skinka","Ost"})
+  Pizza7 = Pizza:new("Kebabrulle","70",{"Skinka","Ost"})
+  Pizza8 = Pizza:new("Hawaii","60",{"Skinka","Ost"})
+  --Put drink1 and 2  into table drinks
   drinks[1] = Drink1
   drinks[2] = Drink2
+
   drinks2[1] = Drink3
   drinks2[2] = Drink4
+  --Put pizzas into pizzas table
   pizzas[1] = Pizza1
   pizzas[2] = Pizza2
   pizzas[3] = Pizza3
   pizzas[4] = Pizza4
+
   pizzas2[1] = Pizza5
   pizzas2[2] = Pizza6
   pizzas2[3] = Pizza7
   pizzas2[4] = Pizza8
-
-  Pizzeria1 = Pizzeria:new("Pizzeria Mona Lisa","pizza1.png","5.0",pizzas,drinks)
-  Pizzeria2 = Pizzeria:new("Pizzeria Baguetten","pizza2.png","5.0",pizzas2,drinks2)
+  --Create pizzerias
+  Pizzeria1 = Pizzeria:new("Pizzeria Mona Lisa","Linköping","58434","010-1111111","pizza1.png","5.0",pizzas,drinks)
+  Pizzeria2 = Pizzeria:new("Pizzeria Baguetten","Linköping","58436","010-1111112","pizza2.png","5.0",pizzas2,drinks2)
+  --Put pizzerias in table
   pizzeriasTable[1] = Pizzeria1
   pizzeriasTable[2] = Pizzeria2
+  pizzeriasTable[3] = Pizzeria3
   table.save(pizzeriasTable,dir .. "PizzeriaData.lua")
 end
 

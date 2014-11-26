@@ -125,7 +125,6 @@ function ioHandler.addTestPizzerias()
   --Put pizzerias in table
   pizzeriasTable[1] = Pizzeria1
   pizzeriasTable[2] = Pizzeria2
-  pizzeriasTable[3] = Pizzeria3
   table.save(pizzeriasTable,dir .. "PizzeriaData.lua")
 end
 

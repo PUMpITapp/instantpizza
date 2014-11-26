@@ -1,3 +1,4 @@
+local onBox = true
 --- Checks if the file was called from a test file.
 -- @return #boolean true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
@@ -9,6 +10,8 @@ function checkTestMode()
   end
   return underGoingTest
 end
+
+
 
 --- Chooses either the actual or the dummy gfx.
 -- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
@@ -30,9 +33,22 @@ function chooseText()
   end
   return tempText
 end
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzeriaPics/?.png'
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzeriaPics/Pizzerias/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 local io = require "IOHandler"
 local text = chooseText(checkTestMode())
-local gfx =  chooseGfx(checkTestMode())
+
 
 --Declare units i variables
 local xUnit = gfx.screen:get_width()/16
@@ -47,9 +63,6 @@ local marginY = yUnit*1.2
 local lowerBoundary = 1
 local upperBoundary = 0
 local highlightPosY = 1
-local background = gfx.loadpng("Images/PizzeriaPics/background.png")
-local inputField = gfx.loadpng("Images/PizzeriaPics/inputfield.png")
-local highlight = gfx.loadpng("Images/PizzeriaPics/highlighter.png")
 
 local lastForm = ...
 local newForm = {}
@@ -61,6 +74,10 @@ local chosenPizzeria = {}
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
+local lastPage = currentPage
+
+local tempCopy = nil
+local coord = {}
 
 function checkForm()
 	if type(lastForm) == "string" then
@@ -108,45 +125,54 @@ function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
   	local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
   	rightArrow:premultiply()
-    gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
     rightArrow:destroy()
   end
   if(currentPage > 1)then
   	local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
   	leftArrow:premultiply()
-    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
     leftArrow:destroy()
   end
 end
 
 --Builds GUI
 function buildGUI()
-	gfx.screen:fill({241,248,233})
-	gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-	displayHighlighter()
+	displayBackground()
 	getNoOfPages()
 	displayPizzerias()
 	displayArrows()
+	displayHighlighter()
+end
 
+function displayBackground()
+	local backgroundPNG = gfx.loadpng("Images/PizzeriaPics/background.png")
+	backgroundPNG:premultiply()
+	gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+	backgroundPNG:destroy()
 end
 
 --- Display pizzerias. TODO: Add functionality to display more than four pizzerias. And display only in zip code area
 function displayPizzerias()
+	local inputField = gfx.loadpng("Images/PizzeriaPics/inputfield.png")
+	inputField:premultiply()
 	upperBoundary = 0
 	yCoord = startPosY
 	text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*2.52, yCoord*2.85, xUnit*7, yUnit)
 	for index=startingIndex, #pizzerias do
 		pngPath = pizzerias[index].imgPath
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
-		gfx.screen:copyfrom(inputField,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
-		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=yUnit, w=xUnit*2})
+		gfx.screen:copyfrom(inputField,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)
+		gfx.screen:copyfrom(pizzeriaImg,nil,{x=startPosPicX, y=yCoord, h=yUnit, w=xUnit*2},true)
 		text.print(gfx.screen,"lato","black","medium",pizzerias[index].name, startPosX*1.05, yCoord+marginY*0.2, xUnit*6, yUnit*4)
+		pizzeriaImg:destroy()
 		upperBoundary = upperBoundary + 1
 		yCoord = yCoord+marginY
 		if(index == startingIndex+3)then
 			break
 		end
 	end
+	inputField:destroy()
 end
 
 --Finds the selected pizzeria and sends i to addToForm()
@@ -169,33 +195,58 @@ end
 
 --- Displays the highlighter that highlights different choices
 function displayHighlighter()
-  gfx.screen:copyfrom(highlight, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit})
+	local highlighter = gfx.loadpng("Images/PizzeriaPics/highlighter.png")
+	highlighter:premultiply()
+
+	local coord =  {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit}
+
+    if tempCopy == nil then
+      tempCopy = gfx.new_surface(coord.w, coord.h)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    elseif lastPage == currentPage then
+      gfx.screen:copyfrom(tempCopy, nil,tempCoord,true)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    else
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+      lastPage = currentPage
+    end
+
+	gfx.screen:copyfrom(highlighter, nil,coord,true)
+	highlighter:destroy()
 end
 
 --- Moves the current inputField
 -- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-  if(key == 'up')then
-    highlightPosY = highlightPosY - 1
+  	if(key == 'up')then
+	    highlightPosY = highlightPosY - 1
 
-    if(highlightPosY < lowerBoundary) then
-      highlightPosY = upperBoundary
-    end
-  --Down
-  elseif(key == 'down')then
-    highlightPosY = highlightPosY + 1
-    if(highlightPosY > upperBoundary) then
-      highlightPosY = 1
-    end
-end
-updateScreen()
+	    if(highlightPosY < lowerBoundary) then
+	      highlightPosY = upperBoundary
+	    end
+	  --Down
+	  elseif(key == 'down')then
+	    highlightPosY = highlightPosY + 1
+	    if(highlightPosY > upperBoundary) then
+	      highlightPosY = 1
+	    end
+	end
+	displayHighlighter()
+	gfx.update()
 end
 
 --- Updates the screen.
 function updateScreen()
 	buildGUI()
 	gfx.update()
+end
+
+function destroyTempSurfaces()
+	tempCopy:destroy()
 end
 
 --- Gets input from user and re-directs according to input
@@ -228,25 +279,27 @@ function onKey(key,state)
 	 		end
 	  	  	changeCurrentPage(key)
 	  	elseif(key=='ok')then
-	  		pathName = "RegistrationStep3.lua"
+	  		pathName = dir .. "RegistrationStep3.lua"
 	  		if checkTestMode() then
 	  			return pathName
 	 		end
 	  		addPizzeria()
+	  		destroyTempSurfaces()
 	  		assert(loadfile(pathName))(newForm)
 	  	elseif(key == 'red')then
-	  		pathName = "RegistrationStep1.lua"
+	  		pathName = dir .. "RegistrationStep1.lua"
 	  		if checkTestMode() then
 	  			return pathName
 	  		else
+	  			destroyTempSurfaces()
 	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif key =='green' then
-	  		pathName = "Menu.lua"
+	  		pathName = dir .. "Menu.lua"
 	  		if checkTestMode() then
 		 		return pathName
 			else
-	  			
+	  			destroyTempSurfaces()
 	  			dofile(pathName)
 	  		end
 	  	end
@@ -315,12 +368,12 @@ function returnLastForm()
 end
 
 --Main method
-function main()
+function onStart()
 	checkForm()
 	readPizzeriaFromFile()
 	updateScreen()	
 end
-main()
+onStart()
 
 
 

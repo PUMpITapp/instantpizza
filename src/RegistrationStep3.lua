@@ -1,3 +1,4 @@
+local onBox = true
 -- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
 -- Returs true if it was, 
@@ -9,7 +10,7 @@ function checkTestMode()
   if (runFile ~= './' ) then
     underGoingTest = false
   elseif (runFile == './') then
-    underGoingTest = true
+    underGoingTest = false
   end
   return underGoingTest
 end
@@ -34,8 +35,19 @@ function chooseText()
   end
   return tempText
 end
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzaPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 local text = chooseText()
-local gfx =  chooseGfx()
 
 local io = require "IOHandler"
 
@@ -60,13 +72,8 @@ local isChosen = false
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
+local lastPage = currentPage
 
-local highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
-local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
-local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
-local deletePNG = gfx.loadpng("Images/PizzaPics/deleteHighlighter.png")
-
-local backgroundSurface = gfx.new_surface(gfx.screen:get_width(), gfx.screen:get_height())
 
 local lastForm = ...
 local newForm = {}
@@ -89,10 +96,10 @@ end
 function buildGUI()
 getNoOfPages()
 displayBackground()
-displayHighlightSurface()
 displayPizzas()
 displayArrows()
 displayChoiceMenu()
+displayHighlightSurface()
 end
 
 function updateScreen()
@@ -101,10 +108,10 @@ function updateScreen()
 end
 
 function displayBackground()
-	backgroundSurface:clear()
-	backgroundSurface:copyfrom(backgroundPNG)
-
-	gfx.screen:copyfrom(backgroundSurface)
+	local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
+	backgroundPNG:premultiply()
+	gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+	backgroundPNG:destroy()
 end
 
 function getPizzas()
@@ -123,13 +130,11 @@ function changeCurrentPage(key)
     if(currentPage > 1)then
       currentPage = currentPage -1
       startingIndex = startingIndex-8
-      displayPizzas()
     end
   elseif (key == 'right')then
     if(currentPage < noOfPages)then
       currentPage=currentPage+1
       startingIndex = startingIndex+8  
-      displayPizzas()
     end
   end
   highlightPosY = 1
@@ -143,10 +148,12 @@ function displayPizzas()
 		local pizzaPosY = startPosY
 		local ySpace = 0.5 * yUnit
 		local pos = 1
+		local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
+		tilePNG:premultiply()
 		upperBoundary = 0
 		text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.3, yUnit*7.1, xUnit*7, yUnit)
 		for index = startingIndex, #currentPizzeria.pizzas do
-			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (pos-1) * marginY, w=xUnit*7 , h=ySpace})
+			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (pos-1) * marginY, w=xUnit*7 , h=ySpace},true)
 			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[index].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (pos-1) * marginY, xUnit*5, ySpace)
 			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[index].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (pos-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
@@ -156,6 +163,7 @@ function displayPizzas()
 				break
 			end
 		end
+		tilePNG:destroy()
 	end
 end
 
@@ -164,25 +172,49 @@ function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
       local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
       rightArrow:premultiply()
-      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*11, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*11, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
       rightArrow:destroy()
   end
   if(currentPage > 1)then
     local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
     leftArrow:premultiply()
-    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*1.5, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*1.5, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
     leftArrow:destroy()
   end
 end
 
+local tempCopy = nil
+local tempCoord = {}
+
 function displayHighlightSurface()
-	local pos = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
+	local highligtherPNG = nil
 	
+	local coord = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
+	
+    if tempCopy == nil then
+      tempCopy = gfx.new_surface(coord.w, coord.h)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    elseif lastPage == currentPage then
+      gfx.screen:copyfrom(tempCopy, nil,tempCoord,true)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    else
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+      lastPage = currentPage
+    end
+
 	if isAlreadyPicked(getPizzaOnCoordinate(highlightPosY)) then
-		gfx.screen:copyfrom(deletePNG, nil , pos)
+		highligtherPNG = gfx.loadpng("Images/PizzaPics/deleteHighlighter.png")
+		highligtherPNG:premultiply()
+		gfx.screen:copyfrom(highligtherPNG, nil , coord,true)
 	else
-		gfx.screen:copyfrom(highligtherPNG, nil , pos)
+		highligtherPNG = gfx.loadpng("Images/PizzaPics/highlighter.png")
+		highligtherPNG:premultiply()
+		gfx.screen:copyfrom(highligtherPNG, nil , coord,true)
 	end
+		highligtherPNG:destroy()
 end
 
 function getPizzaOnCoordinate(posY)
@@ -248,6 +280,10 @@ function displayChoiceMenu()
 	end
 end
 
+function destroyTempSurfaces()
+	tempCopy:destroy()
+end
+
 --Moves the current inputField
 function moveHighlightedInputField(key)
 
@@ -264,8 +300,8 @@ function moveHighlightedInputField(key)
 			highlightPosY = lowerBoundary
 		end
 	end
-		updateScreen()
-
+	displayHighlightSurface()
+	gfx.update()
 end
 
 function onKey(key,state)
@@ -290,11 +326,13 @@ function onKey(key,state)
 	  		--Right
 	  		changeCurrentPage(key)
 	  	elseif(key == 'red') then
-	  		pathName = "RegistrationStep2.lua"
+	  		pathName = dir.."RegistrationStep2.lua"
 	  		if checkTestMode() then
 			 	return pathName
 			else
-	  			assert(loadfile("RegistrationStep2.lua"))(newForm)
+
+				destroyTempSurfaces()
+	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif(key == 'blue') then
 	  		if checkTestMode() then
@@ -303,12 +341,13 @@ function onKey(key,state)
 	  			pizzaIsChoosen()
 	  		end
 	  		if isChosen then
-	  			pathName = "RegistrationReview.lua"
+	  			pathName = dir.."RegistrationReview.lua"
 	  			if checkTestMode() then
 			 		return pathName
 				else
 	  				insertOnTable(pizza)
-	  				assert(loadfile("RegistrationReview.lua"))(newForm)
+	  				destroyTempSurfaces()
+	  				assert(loadfile(pathName))(newForm)
 	  			end
 	  		else
 	  			if checkTestMode() then
@@ -318,10 +357,11 @@ function onKey(key,state)
 	  			end
 	  		end
 	  		elseif key =='green' then
-	  			pathName = "Menu.lua"
+	  			pathName = dir.."Menu.lua"
 	  			if checkTestMode() then
 			 		return pathName
 				else
+					destroyTempSurfaces()
 	  				
 	  				dofile(pathName)
 	  			end
@@ -335,7 +375,7 @@ function onKey(key,state)
 	  		else
 	  		insertOnChoiceMenu(choosenPizza)
 	  		end
-	  			updateScreen()
+	  		updateScreen() -- can still be optimized
 
 	  	end
 	end
@@ -405,12 +445,12 @@ function setIsChosen(value)
 end
 
 --Main method
-function main()
+function onStart()
 	checkForm()
 	getPizzas()
 	updateScreen()
 end
-main()
+onStart()
 
 
 

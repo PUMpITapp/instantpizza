@@ -1,3 +1,5 @@
+local onBox = true
+
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -29,18 +31,30 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
-local gfx =  chooseGfx()
+
+if onBox == true then
+  progress = "loadingPics..."
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/UserPage/?.png'
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzaPics/?.png'
+  dir = sys.root_path()
+else
+gfx = chooseGfx(checkTestMode())
+    sys = {}
+    sys.root_path = function () return '' end
+    dir = ""
+end
+
 local io = require "IOHandler"
 
-local background = gfx.loadpng("Images/UserPage/manageaccount.png") 
-local highlightTile = gfx.loadpng("Images/UserPage/userpressed.png")
-local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
-local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
-local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
+
 
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
+
+local tempCopy = nil
+local tempCoord = {}
 
 --2.3 13.8 
 local startPosY = yUnit*2.5
@@ -55,9 +69,9 @@ local inputFieldEnd = 0
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
+local lastPage = currentPage
 
-
-dofile("table.save.lua")
+dofile(dir.."table.save.lua")
 
 function readUsers()
   userTable = io.readUserData()
@@ -75,18 +89,17 @@ function changeCurrentPage(key)
     if(currentPage > 1)then
       currentPage = currentPage -1
       startingIndex = startingIndex-4
-      displayUsers()
     end
   elseif (key == 'right')then
     if(currentPage < noOfPages)then
       currentPage=currentPage+1
       startingIndex = startingIndex+4  
-      displayUsers()
     end
   end
   highlightPosY = 1
   updateScreen()
 end
+
 function displayUsers()
   foundUsers = false
   yCoord = startPosY
@@ -94,8 +107,10 @@ function displayUsers()
   text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.94, yCoord*2.85, xUnit*7, yUnit)
   if not (userTable == nil)then
     if not (#userTable == 0) then
+    local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
+    accountTile:premultiply()
       for index = startingIndex, #userTable do
-        gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7})
+        gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)
         text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
         yCoord = yCoord+marginY
         upperBoundary = upperBoundary+1
@@ -104,6 +119,7 @@ function displayUsers()
           break
         end
       end
+      accountTile:destroy()
     end
   end
   if(foundUsers==false)then
@@ -121,25 +137,62 @@ end
 
 function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
-      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
+    rightArrow:premultiply()  
+    gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.7, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
+    rightArrow:destroy()
   end
   if(currentPage > 1)then
-      gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
+    leftArrow:premultiply()
+    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
+    leftArrow:destroy()
   end
 end
 
+
+
 function displayHighlighter()
+
   if(upperBoundary >0)then
-    gfx.screen:copyfrom(highlightTile, nil, {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*10 , h =yUnit})
+    
+    local highlightTile = gfx.loadpng("Images/UserPage/userpressed.png")
+    highlightTile:premultiply()
+    local coord = {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*10 , h =yUnit}
+    
+    if tempCopy == nil then
+      tempCopy = gfx.new_surface(coord.w, coord.h)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    elseif lastPage == currentPage then
+      gfx.screen:copyfrom(tempCopy, nil,tempCoord,true)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    else
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+      lastPage = currentPage
+    end
+
+    gfx.screen:copyfrom(highlightTile, nil, coord,true)
+    highlightTile:destroy()
   end
+
 end
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-getNoOfPages()
-displayUsers()
-displayHighlighter()
-displayArrows()
+  displayBackground()
+  getNoOfPages()
+  displayUsers()
+  displayHighlighter()
+  displayArrows()
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/UserPage/manageaccount.png") 
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
 end
 
 function moveHighlightedInputField(key)
@@ -156,14 +209,16 @@ function moveHighlightedInputField(key)
     if(highlightPosY > upperBoundary) then
       highlightPosY = 1
     end
-end
-updateScreen()
+  end
+  displayHighlighter()
+  gfx.update()
 end
 
 function updateScreen()
   buildGUI()
   gfx.update()
 end
+
 function deleteUser()
   removeIndex = (4*(currentPage-1)+highlightPosY)
   table.remove(userTable,removeIndex)
@@ -171,8 +226,12 @@ function deleteUser()
   currentPage = 1
   startingIndex = 1
   updateScreen()
-
 end
+
+function destroyTempSurfaces()
+  tempCopy:destroy()
+end
+
 function onKey(key,state)
 	if(state == 'up') then
     if(key == 'up')then
@@ -197,25 +256,28 @@ function onKey(key,state)
       changeCurrentPage(key)
     elseif(key == 'green') then
       --Go back to menu
-      pathName = "Menu.lua"
+      pathName = dir .. "Menu.lua"
       if checkTestMode() then
         return pathName
       else
+        destroyTempSurfaces()
         dofile(pathName)
       end
       elseif(key == 'blue') then
-      pathName = "RegistrationStep1.lua"
+      pathName = dir .. "RegistrationStep1.lua"
       if checkTestMode() then
         return pathName
       else
+        destroyTempSurfaces()
         dofile(pathName)
       end
     elseif(key == 'yellow') then
-      pathName = "RegistrationStep1.lua"
+      pathName = dir .. "RegistrationStep1.lua"
       if checkTestMode() then
         return pathName
       else
         newForm = getUser()
+        destroyTempSurfaces()
         assert(loadfile(pathName))(newForm)
       end
       elseif(key == 'red') then
@@ -243,11 +305,11 @@ function setValuesForTesting(value)
 end
 
 --Main method
-function main()
+function onStart()
   readUsers()
 	updateScreen()
 end
-main()
+onStart()
 
 
 

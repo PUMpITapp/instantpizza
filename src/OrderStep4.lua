@@ -67,7 +67,7 @@ function buildGUI()
 end
 
 function displayBackground()
-  local backgroundPNG = gfx.loadpng("Images/OrderPics/OrderStep4.png") 
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/orderstep4.png") 
   backgroundPNG:premultiply()
   gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
   backgroundPNG:destroy()
@@ -93,7 +93,6 @@ function randomTime()
 end
 
 function displayOrderInfo()
-  print("Hej")
   text.print(gfx.screen,"lato","black","medium","Orderinformation", xUnit*3.9, yUnit*5.5, 6* xUnit,200)
   text.print(gfx.screen,"lato","black","small",tostring(newOrder.pizzeria.name).." ".."010-31231231", xUnit*4, yUnit*6, 6* xUnit,200)
   text.print(gfx.screen,"lato","black","small","Total cost: "..tostring(newOrder.totalPrice).."kr", xUnit*4, yUnit*6.3, 6* xUnit,200)

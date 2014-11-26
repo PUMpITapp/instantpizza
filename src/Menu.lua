@@ -59,7 +59,6 @@ function onKey(key,state)
         if checkTestMode() then
           return pathName
         else
-          print(pathName)
           dofile(pathName)
         end
       elseif(key == 'yellow') then

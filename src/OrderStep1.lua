@@ -1,5 +1,4 @@
 local onBox = true
-progress = "OrdeSte"
 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
@@ -25,7 +24,6 @@ end
 
 
 if onBox == true then
-  progress = "loadingPackages..."
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
   dir = sys.root_path()
 
@@ -45,12 +43,8 @@ function chooseText()
   end
   return tempText
 end
-progress = "loadText..."
 local text = chooseText()
-progress = "loadIOHANDLER..."
 local io = require "IOHandler"
-progress = "loadIOHandler:DONE"
-
 
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
@@ -68,6 +62,7 @@ local inputFieldEnd = 0
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
+local lastPage = currentPage
 
 local tempCopy = nil
 local tempCoord = {}
@@ -77,11 +72,10 @@ local tempCoord = {}
 dofile(dir .. "table.save.lua")
 
 function readUsers()
-  progress = "readUsers..."
   userTable = io.readUserData()
   if userTable == nil then
   end
-  progress = "readUsers:DONE"
+
 end
 
 function getNoOfPages()
@@ -93,13 +87,11 @@ function changeCurrentPage(key)
     if(currentPage > 1)then
       currentPage = currentPage -1
       startingIndex = startingIndex-4
-      displayUsers()
     end
   elseif (key == 'right')then
     if(currentPage < noOfPages)then
       currentPage=currentPage+1
       startingIndex = startingIndex+4  
-      displayUsers()
     end
   end
   highlightPosY = 1
@@ -107,7 +99,6 @@ function changeCurrentPage(key)
 end
 
 function displayUsers()
-  progress = "displayUsers..."
   local yCoord = startPosY
   local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
   upperBoundary = 0
@@ -135,27 +126,25 @@ function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
       local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
       rightArrow:premultiply()
-      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.5, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+      gfx.screen:copyfrom(rightArrow, nil, {x = xUnit*14.5, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
       rightArrow:destroy()
   end
   if(currentPage > 1)then
     local leftArrow = gfx.loadpng("Images/PizzaPics/leftarrow.png")
     leftArrow:premultiply()
-    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2})
+    gfx.screen:copyfrom(leftArrow, nil, {x = xUnit*0.35, y= yUnit*4, w = xUnit*1 , h =yUnit*2},true)
     leftArrow:destroy()
   end
 end
 
 function getUser()
-  progress = "getUser..."
   userIndex = (4*(currentPage-1)+highlightPosY)
   account = userTable[userIndex]
-  print(account.email)
+  -- print(account.email)
   return account
 end
 
 function displayHighlighter()
-  progress = "displayHighlighter..."
   if(upperBoundary >0)then
     local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
     highlightTile:premultiply()
@@ -164,27 +153,28 @@ function displayHighlighter()
     
     if tempCopy == nil then
       tempCopy = gfx.new_surface(coord.w, coord.h)
-      tempCopy:copyfrom(gfx.screen,coord,coord)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
+      tempCoord = coord
+    elseif lastPage == currentPage then
+      gfx.screen:copyfrom(tempCopy, nil,tempCoord,true)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
       tempCoord = coord
     else
-      gfx.screen:copyfrom(tempCopy,tempCoord,tempCoord,true)
-      tempCopy:copyfrom(gfx.screen,coord,coord)
+      tempCopy:copyfrom(gfx.screen,coord,nil)
       tempCoord = coord
+      lastPage = currentPage
     end
     
       gfx.screen:copyfrom(highlightTile, nil, coord ,true)
       highlightTile:destroy()
   end
-  progress = "displayHighlighter:DONE"
 end
 --Calls methods that builds GUI
 function buildGUI()
-  progress = "buildGUI..."
   displayBackground()
   displayUsers()
   displayHighlighter()
   displayArrows()
-  progress = "buildGUI:DONE"
 end
 
 function displayBackground()
@@ -212,7 +202,9 @@ function moveHighlightedInputField(key)
       highlightPosY = 1
     end
 end
-  updateScreen()
+  displayHighlighter()
+  gfx.update()
+
 end
 
 function updateScreen()
@@ -285,10 +277,8 @@ end
 
 --Main method
 function onStart()
-  progress = "readUsers..."
   readUsers()
   getNoOfPages()
-  progress = "updateScreen..."
   updateScreen()
 end
 onStart()

@@ -11,13 +11,11 @@ local text = {}
 -- @param h Height of textbox
 
 local onBox = true
-progress = "write_text"
 
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'fonts/spritesheets/?.png'
   package.path = package.path .. ';' .. sys.root_path() .. 'fonts/lookups/?.lua'
   dir = sys.root_path()
-  print "hello"
 else
   gfx = require "gfx"
     sys = {}

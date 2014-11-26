@@ -114,10 +114,10 @@ end
 end
 
 function internet(order)
-        local sock = require("socket")
+        local sock = require "socket"
         local tcp=sock.tcp()
-        tcp:connect("pumi-2.ida.liu.se", 88)
         print("connecting")
+        tcp:connect("pumi-2.ida.liu.se", 88)
         tcp:send(order.."\n")
         local s,status, partial = tcp:receive()
         print(s)
@@ -143,7 +143,7 @@ function onKey(key,state)
         end
       elseif(key == 'yellow') then
         --Continue to QR-code page
-	network=internet("OMG")
+        network=internet("OMG")
 	
         if(network)then
           pathName = dir .. "OrderStep4.lua"

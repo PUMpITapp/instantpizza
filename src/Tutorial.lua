@@ -1,3 +1,4 @@
+local onBox = true
 
 --- Checks if the file was called from a test file.
 -- @return #boolean true if called from a test file, indicating the file is being tested, else false
@@ -22,14 +23,30 @@ function chooseGfx(underGoingTest)
   return tempGfx
 end
 
-local gfx =  chooseGfx(checkTestMode())
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 
 
 --Calls methods that builds GUI
 function buildGUI()
-local background = gfx.loadpng("Images/tutorial.png") -- change this
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-gfx.update()
+  displayBackground()
+  gfx.update()
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/tutorial.png") -- change this
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
 end
 
 --- Gets input from user and re-directs according to input
@@ -40,7 +57,7 @@ function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'green') then
 	  		--Go forward
-        pathName = "Menu.lua"
+        pathName = dir .. "Menu.lua"
         if checkTestMode() then
           return pathName
         else
@@ -51,10 +68,10 @@ function onKey(key,state)
 end
 
 --Main method
-function main()
+function onStart()
 	buildGUI()
 end
-main()
+onStart()
 
 
 

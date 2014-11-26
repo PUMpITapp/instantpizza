@@ -1,3 +1,4 @@
+local onBox = true
 -- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
 -- Returs true if it was, 
@@ -34,8 +35,19 @@ function chooseText()
   end
   return tempText
 end
+
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/UserRegistrationPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 local text = chooseText()
-local gfx =  chooseGfx()
 
 local io = require "IOHandler"
 
@@ -47,7 +59,6 @@ local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 local startPosY = yUnit * 2.8
 local startPosX = xUnit*3.40
-local background = gfx.loadpng("Images/UserRegistrationPics/registrationreview.png")
 
 function checkForm()
   if type(lastForm) == "string" then
@@ -61,9 +72,16 @@ end
 
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-displayHighlightSurface()
-gfx.update()
+  displayBackground()
+  displayHighlightSurface()
+  gfx.update()
+end
+
+function displayBackground()
+  local backgroundPNG = gfx.loadpng("Images/UserRegistrationPics/registrationreview.png")
+  backgroundPNG:premultiply()
+  gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  backgroundPNG:destroy()
 end
 
 --Creates inputsurface and displays "highlighted" input
@@ -95,9 +113,6 @@ end
 function saveAccount()
   if not(newForm.editMode == nil)then
     io.updateUser(newForm)
-  end
-
-  if checkTestMode() then
   else
     io.saveUserData(newForm)
   end
@@ -108,7 +123,7 @@ function onKey(key,state)
 	  	if(key == 'yellow') then
 	  		--Save account and go to menu
         saveAccount()
-        pathName = "Menu.lua"
+        pathName = dir .. "Menu.lua"
         if checkTestMode() then
           return pathName
         else
@@ -116,7 +131,7 @@ function onKey(key,state)
         end
       elseif(key == 'green') then
         --Go back to menu
-        pathName = "Menu.lua"
+        pathName = dir .. "Menu.lua"
         if checkTestMode() then
           return pathName
         else
@@ -124,7 +139,7 @@ function onKey(key,state)
         end
       elseif(key == 'red') then
         --Go back to menu
-        pathName = "RegistrationStep3.lua"
+        pathName = dir .. "RegistrationStep3.lua"
         if checkTestMode() then
           return pathName
         else
@@ -135,11 +150,11 @@ function onKey(key,state)
 end
 
 --Main method
-function main()
+function onStart()
   checkForm()
 	buildGUI()
 end
-main()
+onStart()
 
 
 

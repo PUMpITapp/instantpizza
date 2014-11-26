@@ -5,7 +5,7 @@
 --Create user from input
 --Buttons
 --Transparency not working
-
+local onBox = true
 
 -- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
@@ -35,6 +35,17 @@ function chooseGfx()
   return tempGfx
 end
 
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/UserRegistrationPics/?.png'
+  dir = sys.root_path()
+
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -44,8 +55,6 @@ function chooseText()
   return tempText
 end
 local text = chooseText()
-print("inReg")
-local gfx =  chooseGfx()
 local lastForm = ...
 --local account = ...
 
@@ -83,8 +92,6 @@ local newForm = {
 	pizzeria = {}
 	}
 
-local background = gfx.loadpng("Images/UserRegistrationPics/background.png")
-local highlight = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 
 function checkForm()
 	newForm.currentInputField = "name"
@@ -103,10 +110,17 @@ function checkEditMode()
 end
 --Calls methods that builds GUI
 function buildGUI()
-gfx.screen:copyfrom(background, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
-displayFormData()
-displayHighlighter()
-displayErrorData()
+	displayBackground()
+	displayFormData()
+	displayHighlighter()
+	displayErrorData()
+end
+
+function displayBackground()
+	local backgroundPNG = gfx.loadpng("Images/UserRegistrationPics/background.png")
+	backgroundPNG:premultiply()
+	gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+	backgroundPNG:destroy()
 end
 
 function displayErrorData()
@@ -125,14 +139,29 @@ function displayErrorData()
 	end
 end
 
+local tempCopy = nil
+local tempCoord = {}
 
 function displayHighlighter()
-  gfx.screen:copyfrom(highlight, nil, {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 8, h =yUnit*0.5})
+	local highlighter = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
+	highlighter:premultiply()
+	local coord = {x = startPosX,  y= startPosY + (highlightPosY - 1) * marginY, w = xUnit * 8, h =yUnit*0.5}
+	if tempCopy == nil then
+    	tempCopy = gfx.new_surface(coord.w, coord.h)
+    	tempCopy:copyfrom(gfx.screen,coord,nil)
+    	tempCoord = coord
+    else
+    	gfx.screen:copyfrom(tempCopy, nil,tempCoord,true)
+    	tempCopy:copyfrom(gfx.screen,coord,nil)
+    	tempCoord = coord
+    end
+
+  	gfx.screen:copyfrom(highlighter, nil, coord,true)
+  	highlighter:destroy()
 end
 
 --Creates inputsurface and displays "highlighted" input
 function displayFormData()
-	print("print")
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.zipCode),startPosXText,startPosYText+marginY*2,500,500)
@@ -141,23 +170,29 @@ function displayFormData()
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.email),startPosXText,startPosYText+marginY*5,500, 500)
 end
 
+function destroyTempSurfaces()
+	tempCopy:destroy()
+end
+
 --Moves the current inputField
 function moveHighlightedInputField(key)
 	--Starting coordinates for current inputField
-  if(key == 'up')then
-    highlightPosY = highlightPosY - 1
+	if(key == 'up')then
+	    highlightPosY = highlightPosY - 1
 
-    if(highlightPosY < lowerBoundary) then
-      highlightPosY = upperBoundary
-    end
-  --Down
-  elseif(key == 'down')then
-    highlightPosY = highlightPosY + 1
-    if(highlightPosY > upperBoundary) then
-      highlightPosY = lowerBoundary
-    end
-end
-newForm.currentInputField = inputFieldTable[highlightPosY]
+	    if(highlightPosY < lowerBoundary) then
+	      highlightPosY = upperBoundary
+	    end
+	  --Down
+	elseif(key == 'down')then
+	    highlightPosY = highlightPosY + 1
+	    if(highlightPosY > upperBoundary) then
+	      highlightPosY = lowerBoundary
+	    end
+	end
+	newForm.currentInputField = inputFieldTable[highlightPosY]
+	displayHighlighter()
+	gfx.update()
 end
 
 function updateScreen()
@@ -180,19 +215,20 @@ function onKey(key,state)
 	 		moveHighlightedInputField(key)
 		elseif(key == "ok") then
 			-- Open keyboard
-			pathName = "Keyboard.lua"
+			pathName = dir .. "Keyboard.lua"
 			if checkTestMode() then
 			 	return pathName
 			else
-					print(newForm.laststate)
+				destroyTempSurfaces()
 				assert(loadfile(pathName))(newForm)
 			end
 	  	elseif(key == 'green') then
 	  		--Go Back to menu
-	  		pathName = "Menu.lua"
+	  		pathName = dir .. "Menu.lua"
 	  		if checkTestMode() then
 	  			return pathName
 	  		else
+	  			destroyTempSurfaces()
 	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif(key == 'blue') then
@@ -200,20 +236,24 @@ function onKey(key,state)
 	  		emptyFormValidation(newForm)
 	  		--invalidFormValidation(newForm)
 	  		if ((#emptyTextFields) == 0) and (errorCounter == 0) then
-	  			pathName = "RegistrationStep2.lua"
+	  			pathName = dir .. "RegistrationStep2.lua"
 	  			if checkTestMode() then
 	  				return pathName
 	  			else
+	  				destroyTempSurfaces()
 	  				assert(loadfile(pathName))(newForm)
 	  			end
 	  		else
 	  			--Nothing
 	  		end
+	  	elseif(key == 'yellow') then
+	  		pathName = dir .. "RegistrationStep2.lua"
+	  		destroyTempSurfaces()
+	  		assert(loadfile(pathName))(newForm)
 	  	else
 	  		--More options for buttonpress?
 	  		--Test cases needs to be written if more options for onKey is added
 	  	end
-	  	updateScreen()
 	end
 end
 
@@ -327,14 +367,14 @@ function returnLastForm()
 end
 
 --Main method
-function main()
+function onStart()
 	checkForm()
 	checkEditMode()
-	updateScreen()
 	newForm.currentInputField = "name"
 	invalidFormValidation(newForm)
+	updateScreen()
 end
-main()
+onStart()
 
 
 

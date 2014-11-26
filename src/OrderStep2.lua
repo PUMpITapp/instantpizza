@@ -117,8 +117,8 @@ local io = require "IOHandler"
 function updateScreen()
   displayBackground()
   displayMenu()
-  displayHighlighter()
   displayCart()
+  displayHighlighter()
   gfx.update()
 end
 
@@ -272,10 +272,10 @@ local tempCartCopy = nil
 function displayCart()
   local menuItems = 0
   if tempCartCopy == nil then
-    tempCartCopy = gfx.new_surface(3.8 * xUnit, 5.4*yUnit)
-    tempCartCopy:copyfrom(gfx.screen,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit})
+    tempCartCopy = gfx.new_surface(2 * xUnit, 7.5*yUnit)
+    tempCartCopy:copyfrom(gfx.screen,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 2 * xUnit, h = 7.5 * yUnit},nil)
   else
-    gfx.screen:copyfrom(tempCartCopy,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 3.8 * xUnit, h = 8.2 * yUnit},true)
+    gfx.screen:copyfrom(tempCartCopy,nil,{x = 12.3 *xUnit, y = 2.8 * yUnit, w= 2 * xUnit, h = 7.5 * yUnit},true)
 	end
   -- print(#refToOrder)
 	for i=1,#refToOrder do

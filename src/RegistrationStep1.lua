@@ -237,16 +237,14 @@ function invalidFormValidation(form)
 	errorCounter = 0
 	--for k,v in pairs(emptyTextFields) do print(k,v) end
 	--Checks if zipcode is 5 digits (Swedish standard)
-	if (not string.match(form.zipCode, '%d%d%d%d%d') and string.len(form.zipCode) ~= 0) then
-		--print("Incorrect zip-code, write five digits(no spaces)")
+	if (not string.match(form.zipCode, '^%d%d%d%d%d^') and string.len(form.zipCode) ~= 0) then
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
 		
 	end
 	--Checks if phone number is 10 digits (Swedish standard)
-	if (not string.match(form.phone, '%d%d%d%d%d%d%d%d%d%d') and  string.len(form.phone) ~= 0) then
-		--print("Incorrect phone number, write ten digits(no spaces)")
+	if (not string.match(form.phone, '^%d%d%d%d%d%d%d%d%d%d^') and  string.len(form.phone) ~= 0) then
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
@@ -254,7 +252,6 @@ function invalidFormValidation(form)
 	end
 	--Checks if the input email is valid
 	if (not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') and  string.len(form.email) ~= 0) then
-		--print("Incorrect email, use valid characters")
 		invalidFields["email"] = "Incorrect email, use valid characters"
 		errorCounter = errorCounter + 1
 		

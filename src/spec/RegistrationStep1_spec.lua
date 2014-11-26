@@ -184,7 +184,7 @@ describe("Test UserRegistration1, Invalid Form", function()
 	end)
 	it("Incorrect ZipCode", function()
 		local testForm = {
-			zipCode ="blah",
+			zipCode ="1a2a3a4a5a",
 			phone="",
 			email = "",
 		}
@@ -194,10 +194,22 @@ describe("Test UserRegistration1, Invalid Form", function()
 		expected_value["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 		assert.are.same(got,expected_value)
 	end)
+	it("Incorrect phone", function()
+		local testForm = {
+			zipCode ="",
+			phone="1a2a3a4a5a6a7a8a9a0a",
+			email = "",
+		}
+		invalidFormValidation(testForm)
+		local got = returnForms("invalidFields")
+		local expected_value = {}
+		expected_value["phone"] = "Incorrect phone number, write ten digits(no spaces)"
+		assert.are.same(got,expected_value)
+	end)
 	it("Incorrect zipCode and Phone number", function()
 		local testForm = {
 			zipCode = "blah",	
-			phone="Noll-åtta-femhundra-tretti-fem",
+			phone="1a2a3a4a5a6a7a8a9a0a",
 			email = "",
 		}
 		invalidFormValidation(testForm)

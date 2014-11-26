@@ -149,6 +149,11 @@ function displayPizzas()
 			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (pos-1) * marginY, w=xUnit*7 , h=ySpace})
 			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[index].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (pos-1) * marginY, xUnit*5, ySpace)
 			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[index].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (pos-1) * marginY, 2 * xUnit, ySpace)
+			local pizzaIngredients = ""
+			for i = 1, #currentPizzeria.pizzas[index].ingredients do
+				pizzaIngredients = pizzaIngredients..tostring(currentPizzeria.pizzas[index].ingredients[i])..", "
+			end
+			text.print(gfx.screen, "lato","black","small", pizzaIngredients, pizzaPosX + 2.5 * xUnit, (pizzaPosY*1.04) + (pos-1) * marginY, 2 * xUnit, ySpace)
 			pizzaPosY = pizzaPosY + ySpace
 			upperBoundary = upperBoundary+1
 			pos = pos +1

@@ -197,7 +197,7 @@ local tempCoord = {}
 function displayHighlightSurface()
 	local highligtherPNG = nil
 	
-	local coord = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.75 + marginY), w = 9.3 * xUnit, h =0.75*yUnit}
+	local coord = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.75 + marginY), w = 9 * xUnit, h =0.75*yUnit}
 	
     if tempCopy == nil then
       tempCopy = gfx.new_surface(coord.w, coord.h)

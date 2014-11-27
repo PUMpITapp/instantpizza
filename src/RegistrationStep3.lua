@@ -120,8 +120,10 @@ function getPizzas()
 	end
 end
 
-function getNoOfPages()
+function getNoOfPages()	
+  print(#currentPizzeria.pizzas)
   noOfPages = math.ceil(#currentPizzeria.pizzas/6)
+  print(noOfPages)
 
 end
 
@@ -129,12 +131,12 @@ function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
       currentPage = currentPage -1
-      startingIndex = startingIndex-8
+      startingIndex = startingIndex-6
     end
   elseif (key == 'right')then
     if(currentPage < noOfPages)then
       currentPage=currentPage+1
-      startingIndex = startingIndex+8  
+      startingIndex = startingIndex+6
     end
   end
   highlightPosY = 1

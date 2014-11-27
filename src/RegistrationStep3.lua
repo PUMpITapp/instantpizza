@@ -360,7 +360,7 @@ function onKey(key,state)
 	  				return "Need to choose pizza"
 	  			else
 	  				text.print(gfx.screen,"lato","black","small", "You need to choose at least one pizza!", xUnit*3, yUnit*7.1, xUnit*10, yUnit)
-	  				--gfx.update()
+	  				gfx.update()
 	  			end
 	  		end
 	  		elseif key =='green' then
@@ -369,7 +369,6 @@ function onKey(key,state)
 			 		return pathName
 				else
 					destroyTempSurfaces()
-	  				
 	  				dofile(pathName)
 	  			end
 	  	elseif(key == 'ok') then
@@ -377,7 +376,6 @@ function onKey(key,state)
 				return key
 			end
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
-	  		print(choosenPizza)
 	  		if isAlreadyPicked(choosenPizza) then
 	  		deleteOnChoiceMenu(choosenPizza)
 	  		else

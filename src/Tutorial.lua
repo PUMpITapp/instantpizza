@@ -67,7 +67,7 @@ function displayStep()
     step = gfx.loadpng("Images/AboutPics/aboutstep3.png")
   end
   step:premultiply()
-  gfx.screen:copyfrom(step, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  gfx.screen:copyfrom(step, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()},true)
   step:destroy()
 end
 

@@ -70,9 +70,9 @@ local marginX = xUnit * 4
 local totalSum = 0
 local lastPizzaIndex = 0
 local lastDrinkIndex = 0
+local isOrdered = false
 local user = {}
 local newOrder = ...
-local network = false
 
 --Calls methods that builds GUI
 function buildGUI()
@@ -99,17 +99,30 @@ function printOrder()
   i = 1
   if checkTestMode() then
   else
-    for j = 1, #newOrder.order do
-      for key,v in pairs(newOrder.order[j])do
-      -- print(v.name,v.price,v.amount)
-        amount = v.amount
-        text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
-        text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
-        text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
-        i = i+1
+    if not isOrdered then
+     text.print(gfx.screen,"lato","black","medium","You did not order any pizzas!", startPosX, startPosY+(marginY*5), 10* xUnit,yUnit)
+     text.print(gfx.screen,"lato","black","medium","Please edit order.", startPosX, startPosY+(marginY*6.5), 10* xUnit,yUnit)
+    else 
+      for j = 1, #newOrder.order do
+        for key,v in pairs(newOrder.order[j])do
+        -- print(v.name,v.price,v.amount)
+          amount = v.amount
+          text.print(gfx.screen,"lato","black","small",tostring(v.name), startPosX, startPosY+(marginY*i), 6* xUnit,200)
+          text.print(gfx.screen,"lato","black","small",tostring(amount), startPosX+marginX, startPosY+(marginY*i), 6* xUnit,200)
+          text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
+          i = i+1
+        end
       end
+      text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
     end
-    text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
+  end
+end
+
+function checkOrder()
+  for k,v in pairs(newOrder.order[1]) do
+    if v ~= "" then
+      isOrdered = true
+    end
   end
 end
 
@@ -126,19 +139,21 @@ function onKey(key,state)
           assert(loadfile(pathName))(editOrder)
         end
       elseif(key == 'yellow') then
-        pathName = dir .. "OrderPending.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          assert(loadfile(pathName))(newOrder)
+        if isOrdered then
+          pathName = dir .. "OrderPending.lua"
+          if checkTestMode() then
+            return pathName
+          else
+            assert(loadfile(pathName))(newOrder)
+          end
         end
         elseif(key == 'blue') then
-        	
-
 	  	end
 	end
 end
+
 function updateScreen()
+  checkOrder()
   buildGUI()
   gfx.update()
 end

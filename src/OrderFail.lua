@@ -61,10 +61,7 @@ local startPosX = xUnit * 3
 local textPosX = 8.2* xUnit
 local textPosY = 3.2 * yUnit
 
-local marginY = yUnit / 2
-local marginX = xUnit * 4
-
-local stringToQR ="Huy Tran\nvallavägen 6.210\nbella\n+kebabsås\n+loka"
+local stringToQR =""
 local qrCode = nil
 
 local newOrder = ...
@@ -86,7 +83,7 @@ function generateOrder()
   if checkTestMode() then
   else
 
-    stringToQR = newOrder.name.."\n"..newOrder.address.."\n"..newOrder.phone.."\n"..newOrder.email.."\n"
+    stringToQR = "Customer: "..newOrder.name.."\n".."Address: "..newOrder.address.."\n".."Number: "..newOrder.phone.."\n".."Email: "..newOrder.email.."\n\n"
     for i = 1, #newOrder.order do
       for key,value in pairs(newOrder.order[i])do
         stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
@@ -107,7 +104,7 @@ function displayQR()
   local i = 1
   local j = 1
   local bitSizeX = math.floor(4 * xUnit / #qrCode)
-  local bitSizeY = math.floor(4 * yUnit / #qrCode)
+  local bitSizeY = math.floor(4 * xUnit / #qrCode)
   local qrSurface = gfx.new_surface(bitSizeX, bitSizeY)
 
   for k,v in pairs(qrCode) do

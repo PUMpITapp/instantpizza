@@ -90,7 +90,6 @@ function displayHighlightSurface()
 end
 
 function saveAccount()
-  if
   newForm.pizzeria.pizzas = newForm.pizzeria.userPizzas
   newForm.pizzeria.userPizzas = nil
   if not(newForm.editMode == nil)then

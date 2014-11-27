@@ -37,7 +37,7 @@ else
   sys.root_path = function () return '' end
   dir = ""
 end
-
+local order=...
 --- Calls methods that builds GUI
 function buildGUI()
   local backgroundPNG = gfx.loadpng("Images/Pending/Pendingpage.png")
@@ -90,20 +90,27 @@ function internet(order)
         print("connecting")
         tcp:send(order.."\n")
         local s,status, partial = tcp:receive()
-        print(s)
         --print(status)
         --print(partial)
         tcp:close()
         if(s==nil)then
-                return false
+                return 0
         end
-        return true
+        return s
 end
 
 --- Main method
 function onStart()
 	buildGUI()
 	
+	order["time"]=internet(order.pizzeria.name)
+	local pathName=""
+	if(order.time~=0)then
+		pathName = dir .. "OrderStep4.lua"
+	else
+		pathName = dir .. "OrderFail.lua"
+	end
+	assert(loadfile(pathName))(order)
 	
 end
 onStart()

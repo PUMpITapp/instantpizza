@@ -67,7 +67,7 @@ function buildGUI()
 end
 
 function displayBackground()
-  local backgroundPNG = gfx.loadpng("Images/OrderPics/OrderStep4.png") 
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/orderstep4.png") 
   backgroundPNG:premultiply()
   gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
   backgroundPNG:destroy()

@@ -427,13 +427,13 @@ function onKey(key, state)
 			movehighlightKey(key)
 		elseif(key == 'right') then
 			movehighlightKey(key)
-		elseif(key == 'green') then
+		elseif(key == 'blue') then
 			sendFormBackToState(dir..lastForm.laststate, lastForm)
-		elseif(key == 'yellow') then
+		elseif(key == 'red') then
 			inputText = removeLastChar(inputText)
 			displayInput()
 			gfx.update()
-		elseif(key == 'red') then
+		elseif(key == 'green') then
 			keyboardState = map.p14.letter
 			if keyboardState == "symbols" then
 				setKeyboardToSymbols()
@@ -443,7 +443,7 @@ function onKey(key, state)
 				createKeyboardSurface(keyboardState)
 			end
 				updateScreen()
-		elseif(key == 'blue') then
+		elseif(key == 'yellow') then
 			keyboardState = map.p13.letter
 			if keyboardState == "shift" then
 				setKeyboardToUpperCase()

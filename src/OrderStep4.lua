@@ -56,18 +56,17 @@ end
 
 local text = chooseText(checkTestMode())
 local newOrder = ...
-local time = 0
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
 --Calls methods that builds GUI
 function buildGUI()
   displayBackground()
-  text.print(gfx.screen,"lato","black","large",tostring(time).." min", xUnit*6.5, yUnit*3.5, 6* xUnit,200)
+  text.print(gfx.screen,"lato","black","large",tostring(newOrder.time).." min", xUnit*6.5, yUnit*3.5, 6* xUnit,200)
 end
 
 function displayBackground()
-  local backgroundPNG = gfx.loadpng("Images/OrderPics/OrderStep4.png") 
+  local backgroundPNG = gfx.loadpng("Images/OrderPics/orderstep4.png") 
   backgroundPNG:premultiply()
   gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
   backgroundPNG:destroy()
@@ -87,10 +86,6 @@ function onKey(key,state)
 	end
 end
 
-function randomTime()
-  math.randomseed(os.time())
-  time = math.random(30,60)
-end
 
 function displayOrderInfo()
   if checkTestMode() then
@@ -103,7 +98,6 @@ function displayOrderInfo()
 end
 --Main method
 function onStart()
-  randomTime()
 	buildGUI()
   displayOrderInfo()
   gfx.update()

@@ -108,7 +108,7 @@ function displayBackground()
 end
 
 function getPizzas()
-	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
+	if not checkTestMode() then
 		currentPizzeria = newForm.pizzeria
 	end
 end
@@ -234,7 +234,8 @@ function insertOnChoiceMenu(myPizza)
 end
 
 function insertOnTable(pizzaTable)
-	newForm.pizzeria.pizzas = pizzaTable
+	newForm.pizzeria.userPizzas = pizzaTable
+
 end
 
 function deleteOnChoiceMenu(myPizza)

@@ -56,7 +56,7 @@ local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 local marginY = yUnit * 0.05
 
-local startPosY = yUnit * 2.5
+local startPosY = yUnit * 2.3
 local startPosX = xUnit * 3
 
 local highlightPosY = 1
@@ -121,7 +121,7 @@ function getPizzas()
 end
 
 function getNoOfPages()
-  noOfPages = math.ceil(#currentPizzeria.pizzas/8)
+  noOfPages = math.ceil(#currentPizzeria.pizzas/6)
 
 end
 
@@ -146,7 +146,7 @@ function displayPizzas()
 	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
 		local pizzaPosX = startPosX
 		local pizzaPosY = startPosY
-		local ySpace = 0.5 * yUnit
+		local ySpace = 0.75 * yUnit
 		local pos = 1
 		local tilePNG = gfx.loadpng("Images/PizzaPics/inputfield.png")
 		tilePNG:premultiply()
@@ -156,10 +156,16 @@ function displayPizzas()
 			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (pos-1) * marginY, w=xUnit*7 , h=ySpace},true)
 			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[index].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (pos-1) * marginY, xUnit*5, ySpace)
 			text.print(gfx.screen, "lato","black","medium", tostring(currentPizzeria.pizzas[index].price) .. "kr", pizzaPosX + 5.96 * xUnit, (pizzaPosY*0.99) + (pos-1) * marginY, 2 * xUnit, ySpace)
-			pizzaPosY = pizzaPosY + ySpace
-			upperBoundary = upperBoundary+1
-			pos = pos +1
-			if(index == startingIndex+7)then 
+			local pizzaIngredients = ""
+            for i = 1, #currentPizzeria.pizzas[index].ingredients do
+             	pizzaIngredients = pizzaIngredients..tostring(currentPizzeria.pizzas[index].ingredients[i])..", "
+	        end
+	        ingredientsText = 0.45*yUnit
+	       	text.print(gfx.screen, "lato","black","small", pizzaIngredients, pizzaPosX*1.05 ,pizzaPosY + (pos-1) * marginY+(0.45*yUnit), 5 * xUnit, ySpace)
+	        pizzaPosY = pizzaPosY + ySpace
+	        upperBoundary = upperBoundary+1	                        
+	        pos = pos +1
+			if(index == startingIndex+5)then 
 				break
 			end
 		end
@@ -189,7 +195,7 @@ local tempCoord = {}
 function displayHighlightSurface()
 	local highligtherPNG = nil
 	
-	local coord = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.5 + marginY), w = 8 * xUnit, h =0.5*yUnit}
+	local coord = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.75 + marginY), w = 9.3 * xUnit, h =0.75*yUnit}
 	
     if tempCopy == nil then
       tempCopy = gfx.new_surface(coord.w, coord.h)

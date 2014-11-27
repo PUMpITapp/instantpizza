@@ -6,35 +6,35 @@ return {
 },
 -- Table: {2}
 {
-   ["pizzas"]={4},
-   ["drinks"]={5},
+   ["imgPath"]="pizza1.png",
+   ["city"]="Linköping",
+   ["drinks"]={4},
+   ["name"]="Pizzeria Mona Lisa",
    ["zipCode"]="58434",
    ["rating"]="5.0",
+   ["pizzas"]={5},
    ["phoneNr"]="010-1111111",
-   ["city"]="Linköping",
-   ["name"]="Pizzeria Mona Lisa",
-   ["imgPath"]="pizza1.png",
 },
 -- Table: {3}
 {
-   ["pizzas"]={6},
-   ["drinks"]={7},
+   ["imgPath"]="pizza2.png",
+   ["city"]="Linköping",
+   ["drinks"]={6},
+   ["name"]="Pizzeria Baguetten",
    ["zipCode"]="58436",
    ["rating"]="5.0",
+   ["pizzas"]={7},
    ["phoneNr"]="010-1111112",
-   ["city"]="Linköping",
-   ["name"]="Pizzeria Baguetten",
-   ["imgPath"]="pizza2.png",
 },
 -- Table: {4}
 {
    {8},
    {9},
-   {10},
-   {11},
 },
 -- Table: {5}
 {
+   {10},
+   {11},
    {12},
    {13},
 },
@@ -42,81 +42,81 @@ return {
 {
    {14},
    {15},
-   {16},
-   {17},
 },
 -- Table: {7}
 {
+   {16},
+   {17},
    {18},
    {19},
 },
 -- Table: {8}
 {
-   ["price"]="70",
-   ["name"]="Vesuvio",
-   ["ingredients"]={20},
+   ["price"]="10",
+   ["name"]="Coca cola",
 },
 -- Table: {9}
 {
-   ["price"]="75",
-   ["name"]="Kebab",
-   ["ingredients"]={21},
+   ["price"]="10",
+   ["name"]="Fanta",
 },
 -- Table: {10}
 {
    ["price"]="70",
-   ["name"]="Mexicana",
-   ["ingredients"]={22},
+   ["ingredients"]={20},
+   ["name"]="Vesuvio",
 },
 -- Table: {11}
 {
-   ["price"]="65",
-   ["name"]="Azteka",
-   ["ingredients"]={23},
+   ["price"]="75",
+   ["ingredients"]={21},
+   ["name"]="Kebab",
 },
 -- Table: {12}
 {
-   ["name"]="Coca cola",
-   ["price"]="10",
+   ["price"]="70",
+   ["ingredients"]={22},
+   ["name"]="Mexicana",
 },
 -- Table: {13}
 {
-   ["name"]="Fanta",
-   ["price"]="10",
+   ["price"]="65",
+   ["ingredients"]={23},
+   ["name"]="Azteka",
 },
 -- Table: {14}
 {
-   ["price"]="70",
-   ["name"]="Kebab Special",
-   ["ingredients"]={24},
+   ["price"]="10",
+   ["name"]="Ramlösa",
 },
 -- Table: {15}
 {
-   ["price"]="65",
-   ["name"]="Kebabtallrik",
-   ["ingredients"]={25},
+   ["price"]="10",
+   ["name"]="Julmust",
 },
 -- Table: {16}
 {
    ["price"]="70",
-   ["name"]="Kebabrulle",
-   ["ingredients"]={26},
+   ["ingredients"]={24},
+   ["name"]="Kebab Special",
 },
 -- Table: {17}
 {
-   ["price"]="60",
-   ["name"]="Hawaii",
-   ["ingredients"]={27},
+   ["price"]="65",
+   ["ingredients"]={25},
+   ["name"]="Kebabtallrik",
 },
 -- Table: {18}
 {
-   ["name"]="Ramlösa",
-   ["price"]="10",
+   ["price"]="70",
+   ["ingredients"]={26},
+   ["name"]="Kebabrulle",
 },
 -- Table: {19}
 {
-   ["name"]="Julmust",
-   ["price"]="10",
+   ["price"]="60",
+   ["ingredients"]={27},
+   ["name"]="Hawaii",
 },
 -- Table: {20}
 {

@@ -90,6 +90,7 @@ function displayHighlightSurface()
 end
 
 function saveAccount()
+  if
   newForm.pizzeria.pizzas = newForm.pizzeria.userPizzas
   newForm.pizzeria.userPizzas = nil
   if not(newForm.editMode == nil)then
@@ -103,11 +104,11 @@ function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'yellow') then
 	  		--Save account and go to menu
-        saveAccount()
         pathName = "Menu.lua"
         if checkTestMode() then
           return pathName
         else
+          saveAccount()
           dofile(pathName)
         end
       elseif(key == 'green') then

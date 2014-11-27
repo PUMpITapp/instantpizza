@@ -121,9 +121,7 @@ function getPizzas()
 end
 
 function getNoOfPages()	
-  print(#currentPizzeria.pizzas)
   noOfPages = math.ceil(#currentPizzeria.pizzas/6)
-  print(noOfPages)
 
 end
 
@@ -361,7 +359,8 @@ function onKey(key,state)
 	  			if checkTestMode() then
 	  				return "Need to choose pizza"
 	  			else
-	  				text.print(gfx.screen,"lato","black","medium", "You need to choose at least one pizza!", xUnit*3, yUnit*6.5, xUnit*10, yUnit)
+	  				text.print(gfx.screen,"lato","black","small", "You need to choose at least one pizza!", xUnit*3, yUnit*7.1, xUnit*10, yUnit)
+	  				--gfx.update()
 	  			end
 	  		end
 	  		elseif key =='green' then

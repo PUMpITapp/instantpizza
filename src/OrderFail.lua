@@ -83,7 +83,7 @@ function generateOrder()
   if checkTestMode() then
   else
 
-    stringToQR = "Customer: "..newOrder.name.."\n".."Address: "..newOrder.address.."\n".."Number: "..newOrder.phone.."\n".."Email: "..newOrder.email.."\n\n"
+    stringToQR = "Customer: "..newOrder.name.."\nAddress: "..newOrder.address.."\nZip: "..newOrder.zipCode.."\nPhone: "..newOrder.phone.."\n\n"
     for i = 1, #newOrder.order do
       for key,value in pairs(newOrder.order[i])do
         stringToQR = stringToQR..value.amount.."x "..value.name.."\n"
@@ -103,8 +103,8 @@ end
 function displayQR()
   local i = 1
   local j = 1
-  local bitSizeX = math.floor(4 * xUnit / #qrCode)
-  local bitSizeY = math.floor(4 * xUnit / #qrCode)
+  local bitSizeX = math.ceil(4 * xUnit / #qrCode)
+  local bitSizeY = math.ceil(4 * xUnit / #qrCode)
   local qrSurface = gfx.new_surface(bitSizeX, bitSizeY)
 
   for k,v in pairs(qrCode) do
@@ -159,6 +159,9 @@ function updateScreen()
 end
 --Main method
 function onStart()
+  for k,v in pairs(newOrder) do
+    print(k,v)
+  end
   generateOrder()
   qrCode = generateQR()
 	updateScreen()

@@ -91,7 +91,8 @@ local newOrder = {
 	name = account.name,
 	address = account.address,
 	phone = account.phone,
-	email = account.email,
+	zipCode = account.zipCode,
+  email = account.email,
   pizzeria = account.pizzeria,
 	totalPrice = 0
 }

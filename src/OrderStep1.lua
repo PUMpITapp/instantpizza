@@ -185,7 +185,9 @@ function displayBackground()
 end
 
 function destroyTempSurfaces()
+  if not (tempCopy == nil)then
   tempCopy:destroy()
+end
 end
 function moveHighlightedInputField(key)
   --Starting coordinates for current inputField

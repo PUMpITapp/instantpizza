@@ -108,27 +108,11 @@ function printOrder()
         text.print(gfx.screen,"lato","black","small",tostring(amount*v.price.."kr"), startPosX+marginX*1.6, startPosY+(marginY*i), 6* xUnit,200)
         i = i+1
       end
-  end
+    end
     text.print(gfx.screen,"lato","black","medium",tostring(newOrder.totalPrice.."kr"), startPosX+marginX*2,endPosY, 6* xUnit,200)
-end
+  end
 end
 
-function internet(order)
-        local sock = require "socket"
-        local tcp=sock.tcp()
-        print("connecting")
-        tcp:connect("pumi-2.ida.liu.se", 88)
-        tcp:send(order.."\n")
-        local s,status, partial = tcp:receive()
-        print(s)
-        --print(status)
-        --print(partial)
-        tcp:close()
-	if(s==nil)then
-		return false
-	end
-	return true
-end
 
 function onKey(key,state)
 	if(state == 'up') then
@@ -142,14 +126,7 @@ function onKey(key,state)
           assert(loadfile(pathName))(editOrder)
         end
       elseif(key == 'yellow') then
-        --Continue to QR-code page
-        network=internet("OMG")
-	
-        if(network)then
-          pathName = dir .. "OrderStep4.lua"
-        else
-          pathName = dir .. "OrderFail.lua"
-        end
+        pathName = dir .. "OrderPending.lua"
         if checkTestMode() then
           return pathName
         else

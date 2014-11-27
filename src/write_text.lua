@@ -10,7 +10,7 @@ local text = {}
 -- @param w Width of textbox
 -- @param h Height of textbox
 
-local onBox = false
+local onBox = true
 
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'fonts/spritesheets/?.png'

@@ -1,4 +1,4 @@
-local onBox = false
+local onBox = true
 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
@@ -69,7 +69,8 @@ local inputFieldEnd = 0
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
-local lastPage = currentPage
+local lastPage = 0
+local deletedElement = false
 
 dofile(dir.."table.save.lua")
 
@@ -164,6 +165,7 @@ function displayHighlighter()
       tempCopy = gfx.new_surface(coord.w, coord.h)
       tempCopy:copyfrom(gfx.screen,coord,nil)
       tempCoord = coord
+      lastPage = currentPage
     elseif lastPage == currentPage then
       gfx.screen:copyfrom(tempCopy, nil,tempCoord,true)
       tempCopy:copyfrom(gfx.screen,coord,nil)
@@ -225,6 +227,8 @@ function deleteUser()
   io.saveUserTable(userTable)
   currentPage = 1
   startingIndex = 1
+  tempCopy = nil
+  highlightPosY = 1
   updateScreen()
 end
 

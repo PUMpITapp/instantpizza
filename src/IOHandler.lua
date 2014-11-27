@@ -1,5 +1,5 @@
 local ioHandler = {}
-local onBox = false
+local onBox = true
 progress = "IOhandler"
 if onBox == true then
   dir = sys.root_path()

@@ -1,5 +1,5 @@
 --- Tells if the program shall be run on the box or not
-local onBox = false
+local onBox = true
 
 -- Makes sure that the first step in the tutorial is loaded
 local pageNumber = 1

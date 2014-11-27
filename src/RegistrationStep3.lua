@@ -67,12 +67,15 @@ local upperBoundary = 0
 local lowerBoundary = 1
 local cartPosX = 12.9 * xUnit
 local cartPosY = 4.3 * yUnit
+local pizzasPerPage = 6
 local isChosen = false
 
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
 local lastPage = currentPage
+local tempCopy = nil
+local tempCoord = {}
 
 
 local lastForm = ...
@@ -121,7 +124,7 @@ function getPizzas()
 end
 
 function getNoOfPages()	
-  noOfPages = math.ceil(#currentPizzeria.pizzas/6)
+  noOfPages = math.ceil(#currentPizzeria.pizzas/pizzasPerPage)
 
 end
 
@@ -129,12 +132,12 @@ function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
       currentPage = currentPage -1
-      startingIndex = startingIndex-6
+      startingIndex = startingIndex-pizzasPerPage
     end
   elseif (key == 'right')then
     if(currentPage < noOfPages)then
       currentPage=currentPage+1
-      startingIndex = startingIndex+6
+      startingIndex = startingIndex+pizzasPerPage
     end
   end
   highlightPosY = 1
@@ -189,9 +192,6 @@ function displayArrows()
   end
 end
 
-local tempCopy = nil
-local tempCoord = {}
-
 function displayHighlightSurface()
 	local highligtherPNG = nil
 	
@@ -228,7 +228,7 @@ function getPizzaOnCoordinate(posY)
 		currentPizzeria = { ["Testing"] = "Works" }
 		return currentPizzeria
 	else
-		pizzaIndex = (8*(currentPage-1)+highlightPosY)
+		pizzaIndex = (pizzasPerPage*(currentPage-1)+highlightPosY)
 		return currentPizzeria.pizzas[pizzaIndex]
 	end
 end
@@ -377,6 +377,7 @@ function onKey(key,state)
 				return key
 			end
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
+	  		print(choosenPizza)
 	  		if isAlreadyPicked(choosenPizza) then
 	  		deleteOnChoiceMenu(choosenPizza)
 	  		else

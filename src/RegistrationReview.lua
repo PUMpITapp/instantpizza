@@ -96,12 +96,12 @@ function displayHighlightSurface()
     text.print(gfx.screen,"lato","black","small", "Email: "..tostring(newForm.email), startPosX,startPosY+(yUnit*2.5),500, 50)
     text.print(gfx.screen,"lato","black","small", "Pizzeria: "..tostring(newForm.pizzeria.name), startPosX,startPosY+(yUnit*3),500, 50)
     local pizzaText = ""
-    for i=1,#newForm.pizzeria.pizzas do
-      length = #newForm.pizzeria.pizzas
+    for i=1,#newForm.pizzeria.userPizzas do
+      length = #newForm.pizzeria.userPizzas
       if(length == i)then
-        pizzaText = pizzaText.." "..newForm.pizzeria.pizzas[i].name
+        pizzaText = pizzaText.." "..newForm.pizzeria.userPizzas[i].name
       else
-      pizzaText = pizzaText..newForm.pizzeria.pizzas[i].name..", "
+      pizzaText = pizzaText..newForm.pizzeria.userPizzas[i].name..", "
       end
     end
 
@@ -111,6 +111,8 @@ function displayHighlightSurface()
 end
 
 function saveAccount()
+  newForm.pizzeria.pizzas = newForm.pizzeria.userPizzas
+  newForm.pizzeria.userPizzas = nil
   if not(newForm.editMode == nil)then
     io.updateUser(newForm)
   else

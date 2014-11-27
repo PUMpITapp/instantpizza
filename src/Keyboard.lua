@@ -286,6 +286,8 @@ function displayHighlightSurface()
 		highlighter = gfx.loadpng("Images/KeyboardPics/spacePressed.png")
 	elseif currentKey == "ENTER" then
 		highlighter = gfx.loadpng("Images/KeyboardPics/enterPressed.png")
+	elseif currentKey == "SIGNS" then
+		highlighter = gfx.loadpng("Images/KeyboardPics/shiftPressed.png")
 	else
 		highlighter = gfx.loadpng("Images/KeyboardPics/standKeyPressed.png")
 	end

@@ -258,7 +258,7 @@ function insertOnChoiceMenu(myPizza)
 end
 
 function insertOnTable(pizzaTable)
-	newForm.pizzeria.pizzas = pizzaTable
+	newForm.pizzeria.userPizzas = pizzaTable
 end
 
 function deleteOnChoiceMenu(myPizza)

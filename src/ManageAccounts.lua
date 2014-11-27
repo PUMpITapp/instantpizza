@@ -1,4 +1,4 @@
-local onBox = true
+local onBox = false
 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
@@ -229,7 +229,9 @@ function deleteUser()
 end
 
 function destroyTempSurfaces()
-  tempCopy:destroy()
+  if tempCopy ~= nil then
+    tempCopy:destroy()
+  end
 end
 
 function onKey(key,state)
@@ -257,6 +259,8 @@ function onKey(key,state)
     elseif(key == 'green') then
       --Go back to menu
       pathName = dir .. "Menu.lua"
+        print(pathName)
+
       if checkTestMode() then
         return pathName
       else
@@ -307,7 +311,7 @@ end
 --Main method
 function onStart()
   readUsers()
-	updateScreen()
+  updateScreen()
 end
 onStart()
 

@@ -6,29 +6,29 @@ return {
 },
 -- Table: {2}
 {
-   ["rating"]="5.0",
-   ["drinks"]={4},
-   ["name"]="Pizzeria Mona Lisa",
-   ["pizzas"]={5},
    ["imgPath"]="pizza1.png",
+   ["pizzas"]={4},
+   ["rating"]="5.0",
+   ["name"]="Pizzeria Mona Lisa",
+   ["drinks"]={5},
 },
 -- Table: {3}
 {
-   ["rating"]="5.0",
-   ["drinks"]={6},
-   ["name"]="Pizzeria Baguetten",
-   ["pizzas"]={7},
    ["imgPath"]="pizza2.png",
+   ["pizzas"]={6},
+   ["rating"]="5.0",
+   ["name"]="Pizzeria Baguetten",
+   ["drinks"]={7},
 },
 -- Table: {4}
 {
    {8},
    {9},
+   {10},
+   {11},
 },
 -- Table: {5}
 {
-   {10},
-   {11},
    {12},
    {13},
 },
@@ -36,72 +36,72 @@ return {
 {
    {14},
    {15},
+   {16},
+   {17},
 },
 -- Table: {7}
 {
-   {16},
-   {17},
    {18},
    {19},
 },
 -- Table: {8}
 {
-   ["name"]="Coca cola",
-   ["price"]="10",
-},
--- Table: {9}
-{
-   ["name"]="Fanta",
-   ["price"]="10",
-},
--- Table: {10}
-{
    ["name"]="Vesuvio",
    ["price"]="70",
 },
--- Table: {11}
+-- Table: {9}
 {
    ["name"]="Kebab",
    ["price"]="75",
 },
--- Table: {12}
+-- Table: {10}
 {
    ["name"]="Mexicana",
    ["price"]="70",
 },
--- Table: {13}
+-- Table: {11}
 {
    ["name"]="Azteka",
    ["price"]="65",
 },
+-- Table: {12}
+{
+   ["name"]="Coca cola",
+   ["price"]="10",
+},
+-- Table: {13}
+{
+   ["name"]="Fanta",
+   ["price"]="10",
+},
 -- Table: {14}
-{
-   ["name"]="Ramlösa",
-   ["price"]="10",
-},
--- Table: {15}
-{
-   ["name"]="Julmust",
-   ["price"]="10",
-},
--- Table: {16}
 {
    ["name"]="Kebab Special",
    ["price"]="70",
 },
--- Table: {17}
+-- Table: {15}
 {
    ["name"]="Kebabtallrik",
    ["price"]="65",
 },
--- Table: {18}
+-- Table: {16}
 {
    ["name"]="Kebabrulle",
    ["price"]="70",
 },
--- Table: {19}
+-- Table: {17}
 {
    ["name"]="Hawaii",
    ["price"]="60",
+},
+-- Table: {18}
+{
+   ["name"]="Ramlösa",
+   ["price"]="10",
+},
+-- Table: {19}
+{
+   ["name"]="Julmust",
+   ["price"]="10",
 },
 }

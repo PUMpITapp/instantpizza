@@ -38,12 +38,17 @@ else
   dir = ""
 end
 
+local accountAction = ...
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
+
 --- Calls methods that builds GUI
 function buildGUI()
   local backgroundPNG = gfx.loadpng("Images/MenuPics/menu.png")
   backgroundPNG:premultiply()
   gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
   backgroundPNG:destroy()
+  addNotification()
   gfx.update()
 end
 
@@ -80,6 +85,20 @@ function onKey(key,state)
         end
 	  	end
 	end
+end
+function addNotification()
+  if accountAction == "Edit" then
+    local backgroundPNG = gfx.loadpng("Images/MenuPics/editaccount.png")
+    backgroundPNG:premultiply()
+    gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75})
+    backgroundPNG:destroy()
+  elseif (accountAction == "Create") then
+    local backgroundPNG = gfx.loadpng("Images/MenuPics/anewaccount.png")
+    backgroundPNG:premultiply()
+    gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75})
+    backgroundPNG:destroy()  
+  
+  end
 end
 
 --- Main method

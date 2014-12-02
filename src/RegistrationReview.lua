@@ -59,6 +59,7 @@ local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 local startPosY = yUnit * 2.8
 local startPosX = xUnit*3.40
+local accountAction = ""
 
 function checkForm()
   if type(lastForm) == "string" then
@@ -115,8 +116,10 @@ function saveAccount()
   newForm.pizzeria.userPizzas = nil
   if not(newForm.editMode == nil)then
     io.updateUser(newForm)
+    accountAction = "Edit"
   else
     io.saveUserData(newForm)
+    accountAction = "Create"
   end
 end
 
@@ -129,7 +132,7 @@ function onKey(key,state)
         if checkTestMode() then
           return pathName
         else
-          dofile(pathName)
+          assert(loadfile(pathName))(accountAction)
         end
       elseif(key == 'green') then
         --Go back to menu

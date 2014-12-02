@@ -91,7 +91,8 @@ end
 
 --- Reads pizzerias from file and puts them in the pizzeria table.
 function readPizzeriaFromFile()
-	io.addTestPizzerias()
+	--Uncomment if pizzeria_data is empty
+	--io.addTestPizzerias()
 	if checkTestMode() then
 		pizzerias = io.readPizzerias_test()
 	else

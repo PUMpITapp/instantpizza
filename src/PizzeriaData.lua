@@ -14,113 +14,113 @@ return {
 },
 -- Table: {2}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58434",
-   ["imgPath"]="pizza1.png",
    ["phoneNr"]="010-1111111",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Mona Lisa",
    ["city"]="Linköping",
+   ["zipCode"]="58434",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza1.png",
 },
 -- Table: {3}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58436",
-   ["imgPath"]="pizza2.png",
    ["phoneNr"]="010-1111112",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Baguetten",
    ["city"]="Linköping",
+   ["zipCode"]="58436",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza2.png",
 },
 -- Table: {4}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58220",
-   ["imgPath"]="pizza3.png",
    ["phoneNr"]="010-1111113",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Florens",
    ["city"]="Linköping",
+   ["zipCode"]="58220",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza3.png",
 },
 -- Table: {5}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58217",
-   ["imgPath"]="pizza4.png",
    ["phoneNr"]="010-1111114",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Bari",
    ["city"]="Linköping",
+   ["zipCode"]="58217",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza4.png",
 },
 -- Table: {6}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58234",
-   ["imgPath"]="pizza5.png",
    ["phoneNr"]="010-1111115",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Victoria",
    ["city"]="Linköping",
+   ["zipCode"]="58234",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza5.png",
 },
 -- Table: {7}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58214",
-   ["imgPath"]="pizza6.png",
    ["phoneNr"]="010-1111116",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria La Luna",
    ["city"]="Linköping",
+   ["zipCode"]="58214",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza6.png",
 },
 -- Table: {8}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58233",
-   ["imgPath"]="pizza7.png",
    ["phoneNr"]="010-1111117",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzafiket",
    ["city"]="Linköping",
+   ["zipCode"]="58233",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza7.png",
 },
 -- Table: {9}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58232",
-   ["imgPath"]="pizza8.png",
    ["phoneNr"]="010-1111118",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Mamma Mia",
    ["city"]="Linköping",
+   ["zipCode"]="58232",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza8.png",
 },
 -- Table: {10}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58248",
-   ["imgPath"]="pizza9.png",
    ["phoneNr"]="010-1111119",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Montecarlo",
    ["city"]="Linköping",
+   ["zipCode"]="58248",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza9.png",
 },
 -- Table: {11}
 {
-   ["rating"]="5.0",
-   ["zipCode"]="58726",
-   ["imgPath"]="pizza10.png",
    ["phoneNr"]="010-1111110",
    ["pizzas"]={12},
-   ["drinks"]={13},
    ["name"]="Pizzeria Tropicana",
    ["city"]="Linköping",
+   ["zipCode"]="58726",
+   ["rating"]="5.0",
+   ["drinks"]={13},
+   ["imgPath"]="pizza10.png",
 },
 -- Table: {12}
 {
@@ -155,122 +155,122 @@ return {
 -- Table: {14}
 {
    ["price"]="70",
-   ["ingredients"]={38},
    ["name"]="Vesuvio",
+   ["ingredients"]={38},
 },
 -- Table: {15}
 {
    ["price"]="75",
-   ["ingredients"]={39},
    ["name"]="Kebab",
+   ["ingredients"]={39},
 },
 -- Table: {16}
 {
    ["price"]="70",
-   ["ingredients"]={40},
    ["name"]="Mexicana",
+   ["ingredients"]={40},
 },
 -- Table: {17}
 {
    ["price"]="65",
-   ["ingredients"]={41},
    ["name"]="Azteka",
+   ["ingredients"]={41},
 },
 -- Table: {18}
 {
    ["price"]="70",
-   ["ingredients"]={42},
    ["name"]="Kebab Special",
+   ["ingredients"]={42},
 },
 -- Table: {19}
 {
    ["price"]="65",
-   ["ingredients"]={43},
    ["name"]="Kebabtallrik",
+   ["ingredients"]={43},
 },
 -- Table: {20}
 {
    ["price"]="70",
-   ["ingredients"]={44},
    ["name"]="Kebabrulle",
+   ["ingredients"]={44},
 },
 -- Table: {21}
 {
    ["price"]="60",
-   ["ingredients"]={45},
    ["name"]="Hawaii",
+   ["ingredients"]={45},
 },
 -- Table: {22}
 {
    ["price"]="85",
-   ["ingredients"]={46},
    ["name"]="Poker",
+   ["ingredients"]={46},
 },
 -- Table: {23}
 {
    ["price"]="75",
-   ["ingredients"]={47},
    ["name"]="Salami",
+   ["ingredients"]={47},
 },
 -- Table: {24}
 {
    ["price"]="60",
-   ["ingredients"]={48},
    ["name"]="Vegetaria",
+   ["ingredients"]={48},
 },
 -- Table: {25}
 {
    ["price"]="60",
-   ["ingredients"]={49},
    ["name"]="Capricciosa",
+   ["ingredients"]={49},
 },
 -- Table: {26}
 {
    ["price"]="80",
-   ["ingredients"]={50},
    ["name"]="Tono",
+   ["ingredients"]={50},
 },
 -- Table: {27}
 {
    ["price"]="60",
-   ["ingredients"]={51},
    ["name"]="Margaritha",
+   ["ingredients"]={51},
 },
 -- Table: {28}
 {
    ["price"]="60",
-   ["ingredients"]={52},
    ["name"]="Tutti frutti",
+   ["ingredients"]={52},
 },
 -- Table: {29}
 {
    ["price"]="65",
-   ["ingredients"]={53},
    ["name"]="Calzone",
+   ["ingredients"]={53},
 },
 -- Table: {30}
 {
    ["price"]="60",
-   ["ingredients"]={54},
    ["name"]="Honolulu",
+   ["ingredients"]={54},
 },
 -- Table: {31}
 {
    ["price"]="60",
-   ["ingredients"]={55},
    ["name"]="Kycklingpizza",
+   ["ingredients"]={55},
 },
 -- Table: {32}
 {
    ["price"]="70",
-   ["ingredients"]={56},
    ["name"]="Opera",
+   ["ingredients"]={56},
 },
 -- Table: {33}
 {
    ["price"]="80",
-   ["ingredients"]={57},
    ["name"]="Disco",
+   ["ingredients"]={57},
 },
 -- Table: {34}
 {

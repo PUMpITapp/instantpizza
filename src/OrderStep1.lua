@@ -85,7 +85,11 @@ function readUsers()
 end
 
 function getNoOfPages()
-  noOfPages = math.ceil(#userTable/4)
+  if checkTestMode() then
+    -- Nothing
+  else
+    noOfPages = math.ceil(#userTable/4)
+  end
 end
 
 function changeCurrentPage(key)

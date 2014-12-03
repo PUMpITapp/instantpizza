@@ -1,10 +1,8 @@
--- These three functions below are required for running tests on this file
---- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+--- Set if the program is running on the box or not
 local onBox = true
+
+--- Checks if the file was called from a test file.
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -15,9 +13,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -39,6 +36,8 @@ else
   dir = ""
 end
 
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -66,19 +65,22 @@ local qrCode = nil
 
 local newOrder = ...
 
---Calls methods that builds GUI
+---Builds GUI
 function buildGUI()
   displayBackground()
   displayQR()
   displayText()
 end
 
+--- Function that displays the Background image of the application
 function displayBackground()
   local backgroundPNG = gfx.loadpng("Images/OrderPics/orderNoNetwork.png") 
   backgroundPNG:premultiply()
   gfx.screen:copyfrom(backgroundPNG, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
   backgroundPNG:destroy()
 end
+
+--- Function that generates a string to be used when creating the QR-code
 function generateOrder()
   if checkTestMode() then
   else
@@ -92,6 +94,8 @@ function generateOrder()
   end
 end
 
+--- Function that creates a QR-code from the string created in generateOrder()
+-- @return #QR qeCode The generated QR-code
 function generateQR()
   local ok, qrCode = qrencode.qrcode(stringToQR)
   if not ok then
@@ -99,7 +103,7 @@ function generateQR()
   end
   return qrCode
 end
-
+--- Function that displays the QR code on the Screen
 function displayQR()
   local i = 1
   local j = 1
@@ -127,6 +131,8 @@ function displayQR()
   end
   qrSurface:destroy()
 end
+
+--- Function that displays an explaining text to the user about the QR-code
 function displayText()
   if checkTestMode() then
   else
@@ -138,6 +144,10 @@ function displayText()
   end
 end
 
+--- Gets input from user and re-directs according to input
+-- @param #string key The key that has been pressed
+-- @param #string state The state of the key-press
+-- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 
@@ -152,10 +162,13 @@ function onKey(key,state)
 	  	end
 	end
 end
+
+--- Function that that updates the current screen to be able to show new or changed information to the user
 function updateScreen()
   buildGUI()
   gfx.update()
 end
+
 --Main method
 function onStart()
   generateOrder()

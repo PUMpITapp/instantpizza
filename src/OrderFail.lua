@@ -24,7 +24,7 @@ function chooseGfx()
   return tempGfx
 end
 
-
+--- Change the path system if the app runs on the box comparing to the emulator
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
   dir = sys.root_path()
@@ -47,22 +47,30 @@ function chooseText()
   return tempText
 end
 
+--- Variable to use when displaying printed text on the screen
+--- Determine whether to use the stub or to run the actual file
 local text = chooseText()
 
+--- Pathway to the QR-code generator
 local qrencode = dofile(dir .. "qrencode.lua")
 
+--- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
+--- Start of inputFields
 local startPosY = yUnit * 3
 local startPosX = xUnit * 3
 
+--- Start of the textFields
 local textPosX = 8.2* xUnit
 local textPosY = 3.2 * yUnit
 
+--- Setting start values for the QR-code (empty at first)
 local stringToQR =""
 local qrCode = nil
 
+--- Initiates a new form for this step
 local newOrder = ...
 
 ---Builds GUI

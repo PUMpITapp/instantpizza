@@ -92,7 +92,7 @@ local newForm = {
 	pizzeria = {}
 	}
 
-
+--- Checks if there is a form sent from a previous step that needs to be considerd in this Step
 function checkForm()
 	newForm.currentInputField = "name"
 	if type(lastForm) == "string" then
@@ -103,12 +103,14 @@ function checkForm()
 	end
 end
 
+--- Checks if this is editing of an existing user or if it is the creation of a new user
 function checkEditMode()
 	if(newForm.editMode == "true")then
 		newForm.laststate = "RegistrationStep1.lua"
 	end
 end
---Calls methods that builds GUI
+
+---Function that builds the GUI
 function buildGUI()
 	displayBackground()
 	displayFormData()
@@ -116,6 +118,7 @@ function buildGUI()
 	displayErrorData()
 end
 
+--- Function that displays the Background image of the application
 function displayBackground()
 	local backgroundPNG = gfx.loadpng("Images/UserRegistrationPics/background.png")
 	backgroundPNG:premultiply()
@@ -123,6 +126,8 @@ function displayBackground()
 	backgroundPNG:destroy()
 end
 
+--- Function that displays to the user if there is any faults in the inputfields for RegistrationStep1.
+--  Both missing and invalid inputs are displayed using this function
 function displayErrorData()
 	local counter = 0
 	if (#emptyTextFields) == 0 then
@@ -142,6 +147,7 @@ end
 local tempCopy = nil
 local tempCoord = {}
 
+--- Displays which field the user is highlighting, using the markers x and y positions
 function displayHighlighter()
 	local highlighter = gfx.loadpng("Images/UserRegistrationPics/highlighter.png")
 	highlighter:premultiply()
@@ -160,7 +166,7 @@ function displayHighlighter()
   	highlighter:destroy()
 end
 
---Creates inputsurface and displays "highlighted" input
+---Creates inputsurface and displays the highlighted input
 function displayFormData()
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
@@ -170,13 +176,14 @@ function displayFormData()
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.email),startPosXText,startPosYText+marginY*5,500, 500)
 end
 
+--- Deletes the currect surfaces from the box's RAM memory, clearing up space for new surfaces
 function destroyTempSurfaces()
 	tempCopy:destroy()
 end
 
---Moves the current inputField
+---Moves the current inputField
+-- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
-	--Starting coordinates for current inputField
 	if(key == 'up')then
 	    highlightPosY = highlightPosY - 1
 
@@ -195,11 +202,17 @@ function moveHighlightedInputField(key)
 	gfx.update()
 end
 
+--- Function that that updates the current screen to be able to show new or changed information to the user
 function updateScreen()
 	buildGUI()
 	gfx.update()
 end
 
+
+--- Gets input from user and re-directs according to input
+-- @param #string key The key that has been pressed
+-- @param #string state The state of the key-press
+-- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 		--print(key)
@@ -256,10 +269,10 @@ function onKey(key,state)
 	  	end
 	end
 end
-
+--- Function that checks if the form that the user has written is empty or not
+-- @param #table key The key that has been pressed
 function emptyFormValidation(form)
 	emptyTextFields = {}
-
 	--Checks if a textfield is empty
 	for k,v in pairs(form) do
 		if k == "pizzeria" then
@@ -274,14 +287,14 @@ function emptyFormValidation(form)
 	end
 end
 
+--- Function that checks if the form that the user has written has any invalid inputs
+-- @param #table key The key that has been pressed
 function invalidFormValidation(form)
 	invalidFields = {}
 	errorCounter = 0
-	--for k,v in pairs(emptyTextFields) do print(k,v) end
 	--Checks if zipcode is 5 digits (Swedish standard)
 	if (not string.match(form.zipCode, '^%d%d%d%d%d$') and string.len(form.zipCode) ~= 0) then
-		print("Incorrect zip-code, write five digits(no spaces)")
-		
+		print("Incorrect zip-code, write five digits(no spaces)")		
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
@@ -289,29 +302,24 @@ function invalidFormValidation(form)
 	end
 	--Checks if phone number is 10 digits (Swedish standard)
 	if (not string.match(form.phone, '^%d%d%d%d%d%d%d%d%d%d$') and  string.len(form.phone) ~= 0) then
-		print("Incorrect phone number, write ten digits(no spaces)")
-		
+		print("Incorrect phone number, write ten digits(no spaces)")		
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
 		
 	end
-	--Checks if the input email is valid
+	--Checks if the input email is on the correct form (SomeCharacters@Something.Short)
 	if (not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') and  string.len(form.email) ~= 0) then
-		print("Incorrect email, use valid characters")
-		
+		print("Incorrect email, use valid characters")		
 		invalidFields["email"] = "Incorrect email, use valid characters"
-		errorCounter = errorCounter + 1
-		
-	else
-		
+		errorCounter = errorCounter + 1		
+	else		
 	end
-	--for k,v in pairs(invalidFields) do print(k,v) end
-
 end
 -- Below are functions that is required for the testing of this file
 
--- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+--- Creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+-- @param #strong String input from the Tester about what forms that should be created
 function createFormsForTest(String)
 	if String == "Not equal, State equal" then
 		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
@@ -336,9 +344,13 @@ function createFormsForTest(String)
 	end
 end
 
--- This functions returns some of the values on local variables to be used when testing
+--- Functions that returns some of the values on local variables to be used when testing
+-- @return #number StartPosY Starting position of the marker for this page
+-- @return #number HightlightPosY Current position of the marker
+-- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return #number height Height of the screen
 function returnValuesForTesting(value)
-
 	if value == "startPosY" then
 		return startPosY
 	elseif value == "highlightPosY" then 
@@ -351,17 +363,21 @@ function returnValuesForTesting(value)
 		return gfx.screen:get_height()
 	end
 end
--- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+
+--- Function that sets the markers position to a selected value
+-- @param #number value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
 	highlightPosY = value
 end
 
--- Function that returns the newForm variable so that it can be used in testing
+--- Function that returns the newForm variable so that it can be used in testing
+-- @return #table newForm Currect form being used by this Registration step
 function returnNewForm()
 	return newForm
 end
 
 -- Function that returns the lastForm variable so that it can be used in testing
+-- @return #table newForm Currect form being used by the previous Registration step
 function returnLastForm()
 	return lastForm
 end

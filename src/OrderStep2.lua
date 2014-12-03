@@ -303,10 +303,10 @@ function moveHighlight(key)
   if(key == 'up')then
     highlightPosY = highlightPosY - 1
     if(highlightPosY<middleBoundary+1) then
-    	setCoordinates(highlightPosX,highlightPosY)
     	if(highlightPosY < lowerBoundary) then
       	highlightPosY = middleBoundary
       	end
+      setCoordinates(highlightPosX,highlightPosY)
     	startHighlightY = startPosY
     else
     	setCoordinates(highlightPosX+2,highlightPosY-middleBoundary)
@@ -317,10 +317,10 @@ function moveHighlight(key)
   elseif(key == 'down')then
     highlightPosY = highlightPosY + 1
     if(highlightPosY>middleBoundary) then
-    	setCoordinates(highlightPosX+2, highlightPosY-middleBoundary)
     	if(highlightPosY > upperBoundary) then
       	highlightPosY = middleBoundary + 1
       	end
+        setCoordinates(highlightPosX+2, highlightPosY-middleBoundary)
       	if(highlightPosX==1) then
     	  	startHighlightY = startPosY + 1.2 *yUnit + (3-#menu.pizzas) * marginY
       	elseif(highlightPosX==2) then

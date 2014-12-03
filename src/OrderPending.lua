@@ -83,6 +83,7 @@ function onKey(key,state)
 	end
 end
 
+---Function that checks if the box is connected to our server or not
 function internet(order)
         local sock = require("socket")
         local tcp=sock.tcp()

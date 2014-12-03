@@ -1,10 +1,8 @@
+--- Set if the program is running on the box or not
 local onBox = true
--- These three functions below are required for running tests on this file
+
 --- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false  
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -15,9 +13,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -27,6 +24,8 @@ function chooseGfx()
   return tempGfx
 end
 
+--- Chooses the text
+-- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -36,10 +35,10 @@ function chooseText()
   return tempText
 end
 
+--- Change the path system if the app runs on the box comparing to the emulator
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzaPics/?.png'
   dir = sys.root_path()
-
 else
   gfx =  chooseGfx(checkTestMode())
   sys = {}
@@ -47,43 +46,60 @@ else
   dir = ""
 end
 
-local text = chooseText()
-
+--- Variable to use when handling tables that are stored in the system
 local io = require "IOHandler"
 
+--- Variable to use when displaying printed text on the screen
+--- Determine whether to use the stub or to run the actual file
+local text = chooseText()
 
+--Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
-local marginY = yUnit * 0.05
 
+--- Start of inputFields
 local startPosY = yUnit * 2.3
 local startPosX = xUnit * 3
 
+--- Define the starting position of the highlight input field and the space between fields
 local highlightPosY = 1
+local marginY = yUnit * 0.05
 
-local maxChoices = 4
-local choices = 0
+--- Declare the boundary levels for the input field set
 local upperBoundary = 0
 local lowerBoundary = 1
+
+--- Define the starting position of the shopping cart
 local cartPosX = 12.9 * xUnit
 local cartPosY = 4.3 * yUnit
-local pizzasPerPage = 6
-local isChosen = false
 
+
+--- Determine if a pizza has been chosen and the lower and upper limit of choices
+local isChosen = false
+local maxChoices = 4
+local choices = 0
+
+--- Page counter variables to display a varying number of pizza pages depending on the number of pizzas
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
 local lastPage = currentPage
+
+--- Variable to determine the maximum number of pizzas per page
+local pizzasPerPage = 6
+
+--- Variables to save the content of a certain field to display it again after highlighted
+--- Used for memory optimization
 local tempCopy = nil
 local tempCoord = {}
 
-
+--- Handle table form from last step and initiate a new table form for this step
 local lastForm = ...
 local newForm = {}
 
-
-local pizzaMenu = {}
+--- Pizza tables
 local pizza = {}
+local pizzaMenu = {}
 
 function checkForm()
 	if type(lastForm) == "string" then

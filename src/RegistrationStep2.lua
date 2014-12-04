@@ -353,12 +353,12 @@ function createFormsForTest(String)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #integer StartPosY Starting position of the marker for this page
--- @return #integer HightlightPosY Current position of the marker
--- @return #integer upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #integer lowerBoundary Value of the lowerst position the marker can go before going offscreen
--- @return #integer height Height of the screen
--- @return #integer marginY Space that the highlighter shall jump
+-- @return #number StartPosY Starting position of the marker for this page
+-- @return #number HightlightPosY Current position of the marker
+-- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return #number height Height of the screen
+-- @return #number marginY Space that the highlighter shall jump
 function returnValuesForTesting(value)
 	if value == "startPosY" then
 		return startPosY
@@ -376,7 +376,7 @@ function returnValuesForTesting(value)
 end
 
 --- Function that sets the markers position to a selected value
--- @param #integer value Value that the user wants to set the marker on 
+-- @param #number value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
 	highlightPosY = value
 end

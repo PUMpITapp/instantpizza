@@ -53,7 +53,7 @@ local io = require "IOHandler"
 --- Determine whether to use the stub or to run the actual file
 local text = chooseText()
 
---Declare units in variables
+--- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
@@ -250,7 +250,7 @@ function displayHighlightSurface()
 end
 
 --- Function fetches chosen pizza with help from the coordinates on the screen
--- @Param #integer highlightPosY Checks what the current position of the highlighter is
+-- @Param #number highlightPosY Checks what the current position of the highlighter is
 -- @return #table currentPizzeria Returns what pizza that corresponds to the current coordinates
 function getPizzaOnCoordinate(highlightPosY)
 	if checkTestMode() then
@@ -350,7 +350,7 @@ end
 --- Gets input from user and re-directs according to input
 -- @param #string key The key that has been pressed
 -- @param #string state The state of the key-press
--- @return #String pathName The path that the program shall be directed to
+-- @return #string pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'up') then
@@ -454,11 +454,11 @@ function createFormsForTest(String)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #integer StartPosY Starting position of the marker for this page
--- @return #integer HightlightPosY Current position of the marker
--- @return #integer upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #integer lowerBoundary Value of the lowerst position the marker can go before going offscreen
--- @return #integer height Height of the screen
+-- @return #number StartPosY Starting position of the marker for this page
+-- @return #number HightlightPosY Current position of the marker
+-- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return #number height Height of the screen
 function returnValuesForTesting(value)
 	if value == "startPosY" then
 		return startPosY
@@ -474,7 +474,7 @@ function returnValuesForTesting(value)
 end
 
 --- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
--- @param #integer value Sets highlight position value in vertical direction
+-- @param #number value Sets highlight position value in vertical direction
 function setValuesForTesting(value)
 	highlightPosY = value
 end

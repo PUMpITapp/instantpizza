@@ -1,5 +1,3 @@
-
-
 --- Tells if the program shall be run on the box or not
 local onBox = true
 
@@ -30,15 +28,17 @@ end
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/MenuPics/?.png'
   dir = sys.root_path()
-
 else
   gfx =  chooseGfx(checkTestMode())
   sys = {}
   sys.root_path = function () return '' end
   dir = ""
 end
+
+--- Variable that fetches the order content from previous step
 local order=...
---- Calls methods that builds GUI
+
+--- Function that builds GUI
 function buildGUI()
   local backgroundPNG = gfx.loadpng("Images/Pending/Pendingpage.png")
   backgroundPNG:premultiply()
@@ -47,43 +47,7 @@ function buildGUI()
   gfx.update()
 end
 
---- Gets input from user and re-directs according to input
--- @param #string key The key that has been pressed
--- @param #string state The state of the key-press
--- @return #String pathName The path that the program shall be directed to
-function onKey(key,state)
-	if(state == 'up') then
-	  	if(key == 'red') then
-	  		--Go to Create Account
-        pathName = dir .. "ManageAccounts.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          print(pathName)
-          dofile(pathName)
-        end
-      elseif(key == 'yellow') then
-        --Go to About
-        pathName = dir .. "Tutorial.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          dofile(pathName)
-        end
-        elseif(key == 'blue') then
-        --Go to About
-        pathName = dir .. "OrderStep1.lua"
-          if checkTestMode() then
-            return pathName
-          else
-            
-            dofile(pathName)
-        end
-	  	end
-	end
-end
-
----Function that checks if the box is connected to our server or not
+--- Function that checks if the box is connected to our server or not
 function internet(order)
         local sock = require("socket")
         local tcp=sock.tcp()
@@ -112,11 +76,5 @@ function onStart()
 		pathName = dir .. "OrderFail.lua"
 	end
 	assert(loadfile(pathName))(order)
-	
 end
 onStart()
-
-
-
-
-

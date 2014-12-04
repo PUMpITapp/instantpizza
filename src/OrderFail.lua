@@ -28,7 +28,6 @@ end
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
   dir = sys.root_path()
-
 else
   gfx =  chooseGfx(checkTestMode())
   sys = {}
@@ -73,7 +72,7 @@ local qrCode = nil
 --- Initiates a new form for this step
 local newOrder = ...
 
----Builds GUI
+--- Function that builds GUI
 function buildGUI()
   displayBackground()
   displayQR()
@@ -92,7 +91,6 @@ end
 function generateOrder()
   if checkTestMode() then
   else
-
     stringToQR = "Customer: "..newOrder.name.."\nAddress: "..newOrder.address.."\nZip: "..newOrder.zipCode.."\nPhone: "..newOrder.phone.."\n\n"
     for i = 1, #newOrder.order do
       for key,value in pairs(newOrder.order[i])do
@@ -111,6 +109,7 @@ function generateQR()
   end
   return qrCode
 end
+
 --- Function that displays the QR code on the Screen
 function displayQR()
   local i = 1
@@ -120,17 +119,14 @@ function displayQR()
   local qrSurface = gfx.new_surface(bitSizeX, bitSizeY)
 
   for k,v in pairs(qrCode) do
-
     for key, value in pairs(v)do
       -- print(key,value)
       if(value >0) then
         qrSurface:fill({0,0,0,255})
         gfx.screen:copyfrom(qrSurface,nil,{x =startPosX+ i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
-
       elseif(value<0) then
         qrSurface:fill({255,255,255,255})
         gfx.screen:copyfrom(qrSurface,nil,{x =startPosX +i * bitSizeX, y = startPosY+j * bitSizeY, w = bitSizeX, h = bitSizeY})
-
       end
       i = i + 1
     end
@@ -158,7 +154,6 @@ end
 -- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
-
       if(key == 'green') then
         --Go back to menu
         pathName =dir.. "Menu.lua"
@@ -177,12 +172,10 @@ function updateScreen()
   gfx.update()
 end
 
---Main method
+--- Main method
 function onStart()
   generateOrder()
   qrCode = generateQR()
 	updateScreen()
 end
 onStart()
-
-

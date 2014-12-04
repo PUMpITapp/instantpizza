@@ -269,7 +269,7 @@ end
 --- Gets input from user and re-directs according to input
 -- @param #string key The key that has been pressed
 -- @param #string state The state of the key-press
--- @return #String pathName The path that the program shall be directed to
+-- @return #string pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
   		if(key == 'up') then

@@ -1,5 +1,8 @@
+--- Set if the program is running on the box or not
 local onBox = true
 
+--- Checks if the file was called from a test file.
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false  
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -10,9 +13,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -22,19 +24,8 @@ function chooseGfx()
   return tempGfx
 end
 
-
-if onBox == true then
-  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
-  dir = sys.root_path()
-
-else
-  gfx =  chooseGfx(checkTestMode())
-  sys = {}
-  sys.root_path = function () return '' end
-  dir = ""
-end
-
-
+--- Chooses the text
+-- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -43,45 +34,71 @@ function chooseText()
   end
   return tempText
 end
-local text = chooseText()
+
+--- Change the path system if the app runs on the box comparing to the emulator
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
+  dir = sys.root_path()
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
+--- Variable to use when handling tables that are stored in the system
 local io = require "IOHandler"
 
+--- Variable to use when displaying printed text on the screen
+--- Determine whether to use the stub or to run the actual file
+local text = chooseText()
+
+--- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
---2.3 13.8 
+--- Start of inputFields
 local startPosY = yUnit*2.5
---Rutan startposition är 2.3. För att centrera inputfield 2.3+2.25. 
 local startPosX = xUnit*4.55
+
+--- End of inputFields
+local inputFieldEnd = 0
+
+--- Define the starting position of the highlight input field and the space between fields
 local marginY = yUnit*1.2
 local highlightPosY = 1
 
+--- Declare the boundary levels for the input field set
 local lowerBoundary = 1
 local upperBoundary = 0
-local inputFieldEnd = 0
+
+--- Page counter variables to display a varying number of pizza pages depending on the number of pizzas
 local noOfPages = 0
 local currentPage = 1
 local startingIndex = 1
 local lastPage = currentPage
 
+--- Variables to save the content of a certain field to display it again after highlighted
+--- Used for memory optimization
 local tempCopy = nil
 local tempCoord = {}
 
-
-
 dofile(dir .. "table.save.lua")
 
+--- Fetches the users and puts it in a table
 function readUsers()
   userTable = io.readUserData()
   if userTable == nil then
   end
-
 end
 
+--- Function that determines total number of pages with users
 function getNoOfPages()
   noOfPages = math.ceil(#userTable/4)
 end
 
+--- Changes to the next or previous page of users to display
+-- @param #string key The key that has been pressed
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -98,6 +115,7 @@ function changeCurrentPage(key)
   updateScreen()
 end
 
+--- Display the users on the screen
 function displayUsers()
   local yCoord = startPosY
   local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
@@ -105,11 +123,13 @@ function displayUsers()
   accountTile:premultiply()
   text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*2.78, yCoord*2.85, xUnit*7, yUnit)
   if not (userTable == nil) then
+    -- Loops through all users that shall be displayed
     for index = startingIndex, #userTable do
       gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)
       text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
       upperBoundary = upperBoundary + 1
       yCoord = yCoord+marginY
+      -- Stop displaying when the maximum number of users is shown
       if(index == startingIndex+3)then
           break
       end
@@ -121,8 +141,8 @@ function displayUsers()
   progress = "displayUsers:DONE"
 end
 
+--- Function that determines which arrows that shall be shown depending on the current page of users
 function displayArrows()
-  --Bilder
   if(noOfPages > 1 and currentPage < noOfPages)then
       local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
       rightArrow:premultiply()
@@ -137,18 +157,19 @@ function displayArrows()
   end
 end
 
+--- Function that interprets the coordinate position and translates it to a user
+-- @return #table account Returns which account that corresponds to the coordinates highlighted
 function getUser()
   userIndex = (4*(currentPage-1)+highlightPosY)
   account = userTable[userIndex]
-  -- print(account.email)
   return account
 end
 
+--- Displays the highlighter that highlights different choices
 function displayHighlighter()
   if(upperBoundary >0)then
     local highlightTile = gfx.loadpng("Images/OrderPics/highlighter.png")
-    highlightTile:premultiply()
-    
+    highlightTile:premultiply()    
     local coord = {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit}
     
     if tempCopy == nil then
@@ -164,12 +185,12 @@ function displayHighlighter()
       tempCoord = coord
       lastPage = currentPage
     end
-    
       gfx.screen:copyfrom(highlightTile, nil, coord ,true)
       highlightTile:destroy()
   end
 end
---Calls methods that builds GUI
+
+--- Function that builds the GUI
 function buildGUI()
   displayBackground()
   displayUsers()
@@ -177,6 +198,7 @@ function buildGUI()
   displayArrows()
 end
 
+--- Function that displays the Background image of the application
 function displayBackground()
   local backgroundPNG = gfx.loadpng("Images/OrderPics/chooseaccount.png")  
   backgroundPNG:premultiply()
@@ -184,20 +206,21 @@ function displayBackground()
   backgroundPNG:destroy()
 end
 
+--- Deletes the currect surfaces from the box's RAM memory, clearing up space for new surfaces
 function destroyTempSurfaces()
   if not (tempCopy == nil)then
   tempCopy:destroy()
+  end
 end
-end
+
+--- Moves the current inputField
+-- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
-  --Starting coordinates for current inputField
   if(key == 'up')then
     highlightPosY = highlightPosY - 1
-
     if(highlightPosY < lowerBoundary) then
       highlightPosY = upperBoundary
     end
-  --Down
   elseif(key == 'down')then
     highlightPosY = highlightPosY + 1
     if(highlightPosY > upperBoundary) then
@@ -206,14 +229,18 @@ function moveHighlightedInputField(key)
 end
   displayHighlighter()
   gfx.update()
-
 end
 
+--- Function that that updates the current screen to be able to show new or changed information to the user
 function updateScreen()
   buildGUI()
   gfx.update()
 end
 
+--- Gets input from user and re-directs according to input
+-- @param #string key The key that has been pressed
+-- @param #string state The state of the key-press
+-- @return #string pathName The path that the program shall be directed to
 function onKey(key,state)
   if(state == 'up') then
     if(key == 'up')then
@@ -237,17 +264,17 @@ function onKey(key,state)
       end
       changeCurrentPage(key)
     elseif(key == 'ok') then
+      -- Go to next step in the order process
       pathName = dir.. "OrderStep2.lua"
       if checkTestMode() then
         return pathName
       else
-
         account = getUser()
         destroyTempSurfaces()
         assert(loadfile(pathName))(account)
       end
     elseif(key == 'green') then
-      --Go back to menu
+      -- Go back to menu
       pathName = dir .. "Menu.lua"
       if checkTestMode() then
         return pathName
@@ -259,9 +286,12 @@ function onKey(key,state)
   end
 end
 
--- This functions returns some of the values on local variables to be used when testing
+--- Functions that returns some of the values on local variables to be used when testing
+-- @return #number StartPosY Starting position of the marker for this page
+-- @return #number HightlightPosY Current position of the marker
+-- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
 function returnValuesForTesting(value)
-
   if value == "startPosY" then
     return startPosY
   elseif value == "highlightPosY" then 
@@ -272,12 +302,14 @@ function returnValuesForTesting(value)
     return lowerBoundary
   end
 end
--- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+
+--- Function that sets the markers position to a selected value
+-- @param #number value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
   highlightPosY = value
 end
 
---Main method
+--- Main method
 function onStart()
   readUsers()
   getNoOfPages()

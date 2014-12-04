@@ -91,12 +91,12 @@ function addNotification()
   if accountAction == "Edit" then
     local backgroundPNG = gfx.loadpng("Images/MenuPics/editaccount.png")
     backgroundPNG:premultiply()
-    gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75})
+    gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75},true)
     backgroundPNG:destroy()
   elseif (accountAction == "Create") then
     local backgroundPNG = gfx.loadpng("Images/MenuPics/anewaccount.png")
     backgroundPNG:premultiply()
-    gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75})
+    gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75},true)
     backgroundPNG:destroy()  
   end
 end

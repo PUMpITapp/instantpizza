@@ -1,6 +1,7 @@
-
+--- Tells if the program shall be run on the box or not
 local runningOnBox = true
 
+--- Checks if the program is run on the box or not
 if runningOnBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/KeyboardPics/?.png'
   dir = sys.root_path()
@@ -11,30 +12,53 @@ gfx = require "gfx"
   	dir = ""
 end
 
+--- Variable to use when displaying printed text on the screen
+--- Determine whether to use the stub or to run the actual file
 local text = require "write_text"
 
---preload all the PNG
+--- variable for checking which state the keyboard is in
+local keyboardState = "SHIFT"
 
-local keyboardState = "SHIFT" -- which layer that should be shown in keyboard
+--- surfaces that saves parts of gfx.screen for faster computation
 local keyboardSurface = nil
 local textAreaSurface = nil
 
+--- Declare units in variables
+local xUnit = gfx.screen:get_width()/16
+local yUnit = gfx.screen:get_height()/9
 
-local xUnit = gfx.screen:get_width()/16	-- units of the screen. based on 16:9 ratio
-local yUnit = gfx.screen:get_height()/9	-- units of the screen. based on 16:9 ratio
-local keyboardWidth = 10 * xUnit 	-- width of keyboard. can be changed to fit
-local keyboardHeight = 4 * yUnit 	-- height of keyabord. can be changed to fit
-local keyboardXUnit = keyboardWidth/10 -- margin in x for keyboard keys. 10 keys each row
-local keyboardYUnit = keyboardHeight/4 -- margin in y for keyboard keys. 4 keys each column
-local keyboardPosX = 3 * xUnit 		-- keyboard start posx. can be changed
-local keyboardPosY = 3 * yUnit 		-- keyboard start posy. can be changed
-local highlightPosX = 1 			-- pos on keyboard posx
-local highlightPosY = 1 			-- pos on keyboard posy
-local inputText = ""	-- text to display
-local lastForm = ...	-- gets last state form
+--- Declare different keyboard units used in keyboard
+local keyboardWidth = 10 * xUnit
+local keyboardHeight = 4 * yUnit
+local keyboardXUnit = keyboardWidth/10
+local keyboardYUnit = keyboardHeight/4
+local keyboardPosX = 3 * xUnit
+local keyboardPosY = 3 * yUnit
 
+--- Declare the highlight position
+local highlightPosX = 1
+local highlightPosY = 1
+
+--- Declare the text that the keyboard will write to
+local inputText = ""
+
+--- the data (varargs)
+local lastForm = ...
+
+--- init the mapelements that will be the key in keyboard
 local mapElement = {}
 
+--- Function that creates a new mapelement
+-- @return setsmetatable the function to the mapElement table
+-- @param #string key. what letter the key will have
+-- @param #integer row. what row mapelement will be in
+-- @param #integer column. what column the mapelement will be in
+-- @param #number posx. what position on X-axis the key is mapped on
+-- @param #number posy. what position on y-axis the key is mapped on
+-- @param #integer upMove. what is legitimate upmove from key
+-- @param #integer downMove. what is legitimate downmove from key
+-- @param #integer leftmove. what is legitimate leftmove from key
+-- @param #integer rightmove. what is legitimate rightmove from key
 function mapElement:new(key,row,column,posX,posY,upMove,downMove,leftMove,rightMove)
 	pos = {
 	letter = key,
@@ -49,6 +73,7 @@ function mapElement:new(key,row,column,posX,posY,upMove,downMove,leftMove,rightM
 	return setmetatable(pos, self)
 end
 
+--- init the map with the keys of smallcase
 local map = {
 	p11 = mapElement:new("q",1,1,keyboardPosX + keyboardXUnit, keyboardPosY + keyboardYUnit,1,1),
 	p21 = mapElement:new("w",2,1,keyboardPosX +2 * keyboardXUnit, keyboardPosY +keyboardYUnit,1,2),
@@ -88,6 +113,7 @@ local map = {
 	p54 = mapElement:new("ENTER",5,4,keyboardPosX +9 * keyboardXUnit, keyboardPosY +4 * keyboardYUnit,9,10)
 }
 
+--- Function that sets the keyboard to lower case
 function setKeyboardToLowerCase()
 	map.p11.letter = "q"
 	map.p21.letter = "w"
@@ -127,6 +153,7 @@ function setKeyboardToLowerCase()
 	map.p54.letter = "ENTER"
 end
 
+--- Function that sets the keyboard to upper case
 function setKeyboardToUpperCase()
 	map.p11.letter = "Q"
 	map.p21.letter = "W"
@@ -166,6 +193,7 @@ function setKeyboardToUpperCase()
 	map.p54.letter = "ENTER"
 end
 
+--- Function that sets the keyboard to symbols
 function setKeyboardToSymbols()
 	map.p11.letter = "1"
 	map.p21.letter = "2"
@@ -205,14 +233,16 @@ function setKeyboardToSymbols()
 	map.p54.letter = "ENTER"
 end
 
-
+--- Main method that starts when the box runs
 function onStart()
 	setInputText(lastForm[lastForm.currentInputField])
 	createWhiteBackground()
+	keyboardState = getState()
 	createKeyboardSurface(keyboardState)
 	updateScreen()
 end
 
+--- function that updates the whole screen in the correct order
 function updateScreen()
 	displayKeyboardSurface()
 	displayInput()
@@ -220,15 +250,18 @@ function updateScreen()
 	gfx.update()
 end
 
+--- function that inits the inputText to a value
+-- @param #string the text to be saved on inputText
 function setInputText(text)
 	inputText = text
 end
 
---display keyboard
+--- display keyboardsurface on gfx
 function displayKeyboardSurface()
 	gfx.screen:copyfrom(keyboardSurface,nil,{x=keyboardPosX,y = keyboardPosY, w= keyboardWidth,h = keyboardHeight},true)
 end
 
+--- creates the white background
 function createWhiteBackground()
 	local whiteBackgroundPNG = gfx.loadpng("Images/KeyboardPics/keyboardbackgroundwhite.png")
 	whiteBackgroundPNG:premultiply()
@@ -236,6 +269,8 @@ function createWhiteBackground()
 	whiteBackgroundPNG:destroy()
 end
 
+--- creates the keyboardsurface with correct casing
+-- @param #string state for creating correct keyboard
 function createKeyboardSurface(state)
 	local coord = {x=keyboardPosX,y = keyboardPosY, w= keyboardWidth,h = keyboardHeight}
 	local letters = nil
@@ -244,7 +279,6 @@ function createKeyboardSurface(state)
 	keyboardPNG:premultiply()
 	gfx.screen:copyfrom(keyboardPNG,nil, coord,true)
 	keyboardPNG:destroy()
-	
 	if state == "shift" then
 		letters = gfx.loadpng("Images/KeyboardPics/upperCase.png")
 	elseif state == "SHIFT" then
@@ -264,10 +298,24 @@ function createKeyboardSurface(state)
 	end
 		keyboardSurface:copyfrom(gfx.screen,coord,nil)
 end
+--- gets what kind of state the keyboard should be in
+-- @return states for keyboard
+function getState()
+	if lastForm.currentInputField ~= nil then
+		if lastForm.currentInputField == "zipCode" or lastForm.currentInputField == "phone" then
+			setKeyboardToSymbols()
+			return "symbols"
+		else
+			setKeyboardToLowerCase()
+			return "SHIFT"
+		end
+	else
+		setKeyboardToLowerCase()
+		return "SHIFT"
+	end
+end
 
--- displays the highlight
--- TODO
--- needs to change position of copyfrom. (0,0) now writes over keyboard 
+--- displays the correct highlight over the correct key
 function displayHighlightSurface()
 
 	local coordinates = getCoordinates(highlightPosX,highlightPosY)
@@ -307,8 +355,7 @@ function displayHighlightSurface()
 end
 
 
--- displays the saved text on screen
--- TODO: change pictures to fit
+--- displays the  inputText on screen
 function displayInput()
 	if(textAreaSurface == nil) then
 		local textAreaPNG = gfx.loadpng("Images/KeyboardPics/textArea.png")
@@ -323,7 +370,10 @@ function displayInput()
 	text.print(gfx.screen, "lato","black","medium", inputText.."|", 2.5 * xUnit, 2.2 * yUnit, 12 * xUnit, yUnit)
 end
 
---gets the coordinate of arguments
+--- gets the map coordingates from the key position
+-- @return pos if coordinate exists, else nil
+-- @param #integer posx for getting coordinates
+-- @param #integer posy for getting coordinates
 function getCoordinates(posX, posY)
 	local pos = "p"..posX..posY
 	if map[pos] then
@@ -333,49 +383,64 @@ function getCoordinates(posX, posY)
 	end
 end
 
---gets the correct movement of cursor when moving in y-axis
+--- gets the correct movement of cursor when moving in y-axis
+-- @returns the correct move for y-axis
+-- @param #integer xVal for getting correct ymove
+-- @param #integer yVal for getting correct ymove
+-- @param #string move for getting correct ymove
 function getYmove(xVal,yVal,move)
 	local coordinates = "p"..xVal..yVal
 	return map[coordinates][move]
 end
 
--- gets the char that is highlighted
+--- gets the char that is highlighted
+-- @return the letter on highlighted key
+-- @param #integer row for getting the correct key
+-- @param #integer column for getting the correct key
 function getKeyboardChar(row, column)
 	local coordinates = "p"..row..column
 	return map[coordinates].letter
 end
 
---saves character to string
+--- saves character to string
+-- @param #string saves the character to the string
 function setToString(character)
 	if character then
 	inputText = inputText .. character
 	end
 end
 
--- saves the text to the form to be sent back to last state
+--- saves the text to the form to be sent back to last state
+-- @param #string mytext saved to the form
 function saveToForm(myText)
 	local inputField = lastForm.currentInputField
 	lastForm[inputField] = myText
 end
 
--- send form back to state
+--- send form back to state and destroys all the surfaces 
+-- @param #string state which state the form is sent back to
+-- @param #table form the form that is sended back
 function sendFormBackToState(state, form)
 	saveToForm(inputText)
 	destroyTempSurfaces()
 	assert(loadfile(state))(form)
 end
 
+--- destroys all the surfaces
 function destroyTempSurfaces()
 	keyboardSurface:destroy()
 	textAreaSurface:destroy()
 end
 
--- removes the last char in argument
+--- removes the last char in the argument
+-- @return the modified strings
+-- @param #string input to be moved from
 function removeLastChar(input)
 	return string.sub(input, 1, #input-1)
 end
 
--- moves the highligther around
+--- moves the highligther around
+-- @param #string key that is pressed on
 function movehighlightKey(key)
 	if(key == 'down')then
 		--down
@@ -418,7 +483,9 @@ function movehighlightKey(key)
 		gfx.update()
 end
 
--- calls functions on keys
+--- calls functions on keys
+-- @param #string key that is pushed on
+-- @param #string state that the key pushed on is at
 function onKey(key, state)
 	if(state == 'up')then
 		if(key == 'up') then

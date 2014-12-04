@@ -71,6 +71,7 @@ local currentPage = 1
 local startingIndex = 1
 local lastPage = 0
 local deletedElement = false
+local deleteMode = false
 
 dofile(dir.."table.save.lua")
 
@@ -221,6 +222,15 @@ function updateScreen()
   gfx.update()
 end
 
+function showConfirmDelete()
+  print("Hej")
+  local confirm = gfx.loadpng("Images/UserPage/notifydelete.png") 
+  confirm:premultiply()
+  gfx.screen:copyfrom(confirm, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  confirm:destroy()
+  deleteMode = true
+  gfx.update()
+end
 function deleteUser()
   removeIndex = (4*(currentPage-1)+highlightPosY)
   table.remove(userTable,removeIndex)
@@ -244,17 +254,23 @@ function onKey(key,state)
       if checkTestMode() then
         return key
       end
+      if not deleteMode then
       moveHighlightedInputField(key)
+      end
     elseif(key == 'down')then
       if checkTestMode() then
         return key
       end
+      if not deleteMode then
       moveHighlightedInputField(key)
+      end
     elseif(key == 'left')then
       if checkTestMode() then
         return key
       end
+      if not deleteMode then
       changeCurrentPage(key)
+      end
       elseif(key == 'right')then
       if checkTestMode() then
         return key
@@ -276,20 +292,30 @@ function onKey(key,state)
       if checkTestMode() then
         return pathName
       else
+        if(deleteMode)then
+          updateScreen()
+          deleteMode = false
+        else
         destroyTempSurfaces()
         dofile(pathName)
+        end
       end
     elseif(key == 'yellow') then
       pathName = dir .. "RegistrationStep1.lua"
       if checkTestMode() then
         return pathName
       else
+        if(deleteMode)then
+          deleteUser()
+          deleteMode = false
+        else
         newForm = getUser()
         destroyTempSurfaces()
         assert(loadfile(pathName))(newForm)
+        end
       end
       elseif(key == 'red') then
-        deleteUser()
+        showConfirmDelete()
   	end
 	end
 end
@@ -314,6 +340,7 @@ end
 
 --Main method
 function onStart()
+  print(deleteMode)
   readUsers()
   updateScreen()
 end

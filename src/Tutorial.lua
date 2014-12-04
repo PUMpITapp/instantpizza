@@ -1,7 +1,7 @@
 --- Tells if the program shall be run on the box or not
 local onBox = true
 
--- Makes sure that the first step in the tutorial is loaded
+--- Makes sure that the first step in the tutorial is loaded
 local pageNumber = 1
 
 --- Checks if the file was called from a test file.
@@ -46,7 +46,7 @@ function buildGUI()
   gfx.update()
 end
 
--- Displays the general background
+--- Displays the general background
 -- @param #picture backgroundPNG Determines which image to load to the background
 function displayBackground()
   local backgroundPNG = gfx.loadpng("Images/AboutPics/aboutbackground.png")
@@ -55,8 +55,8 @@ function displayBackground()
   backgroundPNG:destroy()
 end
 
--- Displays the current step of the tutorial
--- @param #integer pageNumber Checks which is the current step of the tutorial
+--- Displays the current step of the tutorial
+-- @param #number pageNumber Checks which is the current step of the tutorial
 -- @param #picture step Determines which image to load in front of the background
 function displayStep()
   if pageNumber == 1 then
@@ -74,12 +74,12 @@ end
 --- Gets input from user and re-directs according to input
 -- @param #string key The key that has been pressed
 -- @param #string state The state of the key-press
--- @param #integer pageNumber The current step in the tutorial
+-- @param #number pageNumber The current step in the tutorial
 -- @return #string pathName The path that the program shall be directed to
 function onKey(key,state)
   if(state == 'up') then
       if(key == 'green') then
-        --Go to Menu
+        -- Go to Menu
         pathName = dir .. "Menu.lua"
         if checkTestMode() then
           return pathName
@@ -87,24 +87,24 @@ function onKey(key,state)
           dofile(pathName)
         end
       elseif(key == 'left') then
-        --Go to the previous step
+        -- Go to the previous step
         if checkTestMode() then
           return key
         else
           if pageNumber == 1 then
-            --Nothing
+            -- Nothing
           else
             pageNumber = pageNumber - 1
             buildGUI()
           end
         end
       elseif(key == 'right') then
-        --Go to the next step
+        -- Go to the next step
         if checkTestMode() then
           return key
         else
           if pageNumber == 3 then
-            --Nothing
+            -- Nothing
           else
             pageNumber = pageNumber + 1
             buildGUI()

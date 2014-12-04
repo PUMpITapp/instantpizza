@@ -1,11 +1,3 @@
---TODO:
---Another background and text font/color
---Real graphic components
---Inputs from user, read and write
---Create user from input
---Buttons
---Transparency not working
-
 --- Set if the program is running on the box or not
 local onBox =true
 
@@ -36,7 +28,6 @@ end
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/OrderPics/?.png'
   dir = sys.root_path()
-
 else
   gfx =  chooseGfx(checkTestMode())
   sys = {}
@@ -83,11 +74,11 @@ end
 --- Gets input from user and re-directs according to input
 -- @param #string key The key that has been pressed
 -- @param #string state The state of the key-press
--- @return #String pathName The path that the program shall be directed to
+-- @return #string pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
       if(key == 'green') then
-        --Go back to menu
+        -- Go back to menu
         pathName = dir .. "Menu.lua"
         if checkTestMode() then
           return pathName
@@ -105,7 +96,7 @@ function displayOrderInfo()
   text.print(gfx.screen,"lato","black","small","Total cost: "..tostring(newOrder.totalPrice).."kr", xUnit*4, yUnit*6.3, 6* xUnit,200)
 end
 
----Main method
+--- Main method
 function onStart()
 	buildGUI()
   displayOrderInfo()

@@ -1,5 +1,3 @@
-
-
 --- Tells if the program shall be run on the box or not
 local onBox = false
 
@@ -30,7 +28,6 @@ end
 if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/MenuPics/?.png'
   dir = sys.root_path()
-
 else
   gfx =  chooseGfx(checkTestMode())
   sys = {}
@@ -38,11 +35,14 @@ else
   dir = ""
 end
 
+--- Variable that is triggered if a user has edited or created an account
 local accountAction = ...
+
+--- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
---- Calls methods that builds GUI
+--- Function that builds the GUI
 function buildGUI()
   local backgroundPNG = gfx.loadpng("Images/MenuPics/menu.png")
   backgroundPNG:premultiply()
@@ -55,7 +55,7 @@ end
 --- Gets input from user and re-directs according to input
 -- @param #string key The key that has been pressed
 -- @param #string state The state of the key-press
--- @return #String pathName The path that the program shall be directed to
+-- @return #string pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then
@@ -67,7 +67,7 @@ function onKey(key,state)
           dofile(pathName)
         end
       elseif(key == 'yellow') then
-        --Go to About
+        -- Go to About
         pathName = dir .. "Tutorial.lua"
         if checkTestMode() then
           return pathName
@@ -75,17 +75,18 @@ function onKey(key,state)
           dofile(pathName)
         end
         elseif(key == 'blue') then
-        --Go to About
+        -- Go to order steps
         pathName = dir .. "OrderStep1.lua"
           if checkTestMode() then
             return pathName
           else
-            
             dofile(pathName)
         end
 	  	end
 	end
 end
+
+--- Function that is triggered when an account is edited or created that alerts the user about the action
 function addNotification()
   if accountAction == "Edit" then
     local backgroundPNG = gfx.loadpng("Images/MenuPics/editaccount.png")
@@ -97,7 +98,6 @@ function addNotification()
     backgroundPNG:premultiply()
     gfx.screen:copyfrom(backgroundPNG, nil, {x=xUnit*7.01 , y=yUnit*4.65, w=xUnit*2.5, h=yUnit*3.75})
     backgroundPNG:destroy()  
-  
   end
 end
 

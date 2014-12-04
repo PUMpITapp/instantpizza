@@ -1,0 +1,692 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Luadocs for ManageAccounts.lua</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+    <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+    <div id="product_logo"></div>
+    <div id="product_name"><big><b></b></big></div>
+    <div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/IOHandler.html">IOHandler.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Keyboard.html">Keyboard.lua</a>
+	</li>
+
+	<li><strong>ManageAccounts.lua</strong></li>
+	
+	<li>
+		<a href="../files/Menu.html">Menu.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderFail.html">OrderFail.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderPending.html">OrderPending.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep1.html">OrderStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep2.html">OrderStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep3.html">OrderStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep4.html">OrderStep4.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationReview.html">RegistrationReview.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep1.html">RegistrationStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep2.html">RegistrationStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep3.html">RegistrationStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Tutorial.html">Tutorial.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h1>File <code>ManageAccounts.lua</code></h1>
+
+
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+    <tr>
+    <td class="name" nowrap><a href="#buildGUI">buildGUI</a>&nbsp;()</td>
+    <td class="summary">Calls methods that builds GUI </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#changeCurrentPage">changeCurrentPage</a>&nbsp;(key)</td>
+    <td class="summary">Change visible page </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#checkTestMode">checkTestMode</a>&nbsp;()</td>
+    <td class="summary">Checks if the file was called from a test file.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#chooseGfx">chooseGfx</a>&nbsp;()</td>
+    <td class="summary">Chooses either the actual or the dummy gfx.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#chooseText">chooseText</a>&nbsp;()</td>
+    <td class="summary">Chooses the text </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#deleteUser">deleteUser</a>&nbsp;()</td>
+    <td class="summary">Deletes user from table </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#destroyTempSurfaces">destroyTempSurfaces</a>&nbsp;()</td>
+    <td class="summary">Destoys tempsurfaces </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayArrows">displayArrows</a>&nbsp;()</td>
+    <td class="summary">Displays navigation arrows.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayBackground">displayBackground</a>&nbsp;()</td>
+    <td class="summary">Displays the background </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayHighlighter">displayHighlighter</a>&nbsp;()</td>
+    <td class="summary">Displays highligher </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayUsers">displayUsers</a>&nbsp;()</td>
+    <td class="summary">Display users on the screen.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#getNoOfPages">getNoOfPages</a>&nbsp;()</td>
+    <td class="summary">Calculates no of pages </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#getUser">getUser</a>&nbsp;()</td>
+    <td class="summary">Returns the user that is highlighted </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#moveHighlightedInputField">moveHighlightedInputField</a>&nbsp;(key)</td>
+    <td class="summary">Change position for the inputfield </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onKey">onKey</a>&nbsp;(key, state)</td>
+    <td class="summary">Gets input from user and re-directs according to input </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onStart">onStart</a>&nbsp;()</td>
+    <td class="summary">Main method </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#readUsers">readUsers</a>&nbsp;()</td>
+    <td class="summary">Reads users from file and store them in a table </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#returnValuesForTesting">returnValuesForTesting</a>&nbsp;(value)</td>
+    <td class="summary">Functions that returns some of the values on local variables to be used when testing </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setValuesForTesting">setValuesForTesting</a>&nbsp;(value)</td>
+    <td class="summary">Function that sets the markers position to a selected value </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#showConfirmDelete">showConfirmDelete</a>&nbsp;()</td>
+    <td class="summary">When deleting a user a confirm image is shown.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#updateScreen">updateScreen</a>&nbsp;()</td>
+    <td class="summary">Updates screen, calling other functions that displays images and changes on screen </td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="buildGUI"></a><strong>buildGUI</strong>&nbsp;()</dt>
+<dd>
+Calls methods that builds GUI
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="changeCurrentPage"></a><strong>changeCurrentPage</strong>&nbsp;(key)</dt>
+<dd>
+Change visible page
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: is the key pressed by the user. (Left or right)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="checkTestMode"></a><strong>checkTestMode</strong>&nbsp;()</dt>
+<dd>
+Checks if the file was called from a test file.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+#boolean true if called from a test file, indicating the file is being tested, else false
+
+
+
+</dd>
+
+
+
+
+<dt><a name="chooseGfx"></a><strong>chooseGfx</strong>&nbsp;()</dt>
+<dd>
+Chooses either the actual or the dummy gfx.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+#string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="chooseText"></a><strong>chooseText</strong>&nbsp;()</dt>
+<dd>
+Chooses the text
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+#string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="deleteUser"></a><strong>deleteUser</strong>&nbsp;()</dt>
+<dd>
+Deletes user from table
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="destroyTempSurfaces"></a><strong>destroyTempSurfaces</strong>&nbsp;()</dt>
+<dd>
+Destoys tempsurfaces
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayArrows"></a><strong>displayArrows</strong>&nbsp;()</dt>
+<dd>
+Displays navigation arrows. Depending on the active page arrows are shown
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayBackground"></a><strong>displayBackground</strong>&nbsp;()</dt>
+<dd>
+Displays the background
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayHighlighter"></a><strong>displayHighlighter</strong>&nbsp;()</dt>
+<dd>
+Displays highligher
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayUsers"></a><strong>displayUsers</strong>&nbsp;()</dt>
+<dd>
+Display users on the screen.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="getNoOfPages"></a><strong>getNoOfPages</strong>&nbsp;()</dt>
+<dd>
+Calculates no of pages
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="getUser"></a><strong>getUser</strong>&nbsp;()</dt>
+<dd>
+Returns the user that is highlighted
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+the selected user
+
+
+
+</dd>
+
+
+
+
+<dt><a name="moveHighlightedInputField"></a><strong>moveHighlightedInputField</strong>&nbsp;(key)</dt>
+<dd>
+Change position for the inputfield
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: is the key pressed by the user
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onKey"></a><strong>onKey</strong>&nbsp;(key, state)</dt>
+<dd>
+Gets input from user and re-directs according to input
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: is the key the user presses
+	</li>
+	
+	<li>
+	  state: is the current state of the pressed key (up or down)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onStart"></a><strong>onStart</strong>&nbsp;()</dt>
+<dd>
+Main method
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="readUsers"></a><strong>readUsers</strong>&nbsp;()</dt>
+<dd>
+Reads users from file and store them in a table
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="returnValuesForTesting"></a><strong>returnValuesForTesting</strong>&nbsp;(value)</dt>
+<dd>
+Functions that returns some of the values on local variables to be used when testing
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: 
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>StartPosY Starting position of the marker for this page
+	
+	<li>HightlightPosY Current position of the marker
+	
+	<li>upperBoundary Value of the highest position the marker can go before going offscreen
+	
+	<li>lowerBoundary Value of the lowerst position the marker can go before going offscreen
+	
+</ol>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setValuesForTesting"></a><strong>setValuesForTesting</strong>&nbsp;(value)</dt>
+<dd>
+Function that sets the markers position to a selected value
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: Value that the user wants to set the marker on
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="showConfirmDelete"></a><strong>showConfirmDelete</strong>&nbsp;()</dt>
+<dd>
+When deleting a user a confirm image is shown.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="updateScreen"></a><strong>updateScreen</strong>&nbsp;()</dt>
+<dd>
+Updates screen, calling other functions that displays images and changes on screen
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+    <p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>

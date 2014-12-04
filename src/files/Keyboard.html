@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Luadocs for Keyboard.lua</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+    <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+    <div id="product_logo"></div>
+    <div id="product_name"><big><b></b></big></div>
+    <div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/IOHandler.html">IOHandler.lua</a>
+	</li>
+
+	<li><strong>Keyboard.lua</strong></li>
+	
+	<li>
+		<a href="../files/ManageAccounts.html">ManageAccounts.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Menu.html">Menu.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderFail.html">OrderFail.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderPending.html">OrderPending.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep1.html">OrderStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep2.html">OrderStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep3.html">OrderStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep4.html">OrderStep4.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationReview.html">RegistrationReview.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep1.html">RegistrationStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep2.html">RegistrationStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep3.html">RegistrationStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Tutorial.html">Tutorial.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h1>File <code>Keyboard.lua</code></h1>
+
+
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+    <tr>
+    <td class="name" nowrap><a href="#createKeyboardSurface">createKeyboardSurface</a>&nbsp;(state)</td>
+    <td class="summary">creates the keyboardsurface with correct casing </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#createWhiteBackground">createWhiteBackground</a>&nbsp;()</td>
+    <td class="summary">creates the white background </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#destroyTempSurfaces">destroyTempSurfaces</a>&nbsp;()</td>
+    <td class="summary">destroys all the surfaces </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayHighlightSurface">displayHighlightSurface</a>&nbsp;()</td>
+    <td class="summary">displays the correct highlight over the correct key </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayInput">displayInput</a>&nbsp;()</td>
+    <td class="summary">displays the  inputText on screen </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayKeyboardSurface">displayKeyboardSurface</a>&nbsp;()</td>
+    <td class="summary">display keyboardsurface on gfx </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#getCoordinates">getCoordinates</a>&nbsp;(posX, posY, posx, posy)</td>
+    <td class="summary">gets the map coordingates from the key position </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#getKeyboardChar">getKeyboardChar</a>&nbsp;(row, column)</td>
+    <td class="summary">gets the char that is highlighted </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#getState">getState</a>&nbsp;()</td>
+    <td class="summary">gets what kind of state the keyboard should be in </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#getYmove">getYmove</a>&nbsp;(xVal, yVal, move)</td>
+    <td class="summary">gets the correct movement of cursor when moving in y-axis </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#mapElement:new">mapElement:new</a>&nbsp;(key, row, column, posX, posY, upMove, downMove, leftMove, rightMove, key., row., column., posx., posy., upMove., downMove., leftmove., rightmove.)</td>
+    <td class="summary">Function that creates a new mapelement </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#movehighlightKey">movehighlightKey</a>&nbsp;(key)</td>
+    <td class="summary">moves the highligther around </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onKey">onKey</a>&nbsp;(key, state)</td>
+    <td class="summary">calls functions on keys </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onStart">onStart</a>&nbsp;()</td>
+    <td class="summary">Main method that starts when the box runs </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#removeLastChar">removeLastChar</a>&nbsp;(input)</td>
+    <td class="summary">removes the last char in the argument </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#saveToForm">saveToForm</a>&nbsp;(myText, mytext)</td>
+    <td class="summary">saves the text to the form to be sent back to last state </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#sendFormBackToState">sendFormBackToState</a>&nbsp;(state, form)</td>
+    <td class="summary">send form back to state and destroys all the surfaces </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setInputText">setInputText</a>&nbsp;(text, the)</td>
+    <td class="summary">function that inits the inputText to a value </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setKeyboardToLowerCase">setKeyboardToLowerCase</a>&nbsp;()</td>
+    <td class="summary">Function that sets the keyboard to lower case </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setKeyboardToSymbols">setKeyboardToSymbols</a>&nbsp;()</td>
+    <td class="summary">Function that sets the keyboard to symbols </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setKeyboardToUpperCase">setKeyboardToUpperCase</a>&nbsp;()</td>
+    <td class="summary">Function that sets the keyboard to upper case </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setToString">setToString</a>&nbsp;(character, saves)</td>
+    <td class="summary">saves character to string </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#updateScreen">updateScreen</a>&nbsp;()</td>
+    <td class="summary">function that updates the whole screen in the correct order </td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="createKeyboardSurface"></a><strong>createKeyboardSurface</strong>&nbsp;(state)</dt>
+<dd>
+creates the keyboardsurface with correct casing
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  state: for creating correct keyboard
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="createWhiteBackground"></a><strong>createWhiteBackground</strong>&nbsp;()</dt>
+<dd>
+creates the white background
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="destroyTempSurfaces"></a><strong>destroyTempSurfaces</strong>&nbsp;()</dt>
+<dd>
+destroys all the surfaces
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayHighlightSurface"></a><strong>displayHighlightSurface</strong>&nbsp;()</dt>
+<dd>
+displays the correct highlight over the correct key
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayInput"></a><strong>displayInput</strong>&nbsp;()</dt>
+<dd>
+displays the  inputText on screen
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayKeyboardSurface"></a><strong>displayKeyboardSurface</strong>&nbsp;()</dt>
+<dd>
+display keyboardsurface on gfx
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="getCoordinates"></a><strong>getCoordinates</strong>&nbsp;(posX, posY, posx, posy)</dt>
+<dd>
+gets the map coordingates from the key position
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  posX: 
+	</li>
+	
+	<li>
+	  posY: 
+	</li>
+	
+	<li>
+	  posx: for getting coordinates
+	</li>
+	
+	<li>
+	  posy: for getting coordinates
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+pos if coordinate exists, else nil
+
+
+
+</dd>
+
+
+
+
+<dt><a name="getKeyboardChar"></a><strong>getKeyboardChar</strong>&nbsp;(row, column)</dt>
+<dd>
+gets the char that is highlighted
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  row: for getting the correct key
+	</li>
+	
+	<li>
+	  column: for getting the correct key
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+the letter on highlighted key
+
+
+
+</dd>
+
+
+
+
+<dt><a name="getState"></a><strong>getState</strong>&nbsp;()</dt>
+<dd>
+gets what kind of state the keyboard should be in
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+states for keyboard
+
+
+
+</dd>
+
+
+
+
+<dt><a name="getYmove"></a><strong>getYmove</strong>&nbsp;(xVal, yVal, move)</dt>
+<dd>
+gets the correct movement of cursor when moving in y-axis
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  xVal: for getting correct ymove
+	</li>
+	
+	<li>
+	  yVal: for getting correct ymove
+	</li>
+	
+	<li>
+	  move: for getting correct ymove
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="mapElement:new"></a><strong>mapElement:new</strong>&nbsp;(key, row, column, posX, posY, upMove, downMove, leftMove, rightMove, key., row., column., posx., posy., upMove., downMove., leftmove., rightmove.)</dt>
+<dd>
+Function that creates a new mapelement
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: 
+	</li>
+	
+	<li>
+	  row: 
+	</li>
+	
+	<li>
+	  column: 
+	</li>
+	
+	<li>
+	  posX: 
+	</li>
+	
+	<li>
+	  posY: 
+	</li>
+	
+	<li>
+	  upMove: 
+	</li>
+	
+	<li>
+	  downMove: 
+	</li>
+	
+	<li>
+	  leftMove: 
+	</li>
+	
+	<li>
+	  rightMove: 
+	</li>
+	
+	<li>
+	  key.: what letter the key will have
+	</li>
+	
+	<li>
+	  row.: what row mapelement will be in
+	</li>
+	
+	<li>
+	  column.: what column the mapelement will be in
+	</li>
+	
+	<li>
+	  posx.: what position on X-axis the key is mapped on
+	</li>
+	
+	<li>
+	  posy.: what position on y-axis the key is mapped on
+	</li>
+	
+	<li>
+	  upMove.: what is legitimate upmove from key
+	</li>
+	
+	<li>
+	  downMove.: what is legitimate downmove from key
+	</li>
+	
+	<li>
+	  leftmove.: what is legitimate leftmove from key
+	</li>
+	
+	<li>
+	  rightmove.: what is legitimate rightmove from key
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+setsmetatable the function to the mapElement table
+
+
+
+</dd>
+
+
+
+
+<dt><a name="movehighlightKey"></a><strong>movehighlightKey</strong>&nbsp;(key)</dt>
+<dd>
+moves the highligther around
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: that is pressed on
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onKey"></a><strong>onKey</strong>&nbsp;(key, state)</dt>
+<dd>
+calls functions on keys
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: that is pushed on
+	</li>
+	
+	<li>
+	  state: that the key pushed on is at
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onStart"></a><strong>onStart</strong>&nbsp;()</dt>
+<dd>
+Main method that starts when the box runs
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="removeLastChar"></a><strong>removeLastChar</strong>&nbsp;(input)</dt>
+<dd>
+removes the last char in the argument
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  input: to be moved from
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+the modified strings
+
+
+
+</dd>
+
+
+
+
+<dt><a name="saveToForm"></a><strong>saveToForm</strong>&nbsp;(myText, mytext)</dt>
+<dd>
+saves the text to the form to be sent back to last state
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  myText: 
+	</li>
+	
+	<li>
+	  mytext: saved to the form
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="sendFormBackToState"></a><strong>sendFormBackToState</strong>&nbsp;(state, form)</dt>
+<dd>
+send form back to state and destroys all the surfaces
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  state: which state the form is sent back to
+	</li>
+	
+	<li>
+	  form: the form that is sended back
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setInputText"></a><strong>setInputText</strong>&nbsp;(text, the)</dt>
+<dd>
+function that inits the inputText to a value
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  text: 
+	</li>
+	
+	<li>
+	  the: text to be saved on inputText
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setKeyboardToLowerCase"></a><strong>setKeyboardToLowerCase</strong>&nbsp;()</dt>
+<dd>
+Function that sets the keyboard to lower case
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setKeyboardToSymbols"></a><strong>setKeyboardToSymbols</strong>&nbsp;()</dt>
+<dd>
+Function that sets the keyboard to symbols
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setKeyboardToUpperCase"></a><strong>setKeyboardToUpperCase</strong>&nbsp;()</dt>
+<dd>
+Function that sets the keyboard to upper case
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setToString"></a><strong>setToString</strong>&nbsp;(character, saves)</dt>
+<dd>
+saves character to string
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  character: 
+	</li>
+	
+	<li>
+	  saves: the character to the string
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="updateScreen"></a><strong>updateScreen</strong>&nbsp;()</dt>
+<dd>
+function that updates the whole screen in the correct order
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+    <p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>

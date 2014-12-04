@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Luadocs for OrderStep2.lua</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+    <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+    <div id="product_logo"></div>
+    <div id="product_name"><big><b></b></big></div>
+    <div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/IOHandler.html">IOHandler.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Keyboard.html">Keyboard.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/ManageAccounts.html">ManageAccounts.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Menu.html">Menu.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderFail.html">OrderFail.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderPending.html">OrderPending.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep1.html">OrderStep1.lua</a>
+	</li>
+
+	<li><strong>OrderStep2.lua</strong></li>
+	
+	<li>
+		<a href="../files/OrderStep3.html">OrderStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep4.html">OrderStep4.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationReview.html">RegistrationReview.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep1.html">RegistrationStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep2.html">RegistrationStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep3.html">RegistrationStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Tutorial.html">Tutorial.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h1>File <code>OrderStep2.lua</code></h1>
+
+
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+    <tr>
+    <td class="name" nowrap><a href="#addToOrder">addToOrder</a>&nbsp;(posX, posY)</td>
+    <td class="summary">Adds selected item to order </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#checkExistingOrder">checkExistingOrder</a>&nbsp;()</td>
+    <td class="summary">Checks if there is a existing order.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#checkTestMode">checkTestMode</a>&nbsp;()</td>
+    <td class="summary">Checks if the file was called from a test file.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#chooseGfx">chooseGfx</a>&nbsp;()</td>
+    <td class="summary">Chooses either the actual or the dummy gfx.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#chooseText">chooseText</a>&nbsp;()</td>
+    <td class="summary">Chooses the text </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#createMenu">createMenu</a>&nbsp;()</td>
+    <td class="summary">Function that creates the menu and sets references to refToOrder and refToMenu.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#createOrder">createOrder</a>&nbsp;()</td>
+    <td class="summary">Used to create an order when user presses confirm </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#deleteOrder">deleteOrder</a>&nbsp;(posX, posY)</td>
+    <td class="summary">Deletes item from order </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#destroyTempSurfaces">destroyTempSurfaces</a>&nbsp;()</td>
+    <td class="summary">Function that destroys tempsurface.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayBackground">displayBackground</a>&nbsp;()</td>
+    <td class="summary">Function that displays the background </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayCart">displayCart</a>&nbsp;()</td>
+    <td class="summary">Displays selected items in a cart </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayHighlighter">displayHighlighter</a>&nbsp;()</td>
+    <td class="summary">Displays highlighter on screen.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayMenu">displayMenu</a>&nbsp;()</td>
+    <td class="summary">Prints menu and tiles to screen </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#moveHighlight">moveHighlight</a>&nbsp;(key)</td>
+    <td class="summary">Moves hightlightfield </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onKey">onKey</a>&nbsp;(key, state)</td>
+    <td class="summary">OnKey function.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onStart">onStart</a>&nbsp;()</td>
+    <td class="summary">Main method </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#returnValuesForTesting">returnValuesForTesting</a>&nbsp;(value)</td>
+    <td class="summary">Functions that returns some of the values on local variables to be used when testing </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setCoordinates">setCoordinates</a>&nbsp;(x, y)</td>
+    <td class="summary">Function that sets coordinates </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setUpperBoundary">setUpperBoundary</a>&nbsp;(column)</td>
+    <td class="summary">Sets the upperboundary limit.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setXValuesForTesting">setXValuesForTesting</a>&nbsp;(value)</td>
+    <td class="summary">This function is used in testing when it is needed to set the value of highlightPosX to a certain number </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#setYValuesForTesting">setYValuesForTesting</a>&nbsp;(value)</td>
+    <td class="summary">This function is used in testing when it is needed to set the value of highlightPosY to a certain number </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#updateScreen">updateScreen</a>&nbsp;()</td>
+    <td class="summary">Calls methods that builds GUI </td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="addToOrder"></a><strong>addToOrder</strong>&nbsp;(posX, posY)</dt>
+<dd>
+Adds selected item to order
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  posX: is the current x position
+	</li>
+	
+	<li>
+	  posY: is the current y position
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="checkExistingOrder"></a><strong>checkExistingOrder</strong>&nbsp;()</dt>
+<dd>
+Checks if there is a existing order. Only not nil if user goes back from OrderStep3 to this step.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="checkTestMode"></a><strong>checkTestMode</strong>&nbsp;()</dt>
+<dd>
+Checks if the file was called from a test file.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+true if called from a test file, indicating the file is being tested, else false
+
+
+
+</dd>
+
+
+
+
+<dt><a name="chooseGfx"></a><strong>chooseGfx</strong>&nbsp;()</dt>
+<dd>
+Chooses either the actual or the dummy gfx.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="chooseText"></a><strong>chooseText</strong>&nbsp;()</dt>
+<dd>
+Chooses the text
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="createMenu"></a><strong>createMenu</strong>&nbsp;()</dt>
+<dd>
+Function that creates the menu and sets references to refToOrder and refToMenu.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="createOrder"></a><strong>createOrder</strong>&nbsp;()</dt>
+<dd>
+Used to create an order when user presses confirm
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="deleteOrder"></a><strong>deleteOrder</strong>&nbsp;(posX, posY)</dt>
+<dd>
+Deletes item from order
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  posX: is the x position
+	</li>
+	
+	<li>
+	  posY: is the y position
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="destroyTempSurfaces"></a><strong>destroyTempSurfaces</strong>&nbsp;()</dt>
+<dd>
+Function that destroys tempsurface.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayBackground"></a><strong>displayBackground</strong>&nbsp;()</dt>
+<dd>
+Function that displays the background
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayCart"></a><strong>displayCart</strong>&nbsp;()</dt>
+<dd>
+Displays selected items in a cart
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayHighlighter"></a><strong>displayHighlighter</strong>&nbsp;()</dt>
+<dd>
+Displays highlighter on screen.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayMenu"></a><strong>displayMenu</strong>&nbsp;()</dt>
+<dd>
+Prints menu and tiles to screen
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="moveHighlight"></a><strong>moveHighlight</strong>&nbsp;(key)</dt>
+<dd>
+Moves hightlightfield
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: is the key user presses
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onKey"></a><strong>onKey</strong>&nbsp;(key, state)</dt>
+<dd>
+OnKey function. Called when user presses any key
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: is the key user pressed
+	</li>
+	
+	<li>
+	  state: is the current state (up or down)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onStart"></a><strong>onStart</strong>&nbsp;()</dt>
+<dd>
+Main method
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="returnValuesForTesting"></a><strong>returnValuesForTesting</strong>&nbsp;(value)</dt>
+<dd>
+Functions that returns some of the values on local variables to be used when testing
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: Sets the different testing values
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>StartPosY Starting position of the marker for this page
+	
+	<li>HightlightPosY Current position of the marker
+	
+	<li>HightlightPosX Current position of the marker
+	
+	<li>upperBoundary Value of the highest position the marker can go before going offscreen
+	
+	<li>lowerBoundary Value of the lowerst position the marker can go before going offscreen
+	
+</ol>
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setCoordinates"></a><strong>setCoordinates</strong>&nbsp;(x, y)</dt>
+<dd>
+Function that sets coordinates
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  x: is the x position
+	</li>
+	
+	<li>
+	  y: is the y position
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setUpperBoundary"></a><strong>setUpperBoundary</strong>&nbsp;(column)</dt>
+<dd>
+Sets the upperboundary limit.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  column: is the active column (pizzas and sauces or drinks and salads)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setXValuesForTesting"></a><strong>setXValuesForTesting</strong>&nbsp;(value)</dt>
+<dd>
+This function is used in testing when it is needed to set the value of highlightPosX to a certain number
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: is the highlightposition x
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="setYValuesForTesting"></a><strong>setYValuesForTesting</strong>&nbsp;(value)</dt>
+<dd>
+This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  value: is the highlightposition y
+	</li>
+	
+</ul>
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="updateScreen"></a><strong>updateScreen</strong>&nbsp;()</dt>
+<dd>
+Calls methods that builds GUI
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+    <p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>

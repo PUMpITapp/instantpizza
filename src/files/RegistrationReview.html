@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<head>
+    <title>Luadocs for RegistrationReview.lua</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+    <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+    <div id="product_logo"></div>
+    <div id="product_name"><big><b></b></big></div>
+    <div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h1>LuaDoc</h1>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+
+
+<!-- File list -->
+
+<h1>Files</h1>
+<ul>
+
+	<li>
+		<a href="../files/IOHandler.html">IOHandler.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Keyboard.html">Keyboard.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/ManageAccounts.html">ManageAccounts.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Menu.html">Menu.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderFail.html">OrderFail.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderPending.html">OrderPending.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep1.html">OrderStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep2.html">OrderStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep3.html">OrderStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/OrderStep4.html">OrderStep4.lua</a>
+	</li>
+
+	<li><strong>RegistrationReview.lua</strong></li>
+	
+	<li>
+		<a href="../files/RegistrationStep1.html">RegistrationStep1.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep2.html">RegistrationStep2.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/RegistrationStep3.html">RegistrationStep3.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/Tutorial.html">Tutorial.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div> <!-- id="navigation" -->
+
+<div id="content">
+
+<h1>File <code>RegistrationReview.lua</code></h1>
+
+
+
+
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+    <tr>
+    <td class="name" nowrap><a href="#buildGUI">buildGUI</a>&nbsp;()</td>
+    <td class="summary">Calls methods that builds GUI.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#checkForm">checkForm</a>&nbsp;()</td>
+    <td class="summary">Function that checks lastForm and sets its values to newForm.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#checkTestMode">checkTestMode</a>&nbsp;()</td>
+    <td class="summary">Checks if the file was called from a test file.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#chooseGfx">chooseGfx</a>&nbsp;()</td>
+    <td class="summary">Chooses either the actual or the dummy gfx.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#chooseText">chooseText</a>&nbsp;()</td>
+    <td class="summary">Chooses the text </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayBackground">displayBackground</a>&nbsp;()</td>
+    <td class="summary">Displays the background image.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#displayRegistrationInformation">displayRegistrationInformation</a>&nbsp;()</td>
+    <td class="summary">Displays information the user has entered in previous steps.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onKey">onKey</a>&nbsp;(key, state)</td>
+    <td class="summary">On key function, called when user press a key.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#onStart">onStart</a>&nbsp;()</td>
+    <td class="summary">Main method </td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#saveAccount">saveAccount</a>&nbsp;()</td>
+    <td class="summary">Saves the account.</td>
+    </tr>
+
+</table>
+
+
+
+
+
+
+<br/>
+<br/>
+
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="buildGUI"></a><strong>buildGUI</strong>&nbsp;()</dt>
+<dd>
+Calls methods that builds GUI.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="checkForm"></a><strong>checkForm</strong>&nbsp;()</dt>
+<dd>
+Function that checks lastForm and sets its values to newForm.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="checkTestMode"></a><strong>checkTestMode</strong>&nbsp;()</dt>
+<dd>
+Checks if the file was called from a test file.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+true if called from a test file, indicating the file is being tested, else false
+
+
+
+</dd>
+
+
+
+
+<dt><a name="chooseGfx"></a><strong>chooseGfx</strong>&nbsp;()</dt>
+<dd>
+Chooses either the actual or the dummy gfx.
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="chooseText"></a><strong>chooseText</strong>&nbsp;()</dt>
+<dd>
+Chooses the text
+
+
+
+
+
+
+
+<h3>Return value:</h3>
+tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayBackground"></a><strong>displayBackground</strong>&nbsp;()</dt>
+<dd>
+Displays the background image.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="displayRegistrationInformation"></a><strong>displayRegistrationInformation</strong>&nbsp;()</dt>
+<dd>
+Displays information the user has entered in previous steps.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onKey"></a><strong>onKey</strong>&nbsp;(key, state)</dt>
+<dd>
+On key function, called when user press a key.
+
+
+<h3>Parameters</h3>
+<ul>
+	
+	<li>
+	  key: The key that has been pressed
+	</li>
+	
+	<li>
+	  state: The state of the key-press (up,down)
+	</li>
+	
+</ul>
+
+
+
+
+
+
+<h3>Return value:</h3>
+pathName The path that the program shall be directed to
+
+
+
+</dd>
+
+
+
+
+<dt><a name="onStart"></a><strong>onStart</strong>&nbsp;()</dt>
+<dd>
+Main method
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="saveAccount"></a><strong>saveAccount</strong>&nbsp;()</dt>
+<dd>
+Saves the account. If editMode exists updateUser is called in IOHandler, otherwise saveUser is called.
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+
+
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+    <p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>

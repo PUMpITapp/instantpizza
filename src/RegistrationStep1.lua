@@ -262,12 +262,13 @@ function onKey(key,state)
 	  				assert(loadfile(pathName))(newForm)
 	  			end
 	  		else
-	  			-- Nothing
+	  			-- displayErrorData()
+	  			updateScreen()
 	  		end
-	  	elseif(key == 'yellow') then
-	  		pathName = dir .. "RegistrationStep2.lua"
-	  		destroyTempSurfaces()
-	  		assert(loadfile(pathName))(newForm)
+	  	-- elseif(key == 'yellow') then
+	  	-- 	pathName = dir .. "RegistrationStep2.lua"
+	  	-- 	destroyTempSurfaces()
+	  	-- 	assert(loadfile(pathName))(newForm)
 	  	else
 	  		-- TODO:
 	  		-- More options for buttonpress?
@@ -300,7 +301,7 @@ function invalidFormValidation(form)
 	errorCounter = 0
 	-- Checks if zipcode is 5 digits (Swedish standard)
 	if (not string.match(form.zipCode, '^%d%d%d%d%d$') and string.len(form.zipCode) ~= 0) then
-		print("Incorrect zip-code, write five digits(no spaces)")		
+		-- print("Incorrect zip-code, write five digits(no spaces)")		
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
@@ -308,7 +309,7 @@ function invalidFormValidation(form)
 	end
 	-- Checks if phone number is 10 digits (Swedish standard)
 	if (not string.match(form.phone, '^%d%d%d%d%d%d%d%d%d%d$') and  string.len(form.phone) ~= 0) then
-		print("Incorrect phone number, write ten digits(no spaces)")		
+		-- print("Incorrect phone number, write ten digits(no spaces)")		
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
 		errorCounter = errorCounter + 1
 	else
@@ -316,7 +317,7 @@ function invalidFormValidation(form)
 	end
 	-- Checks if the input email is on the correct form (SomeCharacters@Something.Short)
 	if (not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') and  string.len(form.email) ~= 0) then
-		print("Incorrect email, use valid characters")		
+		-- print("Incorrect email, use valid characters")		
 		invalidFields["email"] = "Incorrect email, use valid characters"
 		errorCounter = errorCounter + 1		
 	else		

@@ -400,15 +400,15 @@ function onKey(key,state)
 	  				gfx.update()
 	  			end
 	  		end
-	  		elseif key =='green' then
-	  			-- Go back to menu
-	  			pathName = dir.."Menu.lua"
-	  			if checkTestMode() then
-			 		return pathName
-				else
-					destroyTempSurfaces()
-	  				dofile(pathName)
-	  			end
+	  	-- 	elseif key =='green' then
+	  	-- 		-- Go back to menu
+	  	-- 		pathName = dir.."Menu.lua"
+	  	-- 		if checkTestMode() then
+			 -- 		return pathName
+				-- else
+				-- 	destroyTempSurfaces()
+	  	-- 			dofile(pathName)
+	  	-- 		end
 	  	elseif(key == 'ok') then
 	  		if checkTestMode() then
 				return key

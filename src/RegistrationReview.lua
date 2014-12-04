@@ -139,14 +139,14 @@ function onKey(key,state)
         else
           assert(loadfile(pathName))(accountAction)
         end
-      elseif(key == 'green') then
-        --Go back to menu
-        pathName = dir .. "Menu.lua"
-        if checkTestMode() then
-          return pathName
-        else
-          dofile(pathName)
-        end
+      -- elseif(key == 'green') then
+      --   --Go back to menu
+      --   pathName = dir .. "Menu.lua"
+      --   if checkTestMode() then
+      --     return pathName
+      --   else
+      --     dofile(pathName)
+      --   end
       elseif(key == 'red') then
         --Go back to menu
         pathName = dir .. "RegistrationStep3.lua"

@@ -303,11 +303,14 @@ end
 function getState()
 	if lastForm.currentInputField ~= nil then
 		if lastForm.currentInputField == "zipCode" or lastForm.currentInputField == "phone" then
+			setKeyboardToSymbols()
 			return "symbols"
-		else	
+		else
+			setKeyboardToLowerCase()
 			return "SHIFT"
 		end
 	else
+		setKeyboardToLowerCase()
 		return "SHIFT"
 	end
 end

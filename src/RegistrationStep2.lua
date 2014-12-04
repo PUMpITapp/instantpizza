@@ -41,7 +41,7 @@ if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzeriaPics/Pizzerias/?.png'
   dir = sys.root_path()
 else
-  gfx =  chooseGfx(checkTestMode())
+  gfx =  chooseGfx()
   sys = {}
   sys.root_path = function () return '' end
   dir = ""
@@ -52,13 +52,11 @@ local io = require "IOHandler"
 
 --- Variable to use when displaying printed text on the screen
 --- Determine whether to use the stub or to run the actual file
-local text = chooseText(checkTestMode())
-
+local text = chooseText()
 
 --- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
-
 
 --- Start of inputFields
 local startPosY = yUnit*2.5
@@ -92,9 +90,10 @@ local lastPage = currentPage
 local tempCopy = nil
 local coord = {}
 
+--- Checks if there is a form sent from a previous step that needs to be considerd in this Step
 function checkForm()
 	if type(lastForm) == "string" then
-
+		-- Nothing
 	else
 		if lastForm then
 				newForm = lastForm
@@ -104,7 +103,7 @@ end
 
 --- Reads pizzerias from file and puts them in the pizzeria table.
 function readPizzeriaFromFile()
-	--Uncomment if pizzeria_data is empty
+	-- Uncomment if pizzeria_data is empty
 	--io.addTestPizzerias()
 	if checkTestMode() then
 		pizzerias = io.readPizzerias_test()
@@ -113,10 +112,13 @@ function readPizzeriaFromFile()
 	end
 end
 
+--- Function that determines total number of pages with pizzerias
 function getNoOfPages()
   noOfPages = math.ceil(#pizzerias/4)
 end
 
+--- Changes to the next or previous page of pizzerias to display
+-- @param #string key The key that has been pressed
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -135,6 +137,7 @@ function changeCurrentPage(key)
   updateScreen()
 end
 
+--- Function that determines which arrows that shall be shown depending on the current page of pizzerias
 function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
   	local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
@@ -150,7 +153,7 @@ function displayArrows()
   end
 end
 
---Builds GUI
+--- Function that builds the GUI
 function buildGUI()
 	displayBackground()
 	getNoOfPages()
@@ -159,6 +162,7 @@ function buildGUI()
 	displayHighlighter()
 end
 
+--- Function that displays the Background image of the application
 function displayBackground()
 	local backgroundPNG = gfx.loadpng("Images/PizzeriaPics/background.png")
 	backgroundPNG:premultiply()
@@ -173,6 +177,7 @@ function displayPizzerias()
 	upperBoundary = 0
 	yCoord = startPosY
 	text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*2.52, yCoord*2.85, xUnit*7, yUnit)
+	-- Loops through all pizzerias that shall be displayed
 	for index=startingIndex, #pizzerias do
 		pngPath = pizzerias[index].imgPath
 		pizzeriaImg = gfx.loadpng("Images/PizzeriaPics/Pizzerias/"..tostring(pngPath))
@@ -182,6 +187,7 @@ function displayPizzerias()
 		pizzeriaImg:destroy()
 		upperBoundary = upperBoundary + 1
 		yCoord = yCoord+marginY
+		-- Stop displaying when the maximum number of pizzerias is shown
 		if(index == startingIndex+3)then
 			break
 		end
@@ -211,7 +217,6 @@ end
 function displayHighlighter()
 	local highlighter = gfx.loadpng("Images/PizzeriaPics/highlighter.png")
 	highlighter:premultiply()
-
 	local coord =  {x = startPosX, y= startPosY + (highlightPosY - 1) * marginY, w = xUnit*9 , h =yUnit}
 
     if tempCopy == nil then
@@ -235,14 +240,11 @@ end
 --- Moves the current inputField
 -- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
-	--Starting coordinates for current inputField
   	if(key == 'up')then
 	    highlightPosY = highlightPosY - 1
-
 	    if(highlightPosY < lowerBoundary) then
 	      highlightPosY = upperBoundary
 	    end
-	  --Down
 	  elseif(key == 'down')then
 	    highlightPosY = highlightPosY + 1
 	    if(highlightPosY > upperBoundary) then
@@ -253,12 +255,13 @@ function moveHighlightedInputField(key)
 	gfx.update()
 end
 
---- Updates the screen.
+--- Function that that updates the current screen to be able to show new or changed information to the user
 function updateScreen()
 	buildGUI()
 	gfx.update()
 end
 
+--- Deletes the currect surfaces from the box's RAM memory, clearing up space for new surfaces
 function destroyTempSurfaces()
 	tempCopy:destroy()
 end
@@ -268,15 +271,12 @@ end
 -- @param #string state The state of the key-press
 -- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
-	--TODO”
 	if(state == 'up') then
   		if(key == 'up') then
-	  		--Up
 	  		if checkTestMode() then
 				return key
 			end
 	  		moveHighlightedInputField(key)
-
 	  	elseif(key == 'down') then
 	  		if checkTestMode() then
 	 			return key
@@ -293,6 +293,7 @@ function onKey(key,state)
 	 		end
 	  	  	changeCurrentPage(key)
 	  	elseif(key=='ok')then
+	  		-- Next step
 	  		pathName = dir .. "RegistrationStep3.lua"
 	  		if checkTestMode() then
 	  			return pathName
@@ -301,6 +302,7 @@ function onKey(key,state)
 	  		destroyTempSurfaces()
 	  		assert(loadfile(pathName))(newForm)
 	  	elseif(key == 'red')then
+	  		-- Go back to last step
 	  		pathName = dir .. "RegistrationStep1.lua"
 	  		if checkTestMode() then
 	  			return pathName
@@ -309,6 +311,7 @@ function onKey(key,state)
 	  			assert(loadfile(pathName))(newForm)
 	  		end
 	  	elseif key =='green' then
+	  		-- Go back to menu
 	  		pathName = dir .. "Menu.lua"
 	  		if checkTestMode() then
 		 		return pathName
@@ -323,7 +326,8 @@ end
 
 -- Below are functions that is required for the testing of this file
 
--- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+--- Creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+-- @param #string String input from the Tester about what forms that should be created
 function createFormsForTest(String)
 	if String == "Not equal, State equal" then
 		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
@@ -348,9 +352,14 @@ function createFormsForTest(String)
 	end
 end
 
--- This functions returns some of the values on local variables to be used when testing
+--- Functions that returns some of the values on local variables to be used when testing
+-- @return #integer StartPosY Starting position of the marker for this page
+-- @return #integer HightlightPosY Current position of the marker
+-- @return #integer upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #integer lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return #integer height Height of the screen
+-- @return #integer marginY Space that the highlighter shall jump
 function returnValuesForTesting(value)
-
 	if value == "startPosY" then
 		return startPosY
 	elseif value == "highlightPosY" then 
@@ -366,22 +375,25 @@ function returnValuesForTesting(value)
 	end
 end
 
--- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+--- Function that sets the markers position to a selected value
+-- @param #integer value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
 	highlightPosY = value
 end
 
--- Function that returns the newForm variable so that it can be used in testing
+--- Function that returns the newForm variable so that it can be used in testing
+-- @return #table newForm Currect form being used by this Registration step
 function returnNewForm()
 	return newForm
 end
 
--- Function that returns the lastForm variable so that it can be used in testing
+--- Function that returns the lastForm variable so that it can be used in testing
+-- @return #table newForm Currect form being used by the previous Registration step
 function returnLastForm()
 	return lastForm
 end
 
---Main method
+--- Main method
 function onStart()
 	checkForm()
 	readPizzeriaFromFile()

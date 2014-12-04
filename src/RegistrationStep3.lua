@@ -40,7 +40,7 @@ if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzaPics/?.png'
   dir = sys.root_path()
 else
-  gfx =  chooseGfx(checkTestMode())
+  gfx =  chooseGfx()
   sys = {}
   sys.root_path = function () return '' end
   dir = ""
@@ -101,17 +101,18 @@ local newForm = {}
 local pizza = {}
 local pizzaMenu = {}
 
+--- Checks if there is a form sent from a previous step that needs to be considerd in this Step
 function checkForm()
 	if type(lastForm) == "string" then
-
+		-- Nothing
 	else
 		if lastForm then
 			newForm = lastForm
-
 		end
 	end
 end
---Calls methods that builds GUI
+
+--- Function that builds the GUI
 function buildGUI()
 getNoOfPages()
 displayBackground()
@@ -121,11 +122,13 @@ displayChoiceMenu()
 displayHighlightSurface()
 end
 
+--- Function that that updates the current screen to be able to show new or changed information to the user
 function updateScreen()
 	buildGUI()
 	gfx.update()
 end
 
+--- Function that displays the Background image of the application
 function displayBackground()
 	local backgroundPNG = gfx.loadpng("Images/PizzaPics/background.png")
 	backgroundPNG:premultiply()
@@ -133,17 +136,21 @@ function displayBackground()
 	backgroundPNG:destroy()
 end
 
+--- Function that fetches the pizzeria chosen by the user
 function getPizzas()
-	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
+	-- The call on the newForm table cannot be done in test mode
+	if not checkTestMode() then
 		currentPizzeria = newForm.pizzeria
 	end
 end
 
+--- Function that determines total number of pages with pizzas
 function getNoOfPages()	
   noOfPages = math.ceil(#currentPizzeria.pizzas/pizzasPerPage)
-
 end
 
+--- Changes to the next or previous page of pizzerias to display
+-- @param #string key The key that has been pressed
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -160,9 +167,10 @@ function changeCurrentPage(key)
   updateScreen()
 end
 
---Creates new surface and display pizzas
+--- Display pizzas in the input field
 function displayPizzas()
-	if not checkTestMode() then -- Something about currentPizzeria doesnt work when running busted. Johan will fix it when reworking the io system
+	-- The call on the currentPizzeria table cannot be done in test mode
+	if not checkTestMode() then
 		local pizzaPosX = startPosX
 		local pizzaPosY = startPosY
 		local ySpace = 0.75 * yUnit
@@ -171,6 +179,7 @@ function displayPizzas()
 		tilePNG:premultiply()
 		upperBoundary = 0
 		text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.3, yUnit*7.1, xUnit*7, yUnit)
+		-- Loops through all pizzas that shall be displayed
 		for index = startingIndex, #currentPizzeria.pizzas do
 			gfx.screen:copyfrom(tilePNG, nil, {x =pizzaPosX, y =pizzaPosY + (pos-1) * marginY, w=xUnit*7 , h=ySpace},true)
 			text.print(gfx.screen, "lato","black","medium", currentPizzeria.pizzas[index].name, pizzaPosX*1.04, (pizzaPosY*0.99)+ (pos-1) * marginY, xUnit*5, ySpace)
@@ -184,6 +193,7 @@ function displayPizzas()
 	        pizzaPosY = pizzaPosY + ySpace
 	        upperBoundary = upperBoundary+1	                        
 	        pos = pos +1
+			-- Stop displaying when the maximum number of pizzas is shown
 			if(index == startingIndex+5)then 
 				break
 			end
@@ -192,8 +202,8 @@ function displayPizzas()
 	end
 end
 
+--- Function that determines which arrows that shall be shown depending on the current page of pizzeras
 function displayArrows()
-  --Bilder
   if(noOfPages > 1 and currentPage < noOfPages)then
       local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
       rightArrow:premultiply()
@@ -208,9 +218,9 @@ function displayArrows()
   end
 end
 
+--- Displays the highlighter that highlights different choices
 function displayHighlightSurface()
 	local highligtherPNG = nil
-	
 	local coord = {x = startPosX, y = startPosY +(highlightPosY-1) * (yUnit *0.75 + marginY), w = 9 * xUnit, h =0.75*yUnit}
 	
     if tempCopy == nil then
@@ -226,7 +236,7 @@ function displayHighlightSurface()
       tempCoord = coord
       lastPage = currentPage
     end
-
+    -- The if statement below changes what highlighter to show depending on if a pizza already is chosen or not
 	if isAlreadyPicked(getPizzaOnCoordinate(highlightPosY)) then
 		highligtherPNG = gfx.loadpng("Images/PizzaPics/deleteHighlighter.png")
 		highligtherPNG:premultiply()
@@ -239,7 +249,10 @@ function displayHighlightSurface()
 		highligtherPNG:destroy()
 end
 
-function getPizzaOnCoordinate(posY)
+--- Function fetches chosen pizza with help from the coordinates on the screen
+-- @Param #integer highlightPosY Checks what the current position of the highlighter is
+-- @return #table currentPizzeria Returns what pizza that corresponds to the current coordinates
+function getPizzaOnCoordinate(highlightPosY)
 	if checkTestMode() then
 		currentPizzeria = { ["Testing"] = "Works" }
 		return currentPizzeria
@@ -249,6 +262,9 @@ function getPizzaOnCoordinate(posY)
 	end
 end
 
+--- Function checks if a pizza already has been chosen by the user or not
+-- @param #table myPizza The pizza menu customized by the user in this step
+-- @return #boolean isPicked Returns if pizza already chosen or not
 function isAlreadyPicked(myPizza)
 	local isPicked = false
 	for i, v in pairs(pizza) do
@@ -259,13 +275,16 @@ function isAlreadyPicked(myPizza)
 	return isPicked
 end
 
+--- Function checks if a pizza has been chosen by the user of not
+-- @return #boolean isChosen Returns if chosen or not
 function pizzaIsChoosen()
 	isChosen = (#pizza~=0)
 	return isChosen
 end
 
+--- Function adds a pizza that is chosen by the user from the user pizza menu
+-- @param #table pizzaTable Stores the pizzas chosen in this step
 function insertOnChoiceMenu(myPizza)
-
 	if checkTestMode() then
 		return myPizza
 	end
@@ -276,13 +295,16 @@ function insertOnChoiceMenu(myPizza)
 		pizza[choices] = myPizza
 		end
 	end
-
 end
 
+--- Function copies the content of the pizza table in current step to the user's account
+-- @param #table pizzaTable Stores the pizzas chosen in this step
 function insertOnTable(pizzaTable)
 	newForm.pizzeria.userPizzas = pizzaTable
 end
 
+--- Function deletes a pizza that is chosen by the user from the user pizza menu
+-- @param #pizza myPizza Used to compare current highlighted pizza with the complete pizza menu
 function deleteOnChoiceMenu(myPizza)
 	for i,v in pairs(pizza) do
 		if pizza[i].name == myPizza.name then
@@ -292,8 +314,8 @@ function deleteOnChoiceMenu(myPizza)
 	choices = choices - 1
 end
 
+--- Displays the pizza(s) chosen by the user in the cart
 function displayChoiceMenu()
-
 	local menuItems = 0
 	for i, v in pairs(pizza) do
 	text.print(gfx.screen, "lato","black","small", pizza[i].name, cartPosX, cartPosY + 0.5*menuItems*yUnit, xUnit*3, yUnit)
@@ -302,20 +324,19 @@ function displayChoiceMenu()
 	end
 end
 
+--- Deletes the currect surfaces from the box's RAM memory, clearing up space for new surfaces
 function destroyTempSurfaces()
 	tempCopy:destroy()
 end
 
---Moves the current inputField
+--- Moves the current inputField
+-- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
-
-	--Up
 	if(key == 'up')then
 		highlightPosY = highlightPosY - 1
 		if(highlightPosY < lowerBoundary) then
 			highlightPosY = upperBoundary
 		end
-	--Down
 	elseif(key == 'down')then
 		highlightPosY = highlightPosY + 1
 		if(highlightPosY > upperBoundary) then
@@ -326,33 +347,32 @@ function moveHighlightedInputField(key)
 	gfx.update()
 end
 
+--- Gets input from user and re-directs according to input
+-- @param #string key The key that has been pressed
+-- @param #string state The state of the key-press
+-- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
-	--TODO
 	if(state == 'up') then
 	  	if(key == 'up') then
-	  		--Up
 	  		if checkTestMode() then
 				return key
 			end
 	  		moveHighlightedInputField(key)	  		
 	  	elseif(key == 'down') then
-	  		--Down
 	  		if checkTestMode() then
 				return key
 			end
 	  		moveHighlightedInputField(key)
 	  	elseif(key == 'left') then
-	  		--Left
 	  		changeCurrentPage(key)
 	  	elseif(key == 'right') then
-	  		--Right
 	  		changeCurrentPage(key)
 	  	elseif(key == 'red') then
 	  		pathName = dir.."RegistrationStep2.lua"
 	  		if checkTestMode() then
 			 	return pathName
 			else
-
+				-- Go back to previous step including current form
 				destroyTempSurfaces()
 	  			assert(loadfile(pathName))(newForm)
 	  		end
@@ -369,6 +389,7 @@ function onKey(key,state)
 				else
 	  				insertOnTable(pizza)
 	  				destroyTempSurfaces()
+	  				-- Go to next step including current form
 	  				assert(loadfile(pathName))(newForm)
 	  			end
 	  		else
@@ -380,6 +401,7 @@ function onKey(key,state)
 	  			end
 	  		end
 	  		elseif key =='green' then
+	  			-- Go back to menu
 	  			pathName = dir.."Menu.lua"
 	  			if checkTestMode() then
 			 		return pathName
@@ -391,21 +413,22 @@ function onKey(key,state)
 	  		if checkTestMode() then
 				return key
 			end
+			-- Add pizza if not already chosen, delete if chosen
 	  		local choosenPizza = getPizzaOnCoordinate(highlightPosY)
 	  		if isAlreadyPicked(choosenPizza) then
 	  		deleteOnChoiceMenu(choosenPizza)
 	  		else
 	  		insertOnChoiceMenu(choosenPizza)
 	  		end
-	  		updateScreen() -- can still be optimized
-
+	  		updateScreen()
 	  	end
 	end
 end
 
 -- Below are functions that is required for the testing of this file
 
--- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+--- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
+-- @param #string String Sets expected status from the testing function
 function createFormsForTest(String)
 	if String == "Not equal, State equal" then
 		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
@@ -430,7 +453,12 @@ function createFormsForTest(String)
 	end
 end
 
--- This functions returns some of the values on local variables to be used when testing
+--- Functions that returns some of the values on local variables to be used when testing
+-- @return #integer StartPosY Starting position of the marker for this page
+-- @return #integer HightlightPosY Current position of the marker
+-- @return #integer upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #integer lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return #integer height Height of the screen
 function returnValuesForTesting(value)
 	if value == "startPosY" then
 		return startPosY
@@ -442,39 +470,37 @@ function returnValuesForTesting(value)
 		return lowerBoundary
 	elseif value == "height" then
 		return gfx.screen:get_height()
-	elseif value == "inputMovement" then
-		return inputMovement
 	end
 end
--- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
+
+--- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
+-- @param #integer value Sets highlight position value in vertical direction
 function setValuesForTesting(value)
 	highlightPosY = value
 end
 
--- Function that returns the newForm variable so that it can be used in testing
+--- Function that returns the newForm variable so that it can be used in testing
+-- @return #table newForm Returns the form used in this step
 function returnNewForm()
 	return newForm
 end
 
--- Function that returns the lastForm variable so that it can be used in testing
+--- Function that returns the lastForm variable so that it can be used in testing
+-- @return #table lastForm Returns the form used in another step
 function returnLastForm()
 	return lastForm
 end
 
--- Function that sets the variable isChoosen to a boolean
+--- Function that sets the variable isChoosen to a boolean
+-- @param #boolean vale Sets if a pizza is chosen or not
 function setIsChosen(value)
 	isChosen = value
 end
 
---Main method
+--- Main method
 function onStart()
 	checkForm()
 	getPizzas()
 	updateScreen()
 end
 onStart()
-
-
-
-
-

@@ -1,18 +1,8 @@
---TODO:
---Another background and text font/color
---Real graphic components
---Inputs from user, read and write
---Create user from input
---Buttons
---Transparency not working
+--- Set if the program is running on the box or not
 local onBox = true
 
--- These three functions below are required for running tests on this file
 --- Checks if the file was called from a test file.
--- Returs true if it was, 
---   - which would mean that the file is being tested.
--- Returns false if it was not,
---   - which wold mean that the file was being used.  
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -23,9 +13,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -35,17 +24,8 @@ function chooseGfx()
   return tempGfx
 end
 
-if onBox == true then
-  package.path = package.path .. ';' .. sys.root_path() .. 'Images/UserRegistrationPics/?.png'
-  dir = sys.root_path()
-
-else
-  gfx =  chooseGfx(checkTestMode())
-  sys = {}
-  sys.root_path = function () return '' end
-  dir = ""
-end
-
+--- Chooses the text
+-- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -54,25 +34,48 @@ function chooseText()
   end
   return tempText
 end
-local text = chooseText()
-local lastForm = ...
---local account = ...
 
---Position variables
+--- Change the path system if the app runs on the box comparing to the emulator
+if onBox == true then
+  package.path = package.path .. ';' .. sys.root_path() .. 'Images/UserRegistrationPics/?.png'
+  dir = sys.root_path()
+else
+  gfx =  chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
+end
+
+--- Variable to use when displaying printed text on the screen
+--- Determine whether to use the stub or to run the actual file
+local text = chooseText()
+
+--- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
+
+--- Start of inputFields
 local startPosY = yUnit*2.5
 local startPosX = 6*xUnit
 local startPosXText = startPosX*1.01
 local startPosYText = startPosY*0.97
+
+--- Define the starting position of the highlight input field and the space between fields
 local highlightPosY = 1
 local marginY = yUnit*0.7
+
+--- Declare the boundary levels for the input field set
 local upperBoundary = 6
 local lowerBoundary = 1
+
+--- Used to control how many errors there are in the form validation
 local errorCounter = 0
 
+--- Tables used for form validation
 local emptyTextFields = {}
 local invalidFields = {}
+
+--- Table to inform the user how the fields are labeled when displayed
 local inputFieldTable = {}
 inputFieldTable[1] = "name"
 inputFieldTable[2] = "address"
@@ -80,6 +83,8 @@ inputFieldTable[3] = "zipCode"
 inputFieldTable[4] = "city"
 inputFieldTable[5] = "phone"
 inputFieldTable[6] = "email"
+
+--- Initiate look of the form that the user shall fill out
 local newForm = {
 	laststate = "RegistrationStep1.lua",
 	currentInputField = "name",
@@ -91,6 +96,14 @@ local newForm = {
 	email = "",
 	pizzeria = {}
 	}
+
+--- Handle forms from other steps when directed to this step
+local lastForm = ...
+
+--- Variables to save the content of a certain field to display it again after highlighted
+--- Used for memory optimization
+local tempCopy = nil
+local tempCoord = {}
 
 --- Checks if there is a form sent from a previous step that needs to be considerd in this Step
 function checkForm()
@@ -110,7 +123,7 @@ function checkEditMode()
 	end
 end
 
----Function that builds the GUI
+--- Function that builds the GUI
 function buildGUI()
 	displayBackground()
 	displayFormData()
@@ -131,21 +144,17 @@ end
 function displayErrorData()
 	local counter = 0
 	if (#emptyTextFields) == 0 then
-		--Nothing
+		-- Nothing
 	else
 		if (errorCounter == 0) then
 			text.print(gfx.screen,"lato","black","small", "Please fill out all fields",startPosXText,startPosYText+marginY*6,500, 500)
 		end
 	end
-
 	for k,v in pairs(invalidFields) do
 		text.print(gfx.screen,"lato","black","small", v,startPosXText,startPosYText+marginY*(6+(counter*0.4)),500, 500)
 		counter = counter + 1
 	end
 end
-
-local tempCopy = nil
-local tempCoord = {}
 
 --- Displays which field the user is highlighting, using the markers x and y positions
 function displayHighlighter()
@@ -166,7 +175,7 @@ function displayHighlighter()
   	highlighter:destroy()
 end
 
----Creates inputsurface and displays the highlighted input
+--- Creates inputsurface and displays the highlighted input
 function displayFormData()
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.name),startPosXText,startPosYText, 500, 500)
 	text.print(gfx.screen,"lato","black","medium", tostring(newForm.address),startPosXText,startPosYText+marginY,500,500)
@@ -181,16 +190,14 @@ function destroyTempSurfaces()
 	tempCopy:destroy()
 end
 
----Moves the current inputField
+--- Moves the current inputField
 -- @param #string key The key that has been pressed
 function moveHighlightedInputField(key)
 	if(key == 'up')then
 	    highlightPosY = highlightPosY - 1
-
 	    if(highlightPosY < lowerBoundary) then
 	      highlightPosY = upperBoundary
 	    end
-	  --Down
 	elseif(key == 'down')then
 	    highlightPosY = highlightPosY + 1
 	    if(highlightPosY > upperBoundary) then
@@ -215,7 +222,6 @@ end
 -- @return #String pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
-		--print(key)
 		if(key == 'up')then
 			if checkTestMode() then
 				return key
@@ -236,7 +242,7 @@ function onKey(key,state)
 				assert(loadfile(pathName))(newForm)
 			end
 	  	elseif(key == 'green') then
-	  		--Go Back to menu
+	  		-- Go Back to menu
 	  		pathName = dir .. "Menu.lua"
 	  		if checkTestMode() then
 	  			return pathName
@@ -247,7 +253,6 @@ function onKey(key,state)
 	  	elseif(key == 'blue') then
 	  		-- Next Step
 	  		emptyFormValidation(newForm)
-	  		--invalidFormValidation(newForm)
 	  		if ((#emptyTextFields) == 0) and (errorCounter == 0) then
 	  			pathName = dir .. "RegistrationStep2.lua"
 	  			if checkTestMode() then
@@ -257,15 +262,16 @@ function onKey(key,state)
 	  				assert(loadfile(pathName))(newForm)
 	  			end
 	  		else
-	  			--Nothing
+	  			-- Nothing
 	  		end
 	  	elseif(key == 'yellow') then
 	  		pathName = dir .. "RegistrationStep2.lua"
 	  		destroyTempSurfaces()
 	  		assert(loadfile(pathName))(newForm)
 	  	else
-	  		--More options for buttonpress?
-	  		--Test cases needs to be written if more options for onKey is added
+	  		-- TODO:
+	  		-- More options for buttonpress?
+	  		-- Test cases needs to be written if more options for onKey is added
 	  	end
 	end
 end
@@ -273,7 +279,7 @@ end
 -- @param #table key The key that has been pressed
 function emptyFormValidation(form)
 	emptyTextFields = {}
-	--Checks if a textfield is empty
+	-- Checks if a textfield is empty
 	for k,v in pairs(form) do
 		if k == "pizzeria" then
 		else
@@ -292,7 +298,7 @@ end
 function invalidFormValidation(form)
 	invalidFields = {}
 	errorCounter = 0
-	--Checks if zipcode is 5 digits (Swedish standard)
+	-- Checks if zipcode is 5 digits (Swedish standard)
 	if (not string.match(form.zipCode, '^%d%d%d%d%d$') and string.len(form.zipCode) ~= 0) then
 		print("Incorrect zip-code, write five digits(no spaces)")		
 		invalidFields["zipCode"] = "Incorrect zip-code, write five digits(no spaces)"
@@ -300,7 +306,7 @@ function invalidFormValidation(form)
 	else
 		
 	end
-	--Checks if phone number is 10 digits (Swedish standard)
+	-- Checks if phone number is 10 digits (Swedish standard)
 	if (not string.match(form.phone, '^%d%d%d%d%d%d%d%d%d%d$') and  string.len(form.phone) ~= 0) then
 		print("Incorrect phone number, write ten digits(no spaces)")		
 		invalidFields["phone"] = "Incorrect phone number, write ten digits(no spaces)"
@@ -308,7 +314,7 @@ function invalidFormValidation(form)
 	else
 		
 	end
-	--Checks if the input email is on the correct form (SomeCharacters@Something.Short)
+	-- Checks if the input email is on the correct form (SomeCharacters@Something.Short)
 	if (not string.match(form.email, '[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?') and  string.len(form.email) ~= 0) then
 		print("Incorrect email, use valid characters")		
 		invalidFields["email"] = "Incorrect email, use valid characters"
@@ -316,10 +322,11 @@ function invalidFormValidation(form)
 	else		
 	end
 end
--- Below are functions that is required for the testing of this file
+
+--- Below are functions that is required for the testing of this file
 
 --- Creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
--- @param #strong String input from the Tester about what forms that should be created
+-- @param #string String input from the Tester about what forms that should be created
 function createFormsForTest(String)
 	if String == "Not equal, State equal" then
 		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
@@ -345,11 +352,11 @@ function createFormsForTest(String)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #number StartPosY Starting position of the marker for this page
--- @return #number HightlightPosY Current position of the marker
--- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
--- @return #number height Height of the screen
+-- @return #integer StartPosY Starting position of the marker for this page
+-- @return #integer HightlightPosY Current position of the marker
+-- @return #integer upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #integer lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return #integer height Height of the screen
 function returnValuesForTesting(value)
 	if value == "startPosY" then
 		return startPosY
@@ -365,7 +372,7 @@ function returnValuesForTesting(value)
 end
 
 --- Function that sets the markers position to a selected value
--- @param #number value Value that the user wants to set the marker on 
+-- @param #integer value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
 	highlightPosY = value
 end
@@ -376,13 +383,13 @@ function returnNewForm()
 	return newForm
 end
 
--- Function that returns the lastForm variable so that it can be used in testing
+--- Function that returns the lastForm variable so that it can be used in testing
 -- @return #table newForm Currect form being used by the previous Registration step
 function returnLastForm()
 	return lastForm
 end
 
---Main method
+-- Main method
 function onStart()
 	checkForm()
 	checkEditMode()
@@ -391,8 +398,3 @@ function onStart()
 	updateScreen()
 end
 onStart()
-
-
-
-
-

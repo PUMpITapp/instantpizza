@@ -5,7 +5,7 @@ local onBox = true
 local pageNumber = 1
 
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false
+-- @return true if called from a test file, indicating the file is being tested, else false
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -17,7 +17,7 @@ function checkTestMode()
 end
 
 --- Chooses either the actual or the dummy gfx.
--- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+-- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -47,7 +47,7 @@ function buildGUI()
 end
 
 --- Displays the general background
--- @param #picture backgroundPNG Determines which image to load to the background
+-- @param backgroundPNG Determines which image to load to the background
 function displayBackground()
   local backgroundPNG = gfx.loadpng("Images/AboutPics/aboutbackground.png")
   backgroundPNG:premultiply()
@@ -56,8 +56,8 @@ function displayBackground()
 end
 
 --- Displays the current step of the tutorial
--- @param #number pageNumber Checks which is the current step of the tutorial
--- @param #picture step Determines which image to load in front of the background
+-- @param pageNumber Checks which is the current step of the tutorial
+-- @param step Determines which image to load in front of the background
 function displayStep()
   if pageNumber == 1 then
     step = gfx.loadpng("Images/AboutPics/aboutstep1.png")
@@ -72,10 +72,10 @@ function displayStep()
 end
 
 --- Gets input from user and re-directs according to input
--- @param #string key The key that has been pressed
--- @param #string state The state of the key-press
--- @param #number pageNumber The current step in the tutorial
--- @return #string pathName The path that the program shall be directed to
+-- @param key The key that has been pressed
+-- @param state The state of the key-press
+-- @param pageNumber The current step in the tutorial
+-- @return pathName The path that the program shall be directed to
 function onKey(key,state)
   if(state == 'up') then
       if(key == 'green') then

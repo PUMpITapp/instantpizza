@@ -2,7 +2,7 @@
 local onBox = true
 
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false  
+-- @return true if called from a test file, indicating the file is being tested, else false  
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -14,7 +14,7 @@ function checkTestMode()
 end
 
 --- Chooses either the actual or the dummy gfx.
--- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+-- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -25,7 +25,7 @@ function chooseGfx()
 end
 
 --- Chooses the text
--- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+-- @return tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -98,7 +98,7 @@ function getNoOfPages()
 end
 
 --- Changes to the next or previous page of users to display
--- @param #string key The key that has been pressed
+-- @param key The key that has been pressed
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -158,7 +158,7 @@ function displayArrows()
 end
 
 --- Function that interprets the coordinate position and translates it to a user
--- @return #table account Returns which account that corresponds to the coordinates highlighted
+-- @return account Returns which account that corresponds to the coordinates highlighted
 function getUser()
   userIndex = (4*(currentPage-1)+highlightPosY)
   account = userTable[userIndex]
@@ -214,7 +214,7 @@ function destroyTempSurfaces()
 end
 
 --- Moves the current inputField
--- @param #string key The key that has been pressed
+-- @param key The key that has been pressed
 function moveHighlightedInputField(key)
   if(key == 'up')then
     highlightPosY = highlightPosY - 1
@@ -238,9 +238,9 @@ function updateScreen()
 end
 
 --- Gets input from user and re-directs according to input
--- @param #string key The key that has been pressed
--- @param #string state The state of the key-press
--- @return #string pathName The path that the program shall be directed to
+-- @param key The key that has been pressed
+-- @param state The state of the key-press
+-- @return pathName The path that the program shall be directed to
 function onKey(key,state)
   if(state == 'up') then
     if(key == 'up')then
@@ -287,10 +287,10 @@ function onKey(key,state)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #number StartPosY Starting position of the marker for this page
--- @return #number HightlightPosY Current position of the marker
--- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return StartPosY Starting position of the marker for this page
+-- @return HightlightPosY Current position of the marker
+-- @return upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return lowerBoundary Value of the lowerst position the marker can go before going offscreen
 function returnValuesForTesting(value)
   if value == "startPosY" then
     return startPosY
@@ -304,7 +304,7 @@ function returnValuesForTesting(value)
 end
 
 --- Function that sets the markers position to a selected value
--- @param #number value Value that the user wants to set the marker on 
+-- @param value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
   highlightPosY = value
 end

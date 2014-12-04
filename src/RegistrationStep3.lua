@@ -2,7 +2,7 @@
 local onBox = true
 
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false  
+-- @return true if called from a test file, indicating the file is being tested, else false  
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -14,7 +14,7 @@ function checkTestMode()
 end
 
 --- Chooses either the actual or the dummy gfx.
--- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+-- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -25,7 +25,7 @@ function chooseGfx()
 end
 
 --- Chooses the text
--- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+-- @return tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -150,7 +150,7 @@ function getNoOfPages()
 end
 
 --- Changes to the next or previous page of pizzerias to display
--- @param #string key The key that has been pressed
+-- @param key The key that has been pressed
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -250,8 +250,8 @@ function displayHighlightSurface()
 end
 
 --- Function fetches chosen pizza with help from the coordinates on the screen
--- @Param #number highlightPosY Checks what the current position of the highlighter is
--- @return #table currentPizzeria Returns what pizza that corresponds to the current coordinates
+-- @Param highlightPosY Checks what the current position of the highlighter is
+-- @return currentPizzeria Returns what pizza that corresponds to the current coordinates
 function getPizzaOnCoordinate(highlightPosY)
 	if checkTestMode() then
 		currentPizzeria = { ["Testing"] = "Works" }
@@ -263,8 +263,8 @@ function getPizzaOnCoordinate(highlightPosY)
 end
 
 --- Function checks if a pizza already has been chosen by the user or not
--- @param #table myPizza The pizza menu customized by the user in this step
--- @return #boolean isPicked Returns if pizza already chosen or not
+-- @param myPizza The pizza menu customized by the user in this step
+-- @return isPicked Returns if pizza already chosen or not
 function isAlreadyPicked(myPizza)
 	local isPicked = false
 	for i, v in pairs(pizza) do
@@ -276,14 +276,14 @@ function isAlreadyPicked(myPizza)
 end
 
 --- Function checks if a pizza has been chosen by the user of not
--- @return #boolean isChosen Returns if chosen or not
+-- @return isChosen Returns if chosen or not
 function pizzaIsChoosen()
 	isChosen = (#pizza~=0)
 	return isChosen
 end
 
 --- Function adds a pizza that is chosen by the user from the user pizza menu
--- @param #table pizzaTable Stores the pizzas chosen in this step
+-- @param pizzaTable Stores the pizzas chosen in this step
 function insertOnChoiceMenu(myPizza)
 	if checkTestMode() then
 		return myPizza
@@ -298,13 +298,13 @@ function insertOnChoiceMenu(myPizza)
 end
 
 --- Function copies the content of the pizza table in current step to the user's account
--- @param #table pizzaTable Stores the pizzas chosen in this step
+-- @param pizzaTable Stores the pizzas chosen in this step
 function insertOnTable(pizzaTable)
 	newForm.pizzeria.userPizzas = pizzaTable
 end
 
 --- Function deletes a pizza that is chosen by the user from the user pizza menu
--- @param #pizza myPizza Used to compare current highlighted pizza with the complete pizza menu
+-- @param myPizza Used to compare current highlighted pizza with the complete pizza menu
 function deleteOnChoiceMenu(myPizza)
 	for i,v in pairs(pizza) do
 		if pizza[i].name == myPizza.name then
@@ -330,7 +330,7 @@ function destroyTempSurfaces()
 end
 
 --- Moves the current inputField
--- @param #string key The key that has been pressed
+-- @param key The key that has been pressed
 function moveHighlightedInputField(key)
 	if(key == 'up')then
 		highlightPosY = highlightPosY - 1
@@ -348,9 +348,9 @@ function moveHighlightedInputField(key)
 end
 
 --- Gets input from user and re-directs according to input
--- @param #string key The key that has been pressed
--- @param #string state The state of the key-press
--- @return #string pathName The path that the program shall be directed to
+-- @param key The key that has been pressed
+-- @param state The state of the key-press
+-- @return pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'up') then
@@ -428,7 +428,7 @@ end
 -- Below are functions that is required for the testing of this file
 
 --- CreateFormsForTest creates a customized newForm and lastFrom to test the functionality of the function checkFrom()
--- @param #string String Sets expected status from the testing function
+-- @param String Sets expected status from the testing function
 function createFormsForTest(String)
 	if String == "Not equal, State equal" then
 		lastForm = {currentInputField = "name",name = "Mikael", address = "Sveavagen", zipCode = "58439", city="Stockholm", phone="112", email="PUMpITapp@TDDC88.com"}
@@ -454,11 +454,11 @@ function createFormsForTest(String)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #number StartPosY Starting position of the marker for this page
--- @return #number HightlightPosY Current position of the marker
--- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
--- @return #number height Height of the screen
+-- @return StartPosY Starting position of the marker for this page
+-- @return HightlightPosY Current position of the marker
+-- @return upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return height Height of the screen
 function returnValuesForTesting(value)
 	if value == "startPosY" then
 		return startPosY
@@ -474,25 +474,25 @@ function returnValuesForTesting(value)
 end
 
 --- This function is used in testing when it is needed to set the value of inputFieldY to a certain number
--- @param #number value Sets highlight position value in vertical direction
+-- @param value Sets highlight position value in vertical direction
 function setValuesForTesting(value)
 	highlightPosY = value
 end
 
 --- Function that returns the newForm variable so that it can be used in testing
--- @return #table newForm Returns the form used in this step
+-- @return newForm Returns the form used in this step
 function returnNewForm()
 	return newForm
 end
 
 --- Function that returns the lastForm variable so that it can be used in testing
--- @return #table lastForm Returns the form used in another step
+-- @return lastForm Returns the form used in another step
 function returnLastForm()
 	return lastForm
 end
 
 --- Function that sets the variable isChoosen to a boolean
--- @param #boolean vale Sets if a pizza is chosen or not
+-- @param vale Sets if a pizza is chosen or not
 function setIsChosen(value)
 	isChosen = value
 end

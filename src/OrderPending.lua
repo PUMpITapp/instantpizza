@@ -2,7 +2,7 @@
 local onBox = true
 
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false
+-- @return true if called from a test file, indicating the file is being tested, else false
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -14,7 +14,7 @@ function checkTestMode()
 end
 
 --- Chooses either the actual or the dummy gfx.
--- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+-- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"

@@ -2,7 +2,7 @@
 local onBox =true
 
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false 
+-- @return true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -14,7 +14,7 @@ function checkTestMode()
 end
 
 --- Chooses either the actual or the dummy gfx.
--- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+-- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -25,7 +25,7 @@ function chooseGfx()
 end
 
 --- Chooses the text
--- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+-- @return tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -132,9 +132,9 @@ function checkOrder()
 end
 
 --- Gets input from user and re-directs according to input
--- @param #string key The key that has been pressed
--- @param #string state The state of the key-press
--- @return #string pathName The path that the program shall be directed to
+-- @param key The key that has been pressed
+-- @param state The state of the key-press
+-- @return pathName The path that the program shall be directed to
 function onKey(key,state)
 	if(state == 'up') then
 	  	if(key == 'red') then

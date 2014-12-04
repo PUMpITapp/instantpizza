@@ -1,7 +1,7 @@
 --- Set if the program is running on the box or not
 local onBox = true
 --- Checks if the file was called from a test file.
--- @return #boolean true if called from a test file, indicating the file is being tested, else false 
+-- @return true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -13,7 +13,7 @@ function checkTestMode()
 end
 
 --- Chooses either the actual or the dummy gfx.
--- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
+-- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -33,7 +33,7 @@ else
   dir = ""
 end
 --- Chooses the text
--- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
+-- @return tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -228,7 +228,7 @@ function displayMenu()
 
 end
 ---Sets the upperboundary limit. 
---@param #number column is the active column (pizzas and sauces or drinks and salads)
+--@param column is the active column (pizzas and sauces or drinks and salads)
 function setUpperBoundary(column)
   if column == 1 then
     middleBoundary = #menu.pizzas
@@ -262,8 +262,8 @@ function displayHighlighter()
 end
 
 ---Adds selected item to order
---@param #number posX is the current x position
---@param #number posY is the current y position
+--@param posX is the current x position
+--@param posY is the current y position
 function addToOrder(posX,posY)
 	local item = refToMenu[posX][posY]
 	if refToOrder[posX][item.name] == nil then
@@ -276,8 +276,8 @@ function addToOrder(posX,posY)
 end
 
 ---Deletes item from order
---@param #number posX is the x position
---@param #number posY is the y position
+--@param posX is the x position
+--@param posY is the y position
 function deleteOrder(posX,posY)
   local item = refToMenu[posX][posY]
   if refToOrder[posX][item.name] then
@@ -309,8 +309,8 @@ function displayCart()
 end
 
 ---Function that sets coordinates
---@param #number x is the x position
---@param #number y is the y position
+--@param x is the x position
+--@param y is the y position
 function setCoordinates(x,y)
 	column = x
 	row = y
@@ -323,7 +323,7 @@ function destroyTempSurfaces()
 end
 
 ---Moves hightlightfield
---@param #string key is the key user presses
+--@param key is the key user presses
 function moveHighlight(key)
   --Up
   if(key == 'up')then
@@ -377,8 +377,8 @@ function moveHighlight(key)
 end
 
 ---OnKey function. Called when user presses any key
---@param #string key is the key user pressed
---@param #string state is the current state (up or down)
+--@param key is the key user pressed
+--@param state is the current state (up or down)
 function onKey(key,state)
 	if(state == 'up') then
 	  if(key == 'red') then
@@ -443,11 +443,11 @@ function onKey(key,state)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #number StartPosY Starting position of the marker for this page
--- @return #number HightlightPosY Current position of the marker
--- @return #number HightlightPosX Current position of the marker
--- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return StartPosY Starting position of the marker for this page
+-- @return HightlightPosY Current position of the marker
+-- @return HightlightPosX Current position of the marker
+-- @return upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return lowerBoundary Value of the lowerst position the marker can go before going offscreen
 function returnValuesForTesting(value)
 
   if value == "startPosY" then
@@ -467,12 +467,12 @@ function returnValuesForTesting(value)
   end
 end
 --- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
---@param #number value is the highlightposition y
+--@param value is the highlightposition y
 function setYValuesForTesting(value)
   highlightPosY = value
 end
 --- This function is used in testing when it is needed to set the value of highlightPosX to a certain number
---@param #number value is the highlightposition x
+--@param value is the highlightposition x
 function setXValuesForTesting(value)
   highlightPosX = value
 end

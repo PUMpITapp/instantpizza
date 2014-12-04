@@ -50,15 +50,15 @@ local mapElement = {}
 
 --- Function that creates a new mapelement
 -- @return setsmetatable the function to the mapElement table
--- @param #string key. what letter the key will have
--- @param #integer row. what row mapelement will be in
--- @param #integer column. what column the mapelement will be in
--- @param #number posx. what position on X-axis the key is mapped on
--- @param #number posy. what position on y-axis the key is mapped on
--- @param #integer upMove. what is legitimate upmove from key
--- @param #integer downMove. what is legitimate downmove from key
--- @param #integer leftmove. what is legitimate leftmove from key
--- @param #integer rightmove. what is legitimate rightmove from key
+-- @param key. what letter the key will have
+-- @param row. what row mapelement will be in
+-- @param column. what column the mapelement will be in
+-- @param posx. what position on X-axis the key is mapped on
+-- @param posy. what position on y-axis the key is mapped on
+-- @param upMove. what is legitimate upmove from key
+-- @param downMove. what is legitimate downmove from key
+-- @param leftmove. what is legitimate leftmove from key
+-- @param rightmove. what is legitimate rightmove from key
 function mapElement:new(key,row,column,posX,posY,upMove,downMove,leftMove,rightMove)
 	pos = {
 	letter = key,
@@ -251,7 +251,7 @@ function updateScreen()
 end
 
 --- function that inits the inputText to a value
--- @param #string the text to be saved on inputText
+-- @param the text to be saved on inputText
 function setInputText(text)
 	inputText = text
 end
@@ -270,7 +270,7 @@ function createWhiteBackground()
 end
 
 --- creates the keyboardsurface with correct casing
--- @param #string state for creating correct keyboard
+-- @param state for creating correct keyboard
 function createKeyboardSurface(state)
 	local coord = {x=keyboardPosX,y = keyboardPosY, w= keyboardWidth,h = keyboardHeight}
 	local letters = nil
@@ -372,8 +372,8 @@ end
 
 --- gets the map coordingates from the key position
 -- @return pos if coordinate exists, else nil
--- @param #integer posx for getting coordinates
--- @param #integer posy for getting coordinates
+-- @param posx for getting coordinates
+-- @param posy for getting coordinates
 function getCoordinates(posX, posY)
 	local pos = "p"..posX..posY
 	if map[pos] then
@@ -385,9 +385,9 @@ end
 
 --- gets the correct movement of cursor when moving in y-axis
 -- @returns the correct move for y-axis
--- @param #integer xVal for getting correct ymove
--- @param #integer yVal for getting correct ymove
--- @param #string move for getting correct ymove
+-- @param xVal for getting correct ymove
+-- @param yVal for getting correct ymove
+-- @param move for getting correct ymove
 function getYmove(xVal,yVal,move)
 	local coordinates = "p"..xVal..yVal
 	return map[coordinates][move]
@@ -395,15 +395,15 @@ end
 
 --- gets the char that is highlighted
 -- @return the letter on highlighted key
--- @param #integer row for getting the correct key
--- @param #integer column for getting the correct key
+-- @param row for getting the correct key
+-- @param column for getting the correct key
 function getKeyboardChar(row, column)
 	local coordinates = "p"..row..column
 	return map[coordinates].letter
 end
 
 --- saves character to string
--- @param #string saves the character to the string
+-- @param saves the character to the string
 function setToString(character)
 	if character then
 	inputText = inputText .. character
@@ -411,15 +411,15 @@ function setToString(character)
 end
 
 --- saves the text to the form to be sent back to last state
--- @param #string mytext saved to the form
+-- @param mytext saved to the form
 function saveToForm(myText)
 	local inputField = lastForm.currentInputField
 	lastForm[inputField] = myText
 end
 
 --- send form back to state and destroys all the surfaces 
--- @param #string state which state the form is sent back to
--- @param #table form the form that is sended back
+-- @param state which state the form is sent back to
+-- @param form the form that is sended back
 function sendFormBackToState(state, form)
 	saveToForm(inputText)
 	destroyTempSurfaces()
@@ -434,13 +434,13 @@ end
 
 --- removes the last char in the argument
 -- @return the modified strings
--- @param #string input to be moved from
+-- @param input to be moved from
 function removeLastChar(input)
 	return string.sub(input, 1, #input-1)
 end
 
 --- moves the highligther around
--- @param #string key that is pressed on
+-- @param key that is pressed on
 function movehighlightKey(key)
 	if(key == 'down')then
 		--down
@@ -484,8 +484,8 @@ function movehighlightKey(key)
 end
 
 --- calls functions on keys
--- @param #string key that is pushed on
--- @param #string state that the key pushed on is at
+-- @param key that is pushed on
+-- @param state that the key pushed on is at
 function onKey(key, state)
 	if(state == 'up')then
 		if(key == 'up') then

@@ -345,10 +345,10 @@ function onKey(key,state)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
--- @return #number StartPosY Starting position of the marker for this page
--- @return #number HightlightPosY Current position of the marker
--- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
--- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
+-- @return StartPosY Starting position of the marker for this page
+-- @return HightlightPosY Current position of the marker
+-- @return upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return lowerBoundary Value of the lowerst position the marker can go before going offscreen
 function returnValuesForTesting(value)
   if value == "startPosY" then
     return startPosY
@@ -362,7 +362,7 @@ function returnValuesForTesting(value)
 end
 
 --- Function that sets the markers position to a selected value
--- @param #number value Value that the user wants to set the marker on 
+-- @param value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
   highlightPosY = value
 end

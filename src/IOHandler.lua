@@ -87,21 +87,21 @@ function Drink:new(name,price)
 end
 
 ---Function to read users from file
---@return of users
+--@return usersTable Contains the users that is read from file
 function ioHandler.readUserData()
   local usersTable = {}
   usersTable = table.load(dir .. "UserData.lua")
   return usersTable
 end
 ---Function to read pizzerias from file
---@return of pizzerias
+--@return pizzeriaTable Contains the pizzerias from file
 function ioHandler.readPizzerias()
   local pizzeriaTable = {}
   pizzeriaTable = table.load(dir .. "PizzeriaData.lua")
   return pizzeriaTable
 end
 ---Test function that reads pizzerias from file
---@return of pizzerias
+--@return pizzeriaTable Contains pizzerias that is read from file
 function ioHandler.readPizzerias_test()
   local pizzeriaTable = {}
   pizzeriaTable = table.load(dir .. "PizzeriaData_testing.lua")

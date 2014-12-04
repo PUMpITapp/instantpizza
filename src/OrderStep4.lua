@@ -15,10 +15,10 @@ end
 
 --- Chooses either the actual or the dummy gfx.
 -- @return tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
-function chooseGfx(underGoingTest)
-  if not underGoingTest then
+function chooseGfx()
+  if not checkTestMode() then
     tempGfx = require "gfx"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempGfx = require "gfx_stub"
   end
   return tempGfx
@@ -37,10 +37,10 @@ end
 
 --- Chooses the text
 -- @return tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
-function chooseText(underGoingTest)
-  if not underGoingTest then
+function chooseText()
+  if not checkTestMode() then
     tempText = require "write_text"
-  elseif underGoingTest then
+  elseif checkTestMode() then
     tempText = require "write_text_stub"
   end
   return tempText
@@ -48,7 +48,7 @@ end
 
 --- Variable to use when displaying printed text on the screen
 --- Determine whether to use the stub or to run the actual file
-local text = chooseText(checkTestMode())
+local text = chooseText()
 
 --- Initiates a new form for this step
 local newOrder = ...

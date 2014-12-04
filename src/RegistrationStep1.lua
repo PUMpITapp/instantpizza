@@ -276,7 +276,7 @@ function onKey(key,state)
 	end
 end
 --- Function that checks if the form that the user has written is empty or not
--- @param key The key that has been pressed
+-- @param form Takes in a form to check status of it
 function emptyFormValidation(form)
 	emptyTextFields = {}
 	-- Checks if a textfield is empty
@@ -294,7 +294,7 @@ function emptyFormValidation(form)
 end
 
 --- Function that checks if the form that the user has written has any invalid inputs
--- @param key The key that has been pressed
+-- @param form Takes in a form to check status of it
 function invalidFormValidation(form)
 	invalidFields = {}
 	errorCounter = 0
@@ -352,6 +352,7 @@ function createFormsForTest(String)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
+-- @param value Sets the different testing values
 -- @return StartPosY Starting position of the marker for this page
 -- @return HightlightPosY Current position of the marker
 -- @return upperBoundary Value of the highest position the marker can go before going offscreen

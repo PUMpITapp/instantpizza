@@ -48,6 +48,8 @@ function buildGUI()
 end
 
 --- Function that checks if the box is connected to our server or not
+-- @param order Handles the content of the order
+-- @return s Returns internet status
 function internet(order)
         local sock = require("socket")
         local tcp=sock.tcp()
@@ -55,8 +57,6 @@ function internet(order)
         print("connecting")
         tcp:send(order.."\n")
         local s,status, partial = tcp:receive()
-        --print(status)
-        --print(partial)
         tcp:close()
         if(s==nil)then
                 return 0

@@ -287,6 +287,7 @@ function onKey(key,state)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
+-- @param value Sets the different testing values
 -- @return StartPosY Starting position of the marker for this page
 -- @return HightlightPosY Current position of the marker
 -- @return upperBoundary Value of the highest position the marker can go before going offscreen

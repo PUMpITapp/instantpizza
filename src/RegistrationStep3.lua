@@ -250,7 +250,7 @@ function displayHighlightSurface()
 end
 
 --- Function fetches chosen pizza with help from the coordinates on the screen
--- @Param highlightPosY Checks what the current position of the highlighter is
+-- @param highlightPosY Checks what the current position of the highlighter is
 -- @return currentPizzeria Returns what pizza that corresponds to the current coordinates
 function getPizzaOnCoordinate(highlightPosY)
 	if checkTestMode() then
@@ -283,7 +283,7 @@ function pizzaIsChoosen()
 end
 
 --- Function adds a pizza that is chosen by the user from the user pizza menu
--- @param pizzaTable Stores the pizzas chosen in this step
+-- @param myPizza Stores the pizzas chosen in this step
 function insertOnChoiceMenu(myPizza)
 	if checkTestMode() then
 		return myPizza
@@ -454,6 +454,7 @@ function createFormsForTest(String)
 end
 
 --- Functions that returns some of the values on local variables to be used when testing
+-- @param value Sets the different testing values
 -- @return StartPosY Starting position of the marker for this page
 -- @return HightlightPosY Current position of the marker
 -- @return upperBoundary Value of the highest position the marker can go before going offscreen
@@ -492,7 +493,7 @@ function returnLastForm()
 end
 
 --- Function that sets the variable isChoosen to a boolean
--- @param vale Sets if a pizza is chosen or not
+-- @param value Sets if a pizza is chosen or not
 function setIsChosen(value)
 	isChosen = value
 end

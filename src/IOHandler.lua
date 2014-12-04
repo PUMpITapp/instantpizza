@@ -1,6 +1,9 @@
 local ioHandler = {}
+
+--- Set if the program is running on the box or not
 local onBox = true
 progress = "IOhandler"
+--- Change the path system if the app runs on the box comparing to the emulator
 if onBox == true then
   dir = sys.root_path()
 else
@@ -8,9 +11,16 @@ else
     sys.root_path = function () return '' end
     dir = ""
 end
-
 dofile(dir .. "table.save.lua")
---Create new user
+
+---Function that is used to create a new user.
+---@param #string name is the users name
+---@param #string address is the users address
+---@param #string zipCode is the users zipCode
+---@param #string city is the users city
+---@param #string phone is the users phonenumber
+---@param #string email is the users email address
+---@param table pizzeria is the pizzeria the user selects
 User = {}
 function User:new(name,address,zipCode,city,phone,email,pizzeria)
   newObj ={
@@ -25,7 +35,15 @@ function User:new(name,address,zipCode,city,phone,email,pizzeria)
   self.__index = self
   return setmetatable(newObj, self)
 end
---Create new pizzeria. Each pizzeria object has one table of pizzas. 
+---Function that is used to create a new pizzeria.
+---@param #string name is the pizzerias name
+---@param #string city is the pizzerias city
+---@param #string zipCode is the pizzerias zipCode
+---@param #string phoneNr is the pizzerias phonenumber
+---@param #string imgPath is the pizzerias path to the logotype
+---@param #string rating is the rating of the pizzeria
+---@param table pizzas is the pizzerias pizzas in a table
+---@param table drinks is the pizzerias drinks in a table
 Pizzeria = {}
 function Pizzeria:new(name,city,zipCode,phoneNr,imgPath,rating,pizzas,drinks)
   newObj = {
@@ -41,7 +59,10 @@ function Pizzeria:new(name,city,zipCode,phoneNr,imgPath,rating,pizzas,drinks)
   self.__index = self
   return setmetatable(newObj, self)
 end
---Create pizza
+---Function that is used to create new pizzas.
+---@param #string name is the name of the pizza
+---@param double price is the price of the pizza
+---@param table ingredients is the ingredients of the pizza
 Pizza = {}
 function Pizza:new(name,price,ingredients)
   newObj = {
@@ -52,7 +73,9 @@ function Pizza:new(name,price,ingredients)
   self.__index = self
   return setmetatable(newObj, self)
 end
---Create drinks
+---Function that is used to create new drinks
+---@param #string name is the name och the drink
+---@param double price is the price of the drink
 Drink = {}
 function Drink:new(name,price)
   newObj = {
@@ -62,25 +85,29 @@ function Drink:new(name,price)
   self.__index = self
   return setmetatable(newObj, self)
 end
---Function to read users. Users are stored in a table containing user "objects"
+
+---Function to read users from file
+---return table of users
 function ioHandler.readUserData()
   local usersTable = {}
   usersTable = table.load(dir .. "UserData.lua")
   return usersTable
 end
--- Function to read pizzerias. Are stored in a table, every pizzeria has a table of pizzas. 
+---Function to read pizzerias from file
+---return table of pizzerias
 function ioHandler.readPizzerias()
   local pizzeriaTable = {}
   pizzeriaTable = table.load(dir .. "PizzeriaData.lua")
   return pizzeriaTable
 end
--- Test function that reads "pizzerias"
+---Test function that reads pizzerias from file
+---return table of pizzerias
 function ioHandler.readPizzerias_test()
   local pizzeriaTable = {}
   pizzeriaTable = table.load(dir .. "PizzeriaData_testing.lua")
   return pizzeriaTable
 end
-
+---Function that adds lots dummy pizzerias.
 function ioHandler.addTestPizzerias()
   drinks ={}
   pizzas = {}
@@ -167,11 +194,14 @@ function ioHandler.addTestPizzerias()
   table.save(pizzeriasTable,dir .. "PizzeriaData.lua")
 end
 
+---Function that saves userdata.
+---@param table userForm is the user that is being saved. 
 function ioHandler.saveUserData(userForm)
   tempUserTable = {}
   usersTable = {}
   j=1
   user = User:new(userForm.name,userForm.address,userForm.zipCode,userForm.city,userForm.phone,userForm.email,userForm.pizzeria)
+  ---Read users from file so previous users are not overwritten 
   tempUserTable = ioHandler.readUserData()
   if not (tempUserTable == nil)then
     for i=1,#tempUserTable do
@@ -182,9 +212,13 @@ function ioHandler.saveUserData(userForm)
   usersTable[j]=user
   table.save(usersTable,dir .. "UserData.lua")
 end
+---Function that saves a table of users to file
+---@param table userTable is the table of users that are going to be saved
 function ioHandler.saveUserTable(userTable)
   table.save(userTable,dir .. "UserData.lua")
 end
+---Function that updates userdata
+---@param table userForm is the user being edited
 function ioHandler.updateUser(userForm)
   users = table.load(dir .. "UserData.lua")
   table.remove(users,userForm.editIndex)

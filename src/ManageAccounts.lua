@@ -1,5 +1,8 @@
+--- Set if the program is running on the box or not
 local onBox = true
 
+--- Checks if the file was called from a test file.
+-- @return #boolean true if called from a test file, indicating the file is being tested, else false 
 function checkTestMode()
   runFile = debug.getinfo(2, "S").source:sub(2,3)
   if (runFile ~= './' ) then
@@ -10,9 +13,8 @@ function checkTestMode()
   return underGoingTest
 end
 
---- Chooses either the actual or he dummy gfx.
--- Returns dummy gfx if the file is being tested.
--- Rerunes actual gfx if the file is being run.
+--- Chooses either the actual or the dummy gfx.
+-- @return #string tempGfx Returns dummy gfx if the file is being tested, returns actual gfx if the file is being run.
 function chooseGfx()
   if not checkTestMode() then
     tempGfx = require "gfx"
@@ -22,6 +24,8 @@ function chooseGfx()
   return tempGfx
 end
 
+--- Chooses the text
+-- @return #string tempText Returns write_text_stub if the file is being tested, returns actual write_text if the file is being run.
 function chooseText()
   if not checkTestMode() then
     tempText = require "write_text"
@@ -32,6 +36,7 @@ function chooseText()
 end
 local text = chooseText()
 
+--- Change the path system if the app runs on the box comparing to the emulator
 if onBox == true then
   progress = "loadingPics..."
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/UserPage/?.png'
@@ -39,42 +44,50 @@ if onBox == true then
   package.path = package.path .. ';' .. sys.root_path() .. 'Images/PizzaPics/?.png'
   dir = sys.root_path()
 else
-gfx = chooseGfx(checkTestMode())
-    sys = {}
-    sys.root_path = function () return '' end
-    dir = ""
+  gfx = chooseGfx(checkTestMode())
+  sys = {}
+  sys.root_path = function () return '' end
+  dir = ""
 end
 
 local io = require "IOHandler"
 
-
-
-
+--- Declare units in variables
 local xUnit = gfx.screen:get_width()/16
 local yUnit = gfx.screen:get_height()/9
 
+---Temp save background
 local tempCopy = nil
 local tempCoord = {}
 
---2.3 13.8 
+--Start position for x and y
 local startPosY = yUnit*2.5
---Rutan startposition är 2.3. För att centrera inputfield 2.3+2.25. 
 local startPosX = xUnit*3.2
+
+---Margin between each field
 local marginY = yUnit*1.2
+
+---Current position for the highlightfield
 local highlightPosY = 1
 
+--- Declare the boundary levels for the input field set
 local lowerBoundary = 1
 local upperBoundary = 0
-local inputFieldEnd = 0
+
+---Number of pages and the current page
 local noOfPages = 0
 local currentPage = 1
+
+---Changes startvalue depending on the current page
 local startingIndex = 1
 local lastPage = 0
+
 local deletedElement = false
 local deleteMode = false
 
 dofile(dir.."table.save.lua")
 
+---Reads users from file and store them in a table
 function readUsers()
   userTable = io.readUserData()
   noOfPages = math.ceil(#userTable/4)
@@ -82,10 +95,13 @@ function readUsers()
   end
 end
 
+---Calculates no of pages
 function getNoOfPages()
   noOfPages = math.ceil(#userTable/4)
 end
 
+---Change visible page
+--@param key is the key pressed by the user. (Left or right)
 function changeCurrentPage(key)
   if(key == 'left')then
     if(currentPage > 1)then
@@ -102,6 +118,7 @@ function changeCurrentPage(key)
   updateScreen()
 end
 
+---Display users on the screen. 
 function displayUsers()
   foundUsers = false
   yCoord = startPosY
@@ -111,12 +128,14 @@ function displayUsers()
     if not (#userTable == 0) then
     local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
     accountTile:premultiply()
+      --Depending on currentPage startingIndex decides where in the table to get users
       for index = startingIndex, #userTable do
         gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)
         text.print(gfx.screen,"lato","black","medium",tostring(userTable[index].email), startPosX*1.04, yCoord+marginY*0.2, xUnit*7, yUnit)
         yCoord = yCoord+marginY
         upperBoundary = upperBoundary+1
         foundUsers = true
+        --Only prints 4 users
         if(index == startingIndex+3)then
           break
         end
@@ -128,7 +147,8 @@ function displayUsers()
     text.print(gfx.screen,"lato","black","medium","No users registered!", startPosX*1.9, yCoord+marginY*0.2, xUnit*7, yUnit)
   end
 end
-
+---Returns the user that is highlighted
+--@return the selected user
 function getUser()
   userIndex = (4*(currentPage-1)+highlightPosY)
   user = userTable[userIndex]
@@ -136,7 +156,7 @@ function getUser()
   user["editIndex"] = userIndex
   return user
 end
-
+---Displays navigation arrows. Depending on the active page arrows are shown 
 function displayArrows()
   if(noOfPages > 1 and currentPage < noOfPages)then
     local rightArrow = gfx.loadpng("Images/PizzaPics/rightarrow.png")
@@ -151,9 +171,7 @@ function displayArrows()
     leftArrow:destroy()
   end
 end
-
-
-
+---Displays highligher
 function displayHighlighter()
 
   if(upperBoundary >0)then
@@ -176,13 +194,12 @@ function displayHighlighter()
       tempCoord = coord
       lastPage = currentPage
     end
-
     gfx.screen:copyfrom(highlightTile, nil, coord,true)
     highlightTile:destroy()
   end
 
 end
---Calls methods that builds GUI
+---Calls methods that builds GUI
 function buildGUI()
   displayBackground()
   getNoOfPages()
@@ -191,6 +208,7 @@ function buildGUI()
   displayArrows()
 end
 
+---Displays the background
 function displayBackground()
   local backgroundPNG = gfx.loadpng("Images/UserPage/manageaccount.png") 
   backgroundPNG:premultiply()
@@ -198,8 +216,9 @@ function displayBackground()
   backgroundPNG:destroy()
 end
 
+---Change position for the inputfield
+--@param key is the key pressed by the user
 function moveHighlightedInputField(key)
-  --Starting coordinates for current inputField
   if(key == 'up')then
     highlightPosY = highlightPosY - 1
 
@@ -217,20 +236,23 @@ function moveHighlightedInputField(key)
   gfx.update()
 end
 
+---Updates screen, calling other functions that displays images and changes on screen
 function updateScreen()
   buildGUI()
   gfx.update()
 end
 
+---When deleting a user a confirm image is shown. 
 function showConfirmDelete()
-  print("Hej")
   local confirm = gfx.loadpng("Images/UserPage/notifydelete.png") 
   confirm:premultiply()
-  gfx.screen:copyfrom(confirm, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()})
+  gfx.screen:copyfrom(confirm, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()},true)
   confirm:destroy()
   deleteMode = true
   gfx.update()
 end
+
+---Deletes user from table
 function deleteUser()
   removeIndex = (4*(currentPage-1)+highlightPosY)
   table.remove(userTable,removeIndex)
@@ -241,13 +263,15 @@ function deleteUser()
   highlightPosY = 1
   updateScreen()
 end
-
+---Destoys tempsurfaces
 function destroyTempSurfaces()
   if tempCopy ~= nil then
     tempCopy:destroy()
   end
 end
-
+--- Gets input from user and re-directs according to input
+--@param key is the key the user presses
+--@param state is the current state of the pressed key (up or down)
 function onKey(key,state)
 	if(state == 'up') then
     if(key == 'up')then
@@ -320,9 +344,12 @@ function onKey(key,state)
 	end
 end
 
--- This functions returns some of the values on local variables to be used when testing
+--- Functions that returns some of the values on local variables to be used when testing
+-- @return #number StartPosY Starting position of the marker for this page
+-- @return #number HightlightPosY Current position of the marker
+-- @return #number upperBoundary Value of the highest position the marker can go before going offscreen
+-- @return #number lowerBoundary Value of the lowerst position the marker can go before going offscreen
 function returnValuesForTesting(value)
-
   if value == "startPosY" then
     return startPosY
   elseif value == "highlightPosY" then 
@@ -333,14 +360,15 @@ function returnValuesForTesting(value)
     return lowerBoundary
   end
 end
--- This function is used in testing when it is needed to set the value of highlightPosY to a certain number
+
+--- Function that sets the markers position to a selected value
+-- @param #number value Value that the user wants to set the marker on 
 function setValuesForTesting(value)
   highlightPosY = value
 end
 
---Main method
+---Main method
 function onStart()
-  print(deleteMode)
   readUsers()
   updateScreen()
 end

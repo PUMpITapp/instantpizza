@@ -123,11 +123,11 @@ function displayUsers()
   foundUsers = false
   yCoord = startPosY
   upperBoundary = 0
-  text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.94, yCoord*2.85, xUnit*7, yUnit)
   if not (userTable == nil)then
     if not (#userTable == 0) then
-    local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
-    accountTile:premultiply()
+      text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*3.94, yCoord*2.85, xUnit*7, yUnit)
+      local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
+      accountTile:premultiply()
       --Depending on currentPage startingIndex decides where in the table to get users
       for index = startingIndex, #userTable do
         gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)
@@ -244,12 +244,14 @@ end
 
 ---When deleting a user a confirm image is shown. 
 function showConfirmDelete()
+  if not(#userTable == 0)then
   local confirm = gfx.loadpng("Images/UserPage/notifydelete.png") 
   confirm:premultiply()
   gfx.screen:copyfrom(confirm, nil, {x=0 , y=0, w=gfx.screen:get_width(), h=gfx.screen:get_height()},true)
   confirm:destroy()
   deleteMode = true
   gfx.update()
+  end
 end
 
 ---Deletes user from table
@@ -303,13 +305,13 @@ function onKey(key,state)
     elseif(key == 'green') then
       --Go back to menu
       pathName = dir .. "Menu.lua"
-        print(pathName)
-
       if checkTestMode() then
         return pathName
       else
+        if not(deleteMode)then
         destroyTempSurfaces()
         dofile(pathName)
+        end
       end
       elseif(key == 'blue') then
       pathName = dir .. "RegistrationStep1.lua"
@@ -339,7 +341,9 @@ function onKey(key,state)
         end
       end
       elseif(key == 'red') then
+        if not (deleteMode)then
         showConfirmDelete()
+        end
   	end
 	end
 end

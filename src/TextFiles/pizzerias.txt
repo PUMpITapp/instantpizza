@@ -1,4 +1,0 @@
-1, Pizzeria Baguetten, pizza1.png, 5.0
-2, Pizzeria Mona Lisa, pizza2.png, 3.0
-3, Pizzeria Bari, pizza3.png, 4.5
-4, Pizzeria Mamma Mia, pizza4.png, 4.2

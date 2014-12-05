@@ -1,7 +1,7 @@
 local text = {}
 
 
-arial = require "apple_symbols_regular_20"
+arial = require "fonts/lookups/lato_small"
 
 function text.print(surface, font, text, x, y, w, h)
 end

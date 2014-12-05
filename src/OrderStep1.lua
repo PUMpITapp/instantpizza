@@ -121,8 +121,8 @@ function displayUsers()
   local accountTile = gfx.loadpng("Images/OrderPics/inputfield.png")
   upperBoundary = 0
   accountTile:premultiply()
-  text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*2.78, yCoord*2.85, xUnit*7, yUnit)
-  if not (userTable == nil) then
+  if not (userTable == nil or #userTable == 0) then
+    text.print(gfx.screen,"lato","black","small",tostring("Page: "..currentPage.."/"..noOfPages), startPosX*2.78, yCoord*2.85, xUnit*7, yUnit)
     -- Loops through all users that shall be displayed
     for index = startingIndex, #userTable do
       gfx.screen:copyfrom(accountTile,nil,{x=startPosX, y=yCoord, h=yUnit, w=xUnit*7},true)

@@ -44,10 +44,6 @@
 	</li>
 
 	<li>
-		<a href="../files/Keyboard.html">Keyboard.lua</a>
-	</li>
-
-	<li>
 		<a href="../files/ManageAccounts.html">ManageAccounts.lua</a>
 	</li>
 
@@ -57,10 +53,6 @@
 
 	<li>
 		<a href="../files/OrderFail.html">OrderFail.lua</a>
-	</li>
-
-	<li>
-		<a href="../files/OrderPending.html">OrderPending.lua</a>
 	</li>
 
 	<li>
@@ -75,6 +67,10 @@
 
 	<li>
 		<a href="../files/OrderStep4.html">OrderStep4.lua</a>
+	</li>
+
+	<li>
+		<a href="../files/PizzeriaData.html">PizzeriaData.lua</a>
 	</li>
 
 	<li>
@@ -239,7 +235,88 @@
 <br/>
 <br/>
 
+<h2>Variables</h2>
+<dl class="function">
+<dt><strong>onBox</strong></dt>
+<dd>
+Tells if the program shall be run on the box or not
+</dd>
+<dt><strong>xUnit, yUnit</strong></dt>
+<dd>
+Declare units in variables
+</dd>
 
+<dt><strong>tempCopy, tempCoord </strong></dt>
+<dd>
+Temp save background
+</dd>
+
+<dt><strong>startPosY, startPosX</strong></dt>
+<dd>
+Start position for x and y
+</dd>
+
+<dt><strong>marginY, marginX</strong></dt>
+<dd>
+Input movement x and y positions
+</dd>
+<dt><strong>highlightPosY</strong></dt>
+<dd>
+Current position for the highlightfield
+</dd>
+<dt><strong>lowerBoundary, upperBoundary, middleBoundary</strong></dt>
+<dd>
+Declare the boundary levels for the input field set
+</dd>
+<dt><strong>text</strong></dt>
+<dd>
+Variable to use when displaying printed text on the screen
+</dd>
+<dt><strong>startDrinksY, startDrinksX</strong></dt>
+<dd>
+Startposition for drinks, y and x position
+</dd>
+<dt><strong>startSauceY, startSauceX</strong></dt>
+<dd>
+Startposition for sauces, y and x position
+</dd>
+<dt><strong>startSaladY, startSaladX</strong></dt>
+<dd>
+Startposition for salads, y and x position
+</dd>
+<dt><strong>fieldWith, fieldHeight</strong></dt>
+<dd>
+Width and height for the fields
+</dd>
+<dt><strong>account</strong></dt>
+<dd>
+Account from previous step
+</dd>
+<dt><strong>editOrder</strong></dt>
+<dd>
+editOrder gets values if user goes back to this step from OrderStep3
+</dd>
+<dt><strong>newOrder</strong></dt>
+<dd>
+Creates a new order table from the account passed on from OrderStep1
+</dd>
+<dt><strong>order</strong></dt>
+<dd>
+Table containing the users order
+</dd>
+<dt><strong>menu</strong></dt>
+<dd>
+Table containing the pizzerias menu
+</dd>
+<dt><strong>io</strong></dt>
+<dd>
+Variable to use when handling tables that are stored in the system
+</dd>
+<dt><strong>refToMenu, refToOrder</strong></dt>
+<dd>
+Table that references menu and order
+</dd>
+</dl>
 
 
 <h2><a name="functions"></a>Functions</h2>
